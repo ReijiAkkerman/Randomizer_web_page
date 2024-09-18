@@ -1,0 +1,38 @@
+@use "theme" as *; 
+
+$static: #000;
+$inactive: #aaa;
+$active: #000;
+$hidden: #0000;
+
+$active-list: #080;
+
+@if $dark-theme {
+    $static: #fff;
+    $active: #fff;
+}
+
+@mixin border($side: false, $color: $static) {
+    @if $side {
+        border-#{$side}: 1px solid $color;
+    }
+    @else {
+        border: 1px solid $static;
+    }
+}
+
+@mixin default($side: false) {
+    @include border($side);
+}
+
+@mixin invisible($side: false) {
+    @include border($side, $color: $hidden);
+
+    &:hover {
+        border-color: $active;
+    }
+}
+
+@mixin active-list {
+    @include border;
+}

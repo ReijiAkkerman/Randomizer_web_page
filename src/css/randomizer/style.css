@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+button {
+  display: block;
+}
+
+.randomizer > .dashboard {
+  border-left: 1px solid #000;
+}
+.randomizer > .dashboard > div {
+  border-bottom: 1px solid #000;
+  border-color: #aaa;
+  padding: 5px 0;
+  margin: 0 20px;
+}
+.randomizer > .dashboard .search {
+  margin-top: 5px;
+}
+.randomizer > .dashboard .search-form {
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+.randomizer > .dashboard .search-form__input {
+  width: 100%;
+  border-right: 1px solid #000;
+  padding: 5px 5px 5px 20px;
+  outline: none;
+  font-size: 22px;
+}
+.randomizer > .dashboard .search-form__button {
+  width: fit-content;
+  cursor: pointer;
+}
+.randomizer > .dashboard .search-form__button > svg {
+  fill: #aaa;
+  width: 30px;
+  height: 30px;
+  padding: 5px 15px;
+  vertical-align: middle;
+}
+.randomizer > .dashboard .search-form__button:hover > svg {
+  fill: #000;
+}
+.randomizer > .dashboard .actions-main {
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+.randomizer > .dashboard .actions-main__button {
+  border-right: 1px solid #000;
+  cursor: pointer;
+}
+.randomizer > .dashboard .actions-main__button:last-of-type {
+  border: none;
+}
+.randomizer > .dashboard .actions-main__button > svg {
+  fill: #aaa;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+.randomizer > .dashboard .actions-main__button:hover > svg {
+  fill: #000;
+}
+.randomizer > .dashboard .parameters > div {
+  gap: 20px;
+}
+.randomizer > .dashboard .parameters__input {
+  width: max-content;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+/*# sourceMappingURL=style.css.map */

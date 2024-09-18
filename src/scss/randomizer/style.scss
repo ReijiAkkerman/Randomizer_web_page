@@ -1,0 +1,97 @@
+@use "../reset";
+@use "../_components/background";
+@use "../_components/borders";
+@use "../_components/text";
+
+.randomizer {
+    > .dashboard {
+        @include borders.default(left);
+        
+        > div {
+            @include borders.default(bottom);
+            border-color: borders.$inactive;
+            padding: 5px 0;
+            margin: 0 20px;
+        }
+
+        .search {
+            margin-top: 5px;
+
+            &-form {
+                @include borders.default;
+                border-radius: 10px;
+
+                &__input {
+                    width: 100%;
+                    @include borders.default(right);
+                    padding: 5px 5px 5px 20px;
+                    outline: none;
+                    font-size: 22px;
+                }
+
+                &__button {
+                    width: fit-content;
+                    cursor: pointer;
+
+                    > svg {
+                        fill: text.$inactive;
+                        width: 30px;
+                        height: 30px;
+                        padding: 5px 15px;
+                        vertical-align: middle;
+                    }
+
+                    &:hover {
+                        > svg {
+                            fill: text.$active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .actions {
+            &-main {
+                @include borders.default;
+                border-radius: 10px;
+
+                &__button {
+                    @include borders.default(right);
+                    cursor: pointer;
+
+                    &:last-of-type {
+                        border: none;
+                    }
+
+                    > svg {
+                        fill: text.$inactive;
+                        vertical-align: middle;
+                        width: 30px;
+                        height: 30px;
+                        padding: 5px;
+                    }
+
+                    &:hover {
+                        > svg {
+                            fill: text.$active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .parameters {
+            > div {
+                gap: 20px;
+            }
+
+            &__input {
+                width: max-content;
+                @include borders.default;
+                border-radius: 10px;
+                padding: 5px;
+
+            }
+        }
+    }
+}

@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+button {
+  display: block;
+}
+
+.randomizer > .dashboard {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  min-width: 400px;
+  max-width: 600px;
+  height: 100%;
+}
+.randomizer > .dashboard .search-form {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+.randomizer > .dashboard .actions-main {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+.randomizer > .dashboard .actions-main__button {
+  width: 100%;
+  height: fit-content;
+}
+.randomizer > .dashboard .parameters {
+  display: block;
+  position: relative;
+}
+.randomizer > .dashboard .parameters > div {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+
+/*# sourceMappingURL=position.css.map */

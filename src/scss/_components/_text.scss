@@ -1,0 +1,11 @@
+@use "theme" as *;
+
+$static: #000;
+$inactive: #aaa;
+$active: #000;
+
+@if $dark-theme {
+    $static: #000;
+    $active: #000;
+}
+

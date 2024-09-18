@@ -1,0 +1,9 @@
+@use "theme" as *;
+
+$static: #fff;
+$hover: #ccc;
+
+@if $dark-theme {
+    $static: #000;
+    $hover: #555;
+}
