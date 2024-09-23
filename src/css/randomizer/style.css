@@ -5,8 +5,21 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
+*::placeholder {
+  color: #aaa;
+}
+
 button {
   display: block;
+  cursor: pointer;
+}
+
+input {
+  outline: none;
+}
+
+svg {
+  vertical-align: middle;
 }
 
 .randomizer > .dashboard {
@@ -14,9 +27,15 @@ button {
 }
 .randomizer > .dashboard > div {
   border-bottom: 1px solid #000;
-  border-color: #aaa;
-  padding: 5px 0;
-  margin: 0 20px;
+  border-color: #000;
+  padding: 5px 5px;
+  margin: 0 15px;
+}
+.randomizer > .dashboard > div:first-of-type {
+  margin-top: 5px;
+}
+.randomizer > .dashboard > div:last-of-type {
+  border: none;
 }
 .randomizer > .dashboard .search {
   margin-top: 5px;
@@ -34,14 +53,12 @@ button {
 }
 .randomizer > .dashboard .search-form__button {
   width: fit-content;
-  cursor: pointer;
 }
 .randomizer > .dashboard .search-form__button > svg {
   fill: #aaa;
   width: 30px;
   height: 30px;
   padding: 5px 15px;
-  vertical-align: middle;
 }
 .randomizer > .dashboard .search-form__button:hover > svg {
   fill: #000;
@@ -52,14 +69,12 @@ button {
 }
 .randomizer > .dashboard .actions-main__button {
   border-right: 1px solid #000;
-  cursor: pointer;
 }
 .randomizer > .dashboard .actions-main__button:last-of-type {
   border: none;
 }
 .randomizer > .dashboard .actions-main__button > svg {
   fill: #aaa;
-  vertical-align: middle;
   width: 30px;
   height: 30px;
   padding: 5px;
@@ -67,14 +82,118 @@ button {
 .randomizer > .dashboard .actions-main__button:hover > svg {
   fill: #000;
 }
+.randomizer > .dashboard .actions-additional__button {
+  border: 1px solid #000;
+  border-radius: 10px;
+  font-size: 20px;
+  margin-top: 5px;
+  color: #aaa;
+}
+.randomizer > .dashboard .actions-additional__button:hover {
+  color: #000;
+}
 .randomizer > .dashboard .parameters > div {
   gap: 20px;
 }
 .randomizer > .dashboard .parameters__input {
-  width: max-content;
+  width: 100%;
   border: 1px solid #000;
   border-radius: 10px;
+  padding: 5px 5px 5px 20px;
+  font-size: 20px;
+}
+.randomizer > .dashboard .lists > div {
+  border-bottom: 1px solid #000;
+  padding: 5px 0;
+}
+.randomizer > .dashboard .lists > div:first-of-type {
+  padding-top: 0;
+}
+.randomizer > .dashboard .lists > div:last-of-type {
+  border: none;
+  padding-bottom: 0;
+}
+.randomizer > .dashboard .lists > div > p {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+.randomizer > .dashboard .lists > div > button {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  font-size: 20px;
+  padding: 0 10px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 5px;
+  color: #aaa;
+}
+.randomizer > .dashboard .lists > div > button:hover {
+  border-color: #000;
+}
+.randomizer > .dashboard .lists > div > button:last-of-type {
+  margin-bottom: 0;
+}
+.randomizer > .dashboard .lists > div > button.lists_delete-lists {
+  width: fit-content;
+  padding: 0 1px;
+}
+.randomizer > .dashboard .lists > div > button:hover {
+  color: #000;
+}
+.randomizer > .dashboard .lists > div > button:hover > svg {
+  fill: #000;
+}
+.randomizer > .dashboard .lists > div > button > svg {
+  fill: #aaa;
+  width: 20px;
+  height: 20px;
+  vertical-align: -16%;
+}
+.randomizer > .dashboard .filters-form {
+  gap: 20px;
+}
+.randomizer > .dashboard .filters-form__input {
+  border: 1px solid #000;
+  padding: 5px 5px 5px 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  width: 100%;
+}
+.randomizer > .dashboard .other-languages {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .dashboard .other-languages__button {
+  border-right: 1px solid #aaa;
+  font-size: 25px;
+  color: #aaa;
+  width: 60px;
+  text-align: center;
+}
+.randomizer > .dashboard .other-languages__button:last-of-type {
+  border: none;
+}
+.randomizer > .dashboard .other-languages__button:hover {
+  color: #555;
+}
+.randomizer > .dashboard .other-utilities {
+  gap: 5px;
+}
+.randomizer > .dashboard .other-utilities__button {
+  border: 1px solid #aaa;
+  border-radius: 8px;
   padding: 5px;
+}
+.randomizer > .dashboard .other-utilities__button:hover {
+  border-color: #000;
+}
+.randomizer > .dashboard .other-utilities__button > svg {
+  width: 30px;
+  height: 30px;
+  fill: #aaa;
+}
+.randomizer > .dashboard .other-utilities__button:hover > svg {
+  fill: #000;
 }
 
 /*# sourceMappingURL=style.css.map */

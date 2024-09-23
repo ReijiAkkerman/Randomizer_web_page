@@ -17,7 +17,7 @@ $active-list: #080;
         border-#{$side}: 1px solid $color;
     }
     @else {
-        border: 1px solid $static;
+        border: 1px solid $color;
     }
 }
 
@@ -27,6 +27,14 @@ $active-list: #080;
 
 @mixin invisible($side: false) {
     @include border($side, $color: $hidden);
+
+    &:hover {
+        border-color: $active;
+    }
+}
+
+@mixin inactive {
+    @include border($color: $inactive);
 
     &:hover {
         border-color: $active;

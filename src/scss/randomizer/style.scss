@@ -9,9 +9,17 @@
         
         > div {
             @include borders.default(bottom);
-            border-color: borders.$inactive;
-            padding: 5px 0;
-            margin: 0 20px;
+            border-color: borders.$static;
+            padding: 5px 5px;
+            margin: 0 15px;
+
+            &:first-of-type {
+                margin-top: 5px;
+            }
+
+            &:last-of-type {
+                border: none;
+            }
         }
 
         .search {
@@ -31,14 +39,12 @@
 
                 &__button {
                     width: fit-content;
-                    cursor: pointer;
 
                     > svg {
                         fill: text.$inactive;
                         width: 30px;
                         height: 30px;
                         padding: 5px 15px;
-                        vertical-align: middle;
                     }
 
                     &:hover {
@@ -57,7 +63,6 @@
 
                 &__button {
                     @include borders.default(right);
-                    cursor: pointer;
 
                     &:last-of-type {
                         border: none;
@@ -65,7 +70,6 @@
 
                     > svg {
                         fill: text.$inactive;
-                        vertical-align: middle;
                         width: 30px;
                         height: 30px;
                         padding: 5px;
@@ -78,6 +82,20 @@
                     }
                 }
             }
+
+            &-additional {
+                &__button {
+                    @include borders.default;
+                    border-radius: 10px;
+                    font-size: 20px;
+                    margin-top: 5px;
+                    color: text.$inactive;
+
+                    &:hover {
+                        color: text.$active;
+                    }
+                }
+            }
         }
 
         .parameters {
@@ -86,11 +104,126 @@
             }
 
             &__input {
-                width: max-content;
+                width: 100%;
                 @include borders.default;
                 border-radius: 10px;
-                padding: 5px;
+                padding: 5px 5px 5px 20px;
+                font-size: 20px;
+            }
+        }
 
+        .lists {
+            > div {
+                @include borders.border(bottom);
+                padding: 5px 0;
+
+                &:first-of-type {
+                    padding-top: 0;
+                }
+
+                &:last-of-type {
+                    border: none;
+                    padding-bottom: 0;
+                }
+
+                > p {
+                    font-size: 20px;
+                    margin-bottom: 5px;
+                }
+
+                > button {
+                    @include borders.inactive;
+                    border-radius: 8px;
+                    font-size: 20px;
+                    padding: 0 10px;
+                    width: 100%;
+                    text-align: left;
+                    margin-bottom: 5px;
+                    color: text.$inactive;
+
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
+
+                    &.lists_delete-lists {
+                        width: fit-content;
+                        padding: 0 1px;
+                    }
+
+                    &:hover {
+                        color: text.$active;
+
+                        > svg {
+                            fill: text.$active;
+                        }
+                    }
+
+                    > svg {
+                        fill: text.$inactive;
+                        width: 20px;
+                        height: 20px;
+                        vertical-align: -16%;
+                    }
+                }
+            }
+        }
+
+        .filters {
+            &-form {
+                gap: 20px;
+
+                &__input {
+                    @include borders.default;
+                    padding: 5px 5px 5px 20px;
+                    border-radius: 10px;
+                    font-size: 20px;
+                    width: 100%;
+                }
+            }
+        }
+
+        .other {
+            &-languages {
+                @include borders.border($color: borders.$inactive);
+                border-radius: 10px;
+
+                &__button {
+                    @include borders.border(right, borders.$inactive);
+                    font-size: 25px;
+                    color: text.$inactive;
+                    width: 60px;
+                    text-align: center;
+
+                    &:last-of-type {
+                        border: none;
+                    }
+
+                    &:hover {
+                        color: #555;
+                    }
+                }
+            }
+
+            &-utilities {
+                gap: 5px;
+
+                &__button {
+                    @include borders.inactive;
+                    border-radius: 8px;
+                    padding: 5px;
+
+                    > svg {
+                        width: 30px;
+                        height: 30px;
+                        fill: text.$inactive;
+                    }
+
+                    &:hover {
+                        > svg {
+                            fill: text.$active;
+                        }
+                    }
+                }
             }
         }
     }

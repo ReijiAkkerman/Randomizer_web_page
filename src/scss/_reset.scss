@@ -5,6 +5,23 @@
     background-color: #0000;
 }
 
+*::placeholder {
+    color: #aaa;
+}
+
 button {
     display: block;
+    cursor: pointer;
 }
+
+input {
+    outline: none;
+}
+
+svg {
+    vertical-align: middle;
+}
+
+// [placeholder] {
+//     color: #aaa;
+// }

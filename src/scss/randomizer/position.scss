@@ -2,12 +2,13 @@
 
 .randomizer  {
     > .dashboard {
-        display: block;
+        display: flex;
         position: fixed;
+        justify-content: space-between;
+        flex-direction: column;
         top: 0;
         right: 0;
-        min-width: 400px;
-        max-width: 600px;
+        width: 400px;
         height: 100%;
 
         .search {
@@ -29,6 +30,16 @@
                     height: fit-content;
                 }
             }
+
+            &-additional {
+                display: block;
+                position: relative;
+
+                &__button {
+                    width: 100%;
+                    height: fit-content;
+                }
+            }
         }
 
         .parameters {
@@ -39,6 +50,42 @@
                 display: flex;
                 position: relative;
                 justify-content: space-between;
+            }
+        }
+
+        .lists {
+            height: 100%;
+            display: block;
+            position: relative;
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            .lists_delete-lists {
+                float: right;
+            }
+        }
+
+        .filters {
+            &-form {
+                display: flex;
+                position: relative;
+                justify-content: space-around;
+            }
+        }
+
+        .other {
+            display: flex;
+            position: relative;
+            justify-content: space-between;
+
+            > div {
+                display: flex;
+                position: relative;
+                justify-content: start;
+            }
+
+            &-utilities {
+                flex-direction: row-reverse;
             }
         }
     }
