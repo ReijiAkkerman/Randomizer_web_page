@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="/src/css/fonts.css">
         <link rel="stylesheet" href="/src/css/randomizer/position.css">
         <link rel="stylesheet" href="/src/css/randomizer/style.css">
     </head>
@@ -9,6 +10,17 @@
         <main>
 
         </main>
+        <section class="settings">
+            <div class="theme">
+
+            </div>
+            <div class="settings-languages">
+                
+            </div>
+            <div class="settings-git">
+
+            </div>
+        </section>
         <section class="dashboard">
             <div class="search">
                 <form action="#" class="search-form">
@@ -113,8 +125,8 @@
             </div>
             <div class="filters">
                 <form class="filters-form">
-                    <input type="text" class="filters-form__input filters-form__input_date-from" placeholder="с 1.1.1111">
-                    <input type="text" class="filters-form__input filters-form__input_date-until" placeholder="по 2.2.2222">
+                    <input type="text" class="filters-form__input filters-form__input_date-from" placeholder="с (dd.mm.yyyy)">
+                    <input type="text" class="filters-form__input filters-form__input_date-until" placeholder="по (dd.mm.yyyy)">
                 </form>
             </div>
             <div class="other">

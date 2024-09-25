@@ -1,7 +1,8 @@
 @use "theme" as *;
 
 $static: #000;
-$inactive: #aaa;
+$inactive: #777;
+$hover: #333;
 $active: #000;
 
 @if $dark-theme {

@@ -3,7 +3,15 @@
 @use "../_components/borders";
 @use "../_components/text";
 
+*::placeholder {
+    color: text.$inactive
+}
+
 .randomizer {
+    > .settings {
+        
+    }
+
     > .dashboard {
         @include borders.default(left);
         
@@ -162,7 +170,7 @@
                         fill: text.$inactive;
                         width: 20px;
                         height: 20px;
-                        vertical-align: -16%;
+                        vertical-align: -15%;
                     }
                 }
             }
@@ -199,7 +207,7 @@
                     }
 
                     &:hover {
-                        color: #555;
+                        color: text.$hover;
                     }
                 }
             }

@@ -1,6 +1,11 @@
 @use "../reset";
 
 .randomizer  {
+    > .settings {
+        display: block;
+        position: relative;
+    }
+
     > .dashboard {
         display: flex;
         position: fixed;
@@ -8,7 +13,7 @@
         flex-direction: column;
         top: 0;
         right: 0;
-        width: 400px;
+        width: 500px;
         height: 100%;
 
         .search {
