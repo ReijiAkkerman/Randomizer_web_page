@@ -33,7 +33,11 @@ $active-list: #080;
     }
 }
 
-@mixin inactive {
+@mixin inactive($side: false) {
+    @include border($side, $inactive);
+}
+
+@mixin hover {
     @include border($color: $inactive);
 
     &:hover {

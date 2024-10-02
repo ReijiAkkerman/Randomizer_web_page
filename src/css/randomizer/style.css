@@ -23,7 +23,124 @@ svg {
   color: #777;
 }
 
+.randomizer > .settings {
+  width: calc(100% - 501px);
+}
+.randomizer > .settings svg {
+  width: 30px;
+  height: 30px;
+}
+.randomizer > .settings > div {
+  border-bottom: 1px solid #000;
+  padding: 0 10px;
+  margin: 0 10px;
+}
+.randomizer > .settings > div:first-of-type {
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+.randomizer > .settings > div:last-of-type {
+  margin-bottom: 10px;
+  padding-top: 10px;
+  border: none;
+}
+.randomizer > .settings .theme-switcher {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .settings .theme-switcher__button {
+  border-right: 1px solid #aaa;
+  padding: 5px 20px;
+}
+.randomizer > .settings .theme-switcher__button:last-of-type {
+  border: none;
+}
+.randomizer > .settings .theme-switcher__button > svg {
+  fill: #777;
+}
+.randomizer > .settings .theme-switcher__button:hover > svg {
+  fill: #333;
+}
+.randomizer > .settings .theme_close-settings {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 0 6px;
+}
+.randomizer > .settings .theme_close-settings:hover {
+  border-color: #000;
+}
+.randomizer > .settings .theme_close-settings > svg {
+  fill: #777;
+}
+.randomizer > .settings .theme_close-settings:hover > svg {
+  fill: #000;
+}
+.randomizer > .settings .languages p {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.randomizer > .settings .languages > div {
+  border-bottom: 1px solid #aaa;
+  padding: 10px 0;
+}
+.randomizer > .settings .languages > div:last-of-type {
+  border-bottom: none;
+}
+.randomizer > .settings .languages-main-language__button {
+  font-size: 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  color: #777;
+  padding: 5px 20px;
+}
+.randomizer > .settings .languages-main-language__button:hover {
+  border-color: #000;
+}
+.randomizer > .settings .languages-main-language__button:hover {
+  color: #000;
+}
+.randomizer > .settings .languages-additional-languages-list {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .settings .languages-additional-languages-list__button {
+  border-bottom: 1px solid #aaa;
+  width: 100%;
+  padding: 5px 20px;
+  font-size: 20px;
+  color: #777;
+}
+.randomizer > .settings .languages-additional-languages-list__button > svg {
+  width: 20px;
+  height: 20px;
+  fill: #777;
+}
+.randomizer > .settings .languages-additional-languages-list__button:last-of-type {
+  border: none;
+}
+.randomizer > .settings .languages-additional-languages-list__button:hover {
+  color: #000;
+}
+.randomizer > .settings .languages-additional-languages-list__button:hover > svg {
+  fill: #000;
+}
+.randomizer > .settings .languages-additional-languages-actions__button {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 6px;
+}
+.randomizer > .settings .languages-additional-languages-actions__button:hover {
+  border-color: #000;
+}
+.randomizer > .settings .languages-additional-languages-actions__button > svg {
+  fill: #777;
+}
+.randomizer > .settings .languages-additional-languages-actions__button:hover > svg {
+  fill: #000;
+}
 .randomizer > .dashboard {
+  background-color: #fff;
   border-left: 1px solid #000;
 }
 .randomizer > .dashboard > div {

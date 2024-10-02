@@ -4,6 +4,53 @@
     > .settings {
         display: block;
         position: relative;
+
+        .theme {
+            display: flex;
+            position: relative;
+            justify-content: space-between;
+
+            &-switcher {
+                display: flex;
+                position: relative;
+                justify-content: start;
+            }
+        }
+
+        .languages {
+            display: block;
+            position: relative;
+
+            &-main-language {
+                display: block;
+                position: relative;
+            }
+
+            &-additional-languages {
+                display: block;
+                position: relative;
+
+                > div {
+                    display: flex;
+                    position: relative;
+                    justify-content: start;
+                    gap: 20px;
+                }
+
+                &-list {
+                    display: block;
+                    position: relative;
+                }
+
+                &-actions {
+                    display: flex;
+                    position: relative;
+                    justify-content: start;
+                    align-items: start;
+                    gap: 10px;
+                }
+            }
+        }
     }
 
     > .dashboard {
