@@ -21,19 +21,42 @@
             padding: 0 10px;
             margin: 0 10px;
 
+            &:nth-child(odd) {
+                border: none;
+            }
+
             &:first-of-type {
                 margin-top: 10px;
                 padding-bottom: 10px;
+                @include borders.default(bottom);
             }
 
             &:last-of-type {
                 margin-bottom: 10px;
-                padding-top: 10px;
-                border: none;
+                // padding-top: 10px;
             }
         }
 
         .theme {
+            .setups-switcher {
+                @include borders.inactive;
+                border-radius: 10px;
+
+                &__button {
+                    font-size: 20px;
+                    padding: 5px 20px;
+                    color: text.$inactive;
+
+                    &:first-of-type {
+                        @include borders.inactive(right);
+                    }
+
+                    &:hover {
+                        color: text.$active;
+                    }
+                }
+            }
+
             &-switcher {
                 @include borders.inactive;
                 border-radius: 10px;
@@ -148,6 +171,224 @@
                         }
 
                         &:hover {
+                            > svg {
+                                fill: text.$active;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &-add {
+                margin: 0 10px;
+
+                p {
+                    text-align: center;
+                    font-size: 20px;
+                    margin-bottom: 10px;
+                }
+
+                > div {
+                    margin: 10px 0;
+                }
+
+                > div:last-of-type {
+                    margin: 0;
+                    padding: 10px 0;
+                    @include borders.inactive(top);
+                }
+
+                > div:first-of-type {
+                    padding: 0;
+                }
+
+                &-select {
+                    @include borders.inactive;
+                    border-radius: 10px;
+
+                    &__button {
+                        font-size: 20px;
+                        padding: 5px 20px;
+                        color: text.$inactive;
+                        @include borders.inactive(bottom);
+                        @include borders.inactive(right);
+
+                        &:nth-child(3n) {
+                            border-right: none;
+                        }
+
+                        &:nth-last-child(-n+3) {
+                            border-bottom: none;
+                        }
+
+                        &:hover {
+                            color: text.$active;
+                        }
+                    }
+                }
+
+                
+
+                &-create {
+                    &__input[type="text"] {
+                        width: 100%;
+                        font-size: 20px;
+                        padding: 5px 5px 5px 20px;
+                        @include borders.inactive;
+                        border-radius: 10px;
+                        color: text.$inactive;
+
+                        &:focus {
+                            color: text.$active;
+                        }
+                    }
+
+                    &__label {
+                        padding-left: 20px;
+                        width: fit-content;
+                        font-size: 20px;
+                        margin: 10px 5px;
+
+                        &::before {
+                            content: "";
+                            top: 2px;
+                            left: -5px;
+                            width: 20px;
+                            height: 20px;
+                            @include borders.default;
+                            border-radius: 5px;
+                        }
+                    }
+
+                    &__input[type="checkbox"]:checked + label::before {
+                        content: "\2713";
+                        font-weight: bold;
+                        font-size: 20px;
+                        text-align: center;
+                    }
+
+                    &__button {
+                        font-size: 20px;
+                        padding: 5px 20px;
+                        @include borders.hover;
+                        border-radius: 10px;
+                        color: text.$inactive;
+                        margin: 0 auto;
+
+                        &:hover {
+                            color: text.$active;
+                        }
+                    }
+                }
+            }
+        }
+
+        .git {
+            p {
+                font-size: 20px;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            > div {
+                @include borders.inactive(bottom);
+                padding: 10px 0;
+
+                &:last-of-type {
+                    border-bottom: none;
+                }
+            }
+
+            &-repo {
+                &__input {
+                    width: 100%;
+                    @include borders.inactive;
+                    border-radius: 10px;
+                    padding: 5px 5px 5px 20px;
+                    font-size: 20px;
+                    color: text.$inactive;
+                    box-sizing: border-box;
+
+                    &:focus {
+                        color: text.$active;
+                        border-color: borders.$active;
+                    }
+                }
+            }
+
+            &-branches {
+                &__button {
+                    font-size: 20px;
+                    @include borders.hover;
+                    border-radius: 10px;
+                    color: text.$inactive;
+                    padding: 5px 20px;
+
+                    &:hover {
+                        color: text.$active;
+                    }
+                }
+
+                &__label {
+                    width: fit-content;
+                    padding-left: 20px;
+                    font-size: 20px;
+                    margin-left: 5px;
+                    margin-top: 10px;
+
+                    &::before {
+                        content: "";
+                        width: 20px;
+                        height: 20px;
+                        left: -5px;
+                        top: 2px;
+                        @include borders.default;
+                        border-radius: 5px;
+                    }
+                }
+
+                &__input[type="checkbox"]:checked + label::before {
+                    content: "\2713";
+                    font-size: 20px;
+                    font-weight: bold;
+                    text-align: center;
+                    vertical-align: top;
+                }
+            }
+
+            &-lang-folders {
+                &-foldernames {
+                    &__input {
+                        font-size: 20px;
+                        @include borders.inactive;
+                        border-radius: 10px;
+                        padding: 5px 20px;
+                        color: text.$inactive;
+    
+                        &:focus {
+                            color: text.$active;
+                            border-color: borders.$active;
+                        }
+                    }
+                }
+
+                &-langnames {
+                    &__button {
+                        font-size: 20px;
+                        @include borders.hover;
+                        border-radius: 10px;
+                        padding: 5px 20px;
+                        color: text.$inactive;
+
+                        > svg {
+                            width: 20px;
+                            height: 20px;
+                            fill: text.$inactive;
+                        }
+    
+                        &:hover {
+                            color: text.$active;
+
                             > svg {
                                 fill: text.$active;
                             }

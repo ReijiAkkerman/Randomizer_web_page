@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +9,10 @@
 
 button {
   display: block;
+  cursor: pointer;
+}
+
+label {
   cursor: pointer;
 }
 
@@ -35,14 +40,31 @@ svg {
   padding: 0 10px;
   margin: 0 10px;
 }
+.randomizer > .settings > div:nth-child(odd) {
+  border: none;
+}
 .randomizer > .settings > div:first-of-type {
   margin-top: 10px;
   padding-bottom: 10px;
+  border-bottom: 1px solid #000;
 }
 .randomizer > .settings > div:last-of-type {
   margin-bottom: 10px;
-  padding-top: 10px;
-  border: none;
+}
+.randomizer > .settings .theme .setups-switcher {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .settings .theme .setups-switcher__button {
+  font-size: 20px;
+  padding: 5px 20px;
+  color: #777;
+}
+.randomizer > .settings .theme .setups-switcher__button:first-of-type {
+  border-right: 1px solid #aaa;
+}
+.randomizer > .settings .theme .setups-switcher__button:hover {
+  color: #000;
 }
 .randomizer > .settings .theme-switcher {
   border: 1px solid #aaa;
@@ -137,6 +159,184 @@ svg {
   fill: #777;
 }
 .randomizer > .settings .languages-additional-languages-actions__button:hover > svg {
+  fill: #000;
+}
+.randomizer > .settings .languages-add {
+  margin: 0 10px;
+}
+.randomizer > .settings .languages-add p {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.randomizer > .settings .languages-add > div {
+  margin: 10px 0;
+}
+.randomizer > .settings .languages-add > div:last-of-type {
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid #aaa;
+}
+.randomizer > .settings .languages-add > div:first-of-type {
+  padding: 0;
+}
+.randomizer > .settings .languages-add-select {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .settings .languages-add-select__button {
+  font-size: 20px;
+  padding: 5px 20px;
+  color: #777;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+}
+.randomizer > .settings .languages-add-select__button:nth-child(3n) {
+  border-right: none;
+}
+.randomizer > .settings .languages-add-select__button:nth-last-child(-n+3) {
+  border-bottom: none;
+}
+.randomizer > .settings .languages-add-select__button:hover {
+  color: #000;
+}
+.randomizer > .settings .languages-add-create__input[type=text] {
+  width: 100%;
+  font-size: 20px;
+  padding: 5px 5px 5px 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  color: #777;
+}
+.randomizer > .settings .languages-add-create__input[type=text]:focus {
+  color: #000;
+}
+.randomizer > .settings .languages-add-create__label {
+  padding-left: 20px;
+  width: fit-content;
+  font-size: 20px;
+  margin: 10px 5px;
+}
+.randomizer > .settings .languages-add-create__label::before {
+  content: "";
+  top: 2px;
+  left: -5px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+.randomizer > .settings .languages-add-create__input[type=checkbox]:checked + label::before {
+  content: "✓";
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+.randomizer > .settings .languages-add-create__button {
+  font-size: 20px;
+  padding: 5px 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  color: #777;
+  margin: 0 auto;
+}
+.randomizer > .settings .languages-add-create__button:hover {
+  border-color: #000;
+}
+.randomizer > .settings .languages-add-create__button:hover {
+  color: #000;
+}
+.randomizer > .settings .git p {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.randomizer > .settings .git > div {
+  border-bottom: 1px solid #aaa;
+  padding: 10px 0;
+}
+.randomizer > .settings .git > div:last-of-type {
+  border-bottom: none;
+}
+.randomizer > .settings .git-repo__input {
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 5px 5px 5px 20px;
+  font-size: 20px;
+  color: #777;
+  box-sizing: border-box;
+}
+.randomizer > .settings .git-repo__input:focus {
+  color: #000;
+  border-color: #000;
+}
+.randomizer > .settings .git-branches__button {
+  font-size: 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  color: #777;
+  padding: 5px 20px;
+}
+.randomizer > .settings .git-branches__button:hover {
+  border-color: #000;
+}
+.randomizer > .settings .git-branches__button:hover {
+  color: #000;
+}
+.randomizer > .settings .git-branches__label {
+  width: fit-content;
+  padding-left: 20px;
+  font-size: 20px;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+.randomizer > .settings .git-branches__label::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  left: -5px;
+  top: 2px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+.randomizer > .settings .git-branches__input[type=checkbox]:checked + label::before {
+  content: "✓";
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: top;
+}
+.randomizer > .settings .git-lang-folders-foldernames__input {
+  font-size: 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 5px 20px;
+  color: #777;
+}
+.randomizer > .settings .git-lang-folders-foldernames__input:focus {
+  color: #000;
+  border-color: #000;
+}
+.randomizer > .settings .git-lang-folders-langnames__button {
+  font-size: 20px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  padding: 5px 20px;
+  color: #777;
+}
+.randomizer > .settings .git-lang-folders-langnames__button:hover {
+  border-color: #000;
+}
+.randomizer > .settings .git-lang-folders-langnames__button > svg {
+  width: 20px;
+  height: 20px;
+  fill: #777;
+}
+.randomizer > .settings .git-lang-folders-langnames__button:hover {
+  color: #000;
+}
+.randomizer > .settings .git-lang-folders-langnames__button:hover > svg {
   fill: #000;
 }
 .randomizer > .dashboard {

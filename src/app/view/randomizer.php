@@ -32,13 +32,17 @@
                         </svg>
                     </button>
                 </div>
+                <div class="setups-switcher">
+                    <button class="setups-switcher__button">Languages</button>
+                    <button class="setups-switcher__button">Git</button>
+                </div>
                 <button class="theme_close-settings">
                     <svg viewBox="0 0 1024 1024">
                         <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                     </svg>
                 </button>
             </div>
-            <div class="languages">
+            <div class="languages"">
                 <div class="languages-main-language">
                     <p>Основной язык</p>
                     <button class="languages-main-language__button">Наименование языка</button>
@@ -73,7 +77,64 @@
                     </div>
                 </div>
             </div>
-            <div class="settings-git">
+            <div class="languages-add" style="display:none;">
+                <div class="languages-add-select languages-add-select_recent-languages">
+                    <button class="languages-add-select__button">Английский</button>
+                    <button class="languages-add-select__button">Японский</button>
+                    <button class="languages-add-select__button">Китайский</button>
+                    <!-- <button class="languages-add-select__button">Английский</button>
+                    <button class="languages-add-select__button">Японский</button>
+                    <button class="languages-add-select__button">Китайский</button> -->
+                </div>
+                <div class="languages-add-select languages-add-select_all-languages">
+                    <button class="languages-add-select__button">Английский</button>
+                    <button class="languages-add-select__button">Японский</button>
+                    <button class="languages-add-select__button">Китайский</button>
+                    <button class="languages-add-select__button">Английский</button>
+                    <button class="languages-add-select__button">Японский</button>
+                    <button class="languages-add-select__button">Китайский</button>
+                </div>
+                <div class="languages-add-create">
+                    <p>Добавить новый язык</p>
+                    <div>
+                        <div class="languages-add-create__div">
+                            <input class="languages-add-create__input" type="text" placeholder="Наименование языка">
+                            <input class="languages-add-create__input" type="text" placeholder="Папка языка">
+                        </div>
+                        <input class="languages-add-create__input" type="checkbox" id="present-kanji">
+                        <label class="languages-add-create__label" for="present-kanji">В языке есть иероглифы</label>
+                        <button class="languages-add-create__button">Добавить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="git" style="display:none;">
+                <div class="git-repo">
+                    <p>Репозиторий</p>
+                    <input class="git-repo__input" type="text" placeholder="Репозиторий со списками слов">
+                </div>
+                <div class="git-branches">
+                    <p>Ветка</p>
+                    <button class="git-branches__button">main</button>
+                    <input class="git-branches__input" type="checkbox" id="combine-branches">
+                    <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
+                </div>
+                <div class="git-lang-folders">
+                    <p>Папки и соответствующие им языки</p>
+                    <div>
+                        <div class="git-lang-folders-foldernames">
+                            <input class="git-lang-folders-foldernames__input" type="text" value="english">
+                            <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
+                            <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
+                        </div>
+                        <div class="git-lang-folders-langnames">
+                            <button class="git-lang-folders-langnames__button">Английский язык</button>
+                            <button class="git-lang-folders-langnames__button">Японский язык</button>
+                            <button class="git-lang-folders-langnames__button">Выбрать язык</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:none;">
 
             </div>
         </section>

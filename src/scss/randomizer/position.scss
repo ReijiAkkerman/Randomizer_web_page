@@ -10,6 +10,12 @@
             position: relative;
             justify-content: space-between;
 
+            .setups-switcher {
+                display: flex;
+                position: relative;
+                justify-content: start;
+            }
+
             &-switcher {
                 display: flex;
                 position: relative;
@@ -48,6 +54,97 @@
                     justify-content: start;
                     align-items: start;
                     gap: 10px;
+                }
+            }
+
+            &-add {
+                display: block;
+                position: relative;
+
+                &-select {
+                    display: grid;
+                    position: relative;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                &-select-from-all {
+                    display: grid;
+                    position: relative;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                &-create {
+                    display: block;
+                    position: relative;
+
+                    > div {
+                        display: block;
+                        position: relative;
+                    }
+
+                    &__div {
+                        display: flex;
+                        position: relative;
+                        justify-content: space-between;
+                        gap: 20px;
+                    }
+
+                    &__input[type="checkbox"] {
+                        display: none;
+                    }
+
+                    &__label {
+                        display: block;
+                        position: relative;
+
+                        &::before {
+                            display: inline-block;
+                            position: absolute;
+                        }
+                    }
+                }
+            }
+        }
+
+        .git {
+            &-branches {
+                &__input {
+                    display: none;
+                }
+
+                &__label {
+                    display: block;
+                    position: relative;
+
+                    &::before {
+                        display: block;
+                        position: absolute;
+                    }
+                }
+            }
+
+            &-lang-folders {
+                display: block;
+                position: relative;
+
+                > div {
+                    display: flex;
+                    position: relative;
+                    justify-content: start;
+                    gap: 40px;
+
+                    > div {
+                        display: flex;
+                        position: relative;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                }
+
+                &-foldernames {
+                    &__input {
+                        display: block;
+                    }
                 }
             }
         }

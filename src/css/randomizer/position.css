@@ -11,6 +11,10 @@ button {
   cursor: pointer;
 }
 
+label {
+  cursor: pointer;
+}
+
 input {
   outline: none;
 }
@@ -27,6 +31,11 @@ svg {
   display: flex;
   position: relative;
   justify-content: space-between;
+}
+.randomizer > .settings .theme .setups-switcher {
+  display: flex;
+  position: relative;
+  justify-content: start;
 }
 .randomizer > .settings .theme-switcher {
   display: flex;
@@ -61,6 +70,75 @@ svg {
   justify-content: start;
   align-items: start;
   gap: 10px;
+}
+.randomizer > .settings .languages-add {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .languages-add-select {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(3, 1fr);
+}
+.randomizer > .settings .languages-add-select-from-all {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(3, 1fr);
+}
+.randomizer > .settings .languages-add-create {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .languages-add-create > div {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .languages-add-create__div {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  gap: 20px;
+}
+.randomizer > .settings .languages-add-create__input[type=checkbox] {
+  display: none;
+}
+.randomizer > .settings .languages-add-create__label {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .languages-add-create__label::before {
+  display: inline-block;
+  position: absolute;
+}
+.randomizer > .settings .git-branches__input {
+  display: none;
+}
+.randomizer > .settings .git-branches__label {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .git-branches__label::before {
+  display: block;
+  position: absolute;
+}
+.randomizer > .settings .git-lang-folders {
+  display: block;
+  position: relative;
+}
+.randomizer > .settings .git-lang-folders > div {
+  display: flex;
+  position: relative;
+  justify-content: start;
+  gap: 40px;
+}
+.randomizer > .settings .git-lang-folders > div > div {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 10px;
+}
+.randomizer > .settings .git-lang-folders-foldernames__input {
+  display: block;
 }
 .randomizer > .dashboard {
   display: flex;
