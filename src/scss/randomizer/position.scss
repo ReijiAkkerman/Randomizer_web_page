@@ -128,17 +128,13 @@
                 position: relative;
 
                 > div {
-                    display: flex;
+                    display: grid;
                     position: relative;
-                    justify-content: start;
-                    gap: 40px;
-
-                    > div {
-                        display: flex;
-                        position: relative;
-                        flex-direction: column;
-                        gap: 10px;
-                    }
+                    grid-template-columns: 1fr 1fr;
+                    justify-items: stretch;
+                    align-items: stretch;
+                    column-gap: 25px;
+                    row-gap: 10px;
                 }
 
                 &-foldernames {

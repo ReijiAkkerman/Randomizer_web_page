@@ -1,3 +1,6 @@
+<?php
+    $enable_tests = false;
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,12 +8,16 @@
         <link rel="stylesheet" href="/src/css/fonts.css">
         <link rel="stylesheet" href="/src/css/randomizer/position.css">
         <link rel="stylesheet" href="/src/css/randomizer/style.css">
+
+        <?php
+            if($enable_tests) require_once __DIR__ . '/tests/head.php';
+        ?>
     </head>
     <body class="randomizer">
         <main>
 
         </main>
-        <section class="settings">
+        <section class="settings" style="display:none;">
             <div class="theme">
                 <div class="theme-switcher">
                     <button class="theme-switcher__button">
@@ -33,8 +40,8 @@
                     </button>
                 </div>
                 <div class="setups-switcher">
-                    <button class="setups-switcher__button">Languages</button>
-                    <button class="setups-switcher__button">Git</button>
+                    <button class="setups-switcher__button setups-switcher__button_languages" style="color:#000;">Languages</button>
+                    <button class="setups-switcher__button setups-switcher__button_git">Git</button>
                 </div>
                 <button class="theme_close-settings">
                     <svg viewBox="0 0 1024 1024">
@@ -42,18 +49,18 @@
                     </svg>
                 </button>
             </div>
-            <div class="languages"">
+            <div class="languages">
                 <div class="languages-main-language">
                     <p>Основной язык</p>
-                    <button class="languages-main-language__button">Наименование языка</button>
+                    <button class="languages-main-language__button existent-language">Наименование языка</button>
                 </div>
                 <div class="languages-additional-languages">
                     <p>Изучаемые языки</p>
                     <div>
                         <div class="languages-additional-languages-list">
-                            <button class="languages-additional-languages-list__button">Английский язык</button>
-                            <button class="languages-additional-languages-list__button">Японский язык</button>
-                            <button class="languages-additional-languages-list__button">
+                            <button class="languages-additional-languages-list__button existent-language">Английский язык</button>
+                            <button class="languages-additional-languages-list__button existent-language">Японский язык</button>
+                            <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language">
                                 <svg viewBox="0 0 32 32">
 	                                <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
                                 </svg>
@@ -82,9 +89,6 @@
                     <button class="languages-add-select__button">Английский</button>
                     <button class="languages-add-select__button">Японский</button>
                     <button class="languages-add-select__button">Китайский</button>
-                    <!-- <button class="languages-add-select__button">Английский</button>
-                    <button class="languages-add-select__button">Японский</button>
-                    <button class="languages-add-select__button">Китайский</button> -->
                 </div>
                 <div class="languages-add-select languages-add-select_all-languages">
                     <button class="languages-add-select__button">Английский</button>
@@ -95,7 +99,8 @@
                     <button class="languages-add-select__button">Китайский</button>
                 </div>
                 <div class="languages-add-create">
-                    <p>Добавить новый язык</p>
+                    <p class="languages-add-create__p_add-language">Добавить новый язык</p>
+                    <p class="languages-add-create__p_edit-language">Изменить параметры языка</p>
                     <div>
                         <div class="languages-add-create__div">
                             <input class="languages-add-create__input" type="text" placeholder="Наименование языка">
@@ -121,16 +126,12 @@
                 <div class="git-lang-folders">
                     <p>Папки и соответствующие им языки</p>
                     <div>
-                        <div class="git-lang-folders-foldernames">
-                            <input class="git-lang-folders-foldernames__input" type="text" value="english">
-                            <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
-                            <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
-                        </div>
-                        <div class="git-lang-folders-langnames">
-                            <button class="git-lang-folders-langnames__button">Английский язык</button>
-                            <button class="git-lang-folders-langnames__button">Японский язык</button>
-                            <button class="git-lang-folders-langnames__button">Выбрать язык</button>
-                        </div>
+                        <input class="git-lang-folders-foldernames__input" type="text" value="english">
+                        <button class="git-lang-folders-langnames__button">Английский язык</button>
+                        <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
+                        <button class="git-lang-folders-langnames__button">Японский язык</button>
+                        <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
+                        <button class="git-lang-folders-langnames__button">Выбрать язык</button>
                     </div>
                 </div>
             </div>
@@ -265,5 +266,10 @@
                 </div>
             </div>
         </section>
+        <script src="/src/js/UserInterface.js"></script>
+
+        <?php
+            if($enable_tests) require_once __DIR__ . '/tests/body.php';
+        ?>
     </body>
 </html>
