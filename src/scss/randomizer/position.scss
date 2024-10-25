@@ -1,95 +1,134 @@
 @use "../reset";
 
 .randomizer  {
-    > .settings {
+    main {
         display: block;
-        position: relative;
+        position: fixed;
+        width: calc(100% - 501px);
+        height: 100%;
+        top: 0;
+        left: 0;
 
-        .theme {
-            display: flex;
-            position: relative;
-            justify-content: space-between;
-
-            .setups-switcher {
-                display: flex;
-                position: relative;
-                justify-content: start;
-            }
-
-            &-switcher {
-                display: flex;
-                position: relative;
-                justify-content: start;
-            }
-        }
-
-        .languages {
+        > .words {
             display: block;
             position: relative;
 
-            &-main-language {
-                display: block;
+            > div {
+                display: flex;
                 position: relative;
+                justify-content: start;
+                gap: 5px;
             }
+        }
 
-            &-additional-languages {
-                display: block;
+        > .settings {
+            display: block;
+            position: relative;
+
+            .theme {
+                display: flex;
                 position: relative;
+                justify-content: space-between;
 
-                > div {
+                .setups-switcher {
                     display: flex;
                     position: relative;
                     justify-content: start;
-                    gap: 20px;
                 }
 
-                &-list {
+                &-switcher {
+                    display: flex;
+                    position: relative;
+                    justify-content: start;
+                }
+            }
+
+            .languages {
+                display: block;
+                position: relative;
+
+                &-main-language {
                     display: block;
                     position: relative;
                 }
 
-                &-actions {
-                    display: flex;
-                    position: relative;
-                    justify-content: start;
-                    align-items: start;
-                    gap: 10px;
-                }
-            }
-
-            &-add {
-                display: block;
-                position: relative;
-
-                &-select {
-                    display: grid;
-                    position: relative;
-                    grid-template-columns: repeat(3, 1fr);
-                }
-
-                &-select-from-all {
-                    display: grid;
-                    position: relative;
-                    grid-template-columns: repeat(3, 1fr);
-                }
-
-                &-create {
+                &-additional-languages {
                     display: block;
                     position: relative;
 
                     > div {
+                        display: flex;
+                        position: relative;
+                        justify-content: start;
+                        gap: 20px;
+                    }
+
+                    &-list {
                         display: block;
                         position: relative;
                     }
 
-                    &__div {
+                    &-actions {
                         display: flex;
                         position: relative;
-                        justify-content: space-between;
-                        gap: 20px;
+                        justify-content: start;
+                        align-items: start;
+                        gap: 10px;
+                    }
+                }
+
+                &-add {
+                    display: block;
+                    position: relative;
+
+                    &-select {
+                        display: grid;
+                        position: relative;
+                        grid-template-columns: repeat(3, 1fr);
                     }
 
-                    &__input[type="checkbox"] {
+                    &-select-from-all {
+                        display: grid;
+                        position: relative;
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+
+                    &-create {
+                        display: block;
+                        position: relative;
+
+                        > div {
+                            display: block;
+                            position: relative;
+                        }
+
+                        &__div {
+                            display: flex;
+                            position: relative;
+                            justify-content: space-between;
+                            gap: 20px;
+                        }
+
+                        &__input[type="checkbox"] {
+                            display: none;
+                        }
+
+                        &__label {
+                            display: block;
+                            position: relative;
+
+                            &::before {
+                                display: inline-block;
+                                position: absolute;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .git {
+                &-branches {
+                    &__input {
                         display: none;
                     }
 
@@ -98,48 +137,30 @@
                         position: relative;
 
                         &::before {
-                            display: inline-block;
+                            display: block;
                             position: absolute;
                         }
                     }
                 }
-            }
-        }
 
-        .git {
-            &-branches {
-                &__input {
-                    display: none;
-                }
-
-                &__label {
+                &-lang-folders {
                     display: block;
                     position: relative;
 
-                    &::before {
-                        display: block;
-                        position: absolute;
+                    > div {
+                        display: grid;
+                        position: relative;
+                        grid-template-columns: 1fr 1fr;
+                        justify-items: stretch;
+                        align-items: stretch;
+                        column-gap: 25px;
+                        row-gap: 10px;
                     }
-                }
-            }
 
-            &-lang-folders {
-                display: block;
-                position: relative;
-
-                > div {
-                    display: grid;
-                    position: relative;
-                    grid-template-columns: 1fr 1fr;
-                    justify-items: stretch;
-                    align-items: stretch;
-                    column-gap: 25px;
-                    row-gap: 10px;
-                }
-
-                &-foldernames {
-                    &__input {
-                        display: block;
+                    &-foldernames {
+                        &__input {
+                            display: block;
+                        }
                     }
                 }
             }

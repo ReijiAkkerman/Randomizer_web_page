@@ -23,109 +23,127 @@ svg {
   vertical-align: middle;
 }
 
-.randomizer > .settings {
+.randomizer main {
+  display: block;
+  position: fixed;
+  width: calc(100% - 501px);
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.randomizer main > .words {
   display: block;
   position: relative;
 }
-.randomizer > .settings .theme {
+.randomizer main > .words > div {
+  display: flex;
+  position: relative;
+  justify-content: start;
+  gap: 5px;
+}
+.randomizer main > .settings {
+  display: block;
+  position: relative;
+}
+.randomizer main > .settings .theme {
   display: flex;
   position: relative;
   justify-content: space-between;
 }
-.randomizer > .settings .theme .setups-switcher {
+.randomizer main > .settings .theme .setups-switcher {
   display: flex;
   position: relative;
   justify-content: start;
 }
-.randomizer > .settings .theme-switcher {
+.randomizer main > .settings .theme-switcher {
   display: flex;
   position: relative;
   justify-content: start;
 }
-.randomizer > .settings .languages {
+.randomizer main > .settings .languages {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-main-language {
+.randomizer main > .settings .languages-main-language {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-additional-languages {
+.randomizer main > .settings .languages-additional-languages {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-additional-languages > div {
+.randomizer main > .settings .languages-additional-languages > div {
   display: flex;
   position: relative;
   justify-content: start;
   gap: 20px;
 }
-.randomizer > .settings .languages-additional-languages-list {
+.randomizer main > .settings .languages-additional-languages-list {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-additional-languages-actions {
+.randomizer main > .settings .languages-additional-languages-actions {
   display: flex;
   position: relative;
   justify-content: start;
   align-items: start;
   gap: 10px;
 }
-.randomizer > .settings .languages-add {
+.randomizer main > .settings .languages-add {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-add-select {
+.randomizer main > .settings .languages-add-select {
   display: grid;
   position: relative;
   grid-template-columns: repeat(3, 1fr);
 }
-.randomizer > .settings .languages-add-select-from-all {
+.randomizer main > .settings .languages-add-select-from-all {
   display: grid;
   position: relative;
   grid-template-columns: repeat(3, 1fr);
 }
-.randomizer > .settings .languages-add-create {
+.randomizer main > .settings .languages-add-create {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-add-create > div {
+.randomizer main > .settings .languages-add-create > div {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-add-create__div {
+.randomizer main > .settings .languages-add-create__div {
   display: flex;
   position: relative;
   justify-content: space-between;
   gap: 20px;
 }
-.randomizer > .settings .languages-add-create__input[type=checkbox] {
+.randomizer main > .settings .languages-add-create__input[type=checkbox] {
   display: none;
 }
-.randomizer > .settings .languages-add-create__label {
+.randomizer main > .settings .languages-add-create__label {
   display: block;
   position: relative;
 }
-.randomizer > .settings .languages-add-create__label::before {
+.randomizer main > .settings .languages-add-create__label::before {
   display: inline-block;
   position: absolute;
 }
-.randomizer > .settings .git-branches__input {
+.randomizer main > .settings .git-branches__input {
   display: none;
 }
-.randomizer > .settings .git-branches__label {
+.randomizer main > .settings .git-branches__label {
   display: block;
   position: relative;
 }
-.randomizer > .settings .git-branches__label::before {
+.randomizer main > .settings .git-branches__label::before {
   display: block;
   position: absolute;
 }
-.randomizer > .settings .git-lang-folders {
+.randomizer main > .settings .git-lang-folders {
   display: block;
   position: relative;
 }
-.randomizer > .settings .git-lang-folders > div {
+.randomizer main > .settings .git-lang-folders > div {
   display: grid;
   position: relative;
   grid-template-columns: 1fr 1fr;
@@ -134,7 +152,7 @@ svg {
   column-gap: 25px;
   row-gap: 10px;
 }
-.randomizer > .settings .git-lang-folders-foldernames__input {
+.randomizer main > .settings .git-lang-folders-foldernames__input {
   display: block;
 }
 .randomizer > .dashboard {
