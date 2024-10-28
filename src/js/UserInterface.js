@@ -1,5 +1,8 @@
+import {CircularQueue} from './DataStructures/CircularQueue.js';
+
 class UserInterface {
     static text_color = '#000';
+    static selected_text_color ='#00f';
 
     static selectors = new Map([
         ['Панель настроек', '.settings'],
@@ -17,12 +20,25 @@ class UserInterface {
         ['Панель слов', '.words'],
         ['Исходные значения слов', '.source'],
         ['Перевод слов', '.translation'],
+        ['Чтения слов', '.transcription'],
         ['Панель руководства', '.guide'],
         ['Кнопка руководства', '.other-utilities__button_guide'],
+        ['Кнопка включения исходников', '.other-modes__button_source'],
+        ['Кнопка включения переводов', '.other-modes__button_translation'],
+        ['Кнопка включения чтений', '.other-modes__button_transcription'],
+        ['Кнопки переключения режимов', '.other-modes__button'],
     ]);
 
     static settings_button_enabled = false;
     static guide_button_enabled = false;
+
+    static kanji_mode_enabled = true;
+
+    static source_mode_enabled = true;
+    static translation_mode_enabled = false;
+    static transcription_mode_enabled = true;
+    static mode_switcher_clicks_after_reload = 0;
+    static mode_switcher_queue;
 
     static close_settings() {
         let settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
@@ -165,7 +181,151 @@ class UserInterface {
         let words_panel = document.querySelector(UserInterface.selectors.get('Панель слов'));
         words_panel.style.display = '';
     }
+
+    static #enable_source_mode() {
+        let source = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
+        source.style.display = '';
+        UserInterface.source_mode_enabled = true;
+    }
+
+    static #enable_translation_mode() {
+        let translation = document.querySelector(UserInterface.selectors.get('Перевод слов'));
+        translation.style.display = '';
+        UserInterface.translation_mode_enabled = true;
+    }
+
+    static #enable_transcription_mode() {
+        let transcription = document.querySelector(UserInterface.selectors.get('Чтения слов'));
+        transcription.style.display = '';
+        UserInterface.transcription_mode_enabled = true;
+    }
+
+    static #disable_source_mode() {
+        let source = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
+        source.style.display = 'none';
+        UserInterface.source_mode_enabled = false;
+    }
+
+    static #disable_translation_mode() {
+        let translation = document.querySelector(UserInterface.selectors.get('Перевод слов'));
+        translation.style.display = 'none';
+        UserInterface.translation_mode_enabled = false;
+    }
+
+    static #disable_transcription_mode() {
+        let transcription = document.querySelector(UserInterface.selectors.get('Чтения слов'));
+        transcription.style.display = 'none';
+        UserInterface.transcription_mode_enabled = false;
+    }
+
+    static #set_default_colors_to_source_mode_button() {
+        let source_button = document.querySelector(UserInterface.selectors.get('Кнопка включения исходников'));
+        let svg_of_source_button = source_button.firstElementChild;
+        svg_of_source_button.style.fill = '';
+    }
+
+    static #set_default_colors_to_translation_mode_button() {
+        let translation_button = document.querySelector(UserInterface.selectors.get('Кнопка включения переводов'));
+        let svg_of_translation_button = translation_button.firstElementChild;
+        svg_of_translation_button.style.fill = '';
+    }
+
+    static #set_default_colors_to_transcription_mode_button() {
+        let transcription_button = document.querySelector(UserInterface.selectors.get('Кнопка включения чтений'));
+        let svg_of_transcription_button = transcription_button.firstElementChild;
+        svg_of_transcription_button.style.stroke = '';
+    }
+
+    static #set_active_colors_to_source_mode_button() {
+        let source_button = document.querySelector(UserInterface.selectors.get('Кнопка включения исходников'));
+        let svg_of_source_button = source_button.firstElementChild;
+        svg_of_source_button.style.fill = UserInterface.selected_text_color;
+    }
+
+    static #set_active_colors_to_translation_mode_button() {
+        let translation_button = document.querySelector(UserInterface.selectors.get('Кнопка включения переводов'));
+        let svg_of_translation_button = translation_button.firstElementChild;
+        svg_of_translation_button.style.fill = UserInterface.selected_text_color;
+    }
+
+    static #set_active_colors_to_transcription_mode_button() {
+        let transcription_button = document.querySelector(UserInterface.selectors.get('Кнопка включения чтений'));
+        let svg_of_transcription_button = transcription_button.firstElementChild;
+        svg_of_transcription_button.style.stroke = UserInterface.selected_text_color;
+    }
+
+    mode_switcher_buttons() {
+        if(UserInterface.mode_switcher_clicks_after_reload === 0)
+            UserInterface.mode_switcher_queue = new CircularQueue(3, 'translation-mode_button', ['source-mode_button', 'transcription-mode_button']);
+        if(this.id === UserInterface.mode_switcher_queue.lastDeQueuedElement) {
+            /**
+             * включает соответствующую нажатию кнопку
+             * и соответствующий ей раздел изучения слов
+             */
+            switch(this.id) {   
+                case 'source-mode_button':
+                    UserInterface.mode_switcher_queue.enQueue(this.id);
+                    UserInterface.source_mode_enabled = true;
+                    UserInterface.#set_active_colors_to_source_mode_button();
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.mode_switcher_queue.enQueue(this.id);
+                    UserInterface.translation_mode_enabled = true;
+                    UserInterface.#set_active_colors_to_translation_mode_button();
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.mode_switcher_queue.enQueue(this.id);
+                    UserInterface.transcription_mode_enabled = true;
+                    UserInterface.#set_active_colors_to_transcription_mode_button();
+                    break;
+            }
+            /**
+             * выключает первую в очереди на выход кнопку
+             * и соответствующий ей раздел
+             * 
+             * P.S. Очередь нужна только чтобы показывать 
+             * какая кнопка является неактивной
+             */
+            switch(UserInterface.mode_switcher_queue.peek()) {
+                case 'source-mode_button':
+                    UserInterface.source_mode_enabled = false;
+                    UserInterface.#set_default_colors_to_source_mode_button();
+                    UserInterface.mode_switcher_queue.deQueue();
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.translation_mode_enabled = false;
+                    UserInterface.#set_default_colors_to_translation_mode_button();
+                    UserInterface.mode_switcher_queue.deQueue();
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.transcription_mode_enabled = false;
+                    UserInterface.#set_default_colors_to_transcription_mode_button();
+                    UserInterface.mode_switcher_queue.deQueue();
+                    break;
+            }
+            UserInterface.mode_switcher_clicks_after_reload++;
+        }
+        switch(this.id) {
+            case 'source-mode_button':
+                UserInterface.#enable_source_mode();
+                UserInterface.#disable_transcription_mode();
+                UserInterface.#disable_translation_mode();
+                break;
+            case 'translation-mode_button':
+                UserInterface.#enable_translation_mode();
+                UserInterface.#disable_source_mode();
+                UserInterface.#disable_transcription_mode();
+                break;
+            case 'transcription-mode_button':
+                UserInterface.#enable_transcription_mode();
+                UserInterface.#disable_source_mode();
+                UserInterface.#disable_translation_mode();
+                break;
+        }
+    }
 }
+
+var UI = new UserInterface();
 
 document.addEventListener('DOMContentLoaded', function() {
     let element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия настроек'));
@@ -185,7 +345,10 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener('click', UserInterface.open_languages_additional_options);
         element.addEventListener('click', UserInterface.set_editing_language_header);
     }
-
     element = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
     element.addEventListener('click', UserInterface.guide_button);
+    elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки переключения режимов'));
+    for(const element of elements) {
+        element.addEventListener('click', UI.mode_switcher_buttons);
+    }
 });

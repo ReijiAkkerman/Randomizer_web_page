@@ -105,18 +105,18 @@ svg {
 .randomizer main > .settings .theme-switcher__button:hover > svg {
   fill: #333;
 }
-.randomizer main > .settings .theme_close-settings {
+.randomizer main > .settings .theme_close-settings, .randomizer main > .settings .theme_exit {
   border: 1px solid #aaa;
   border-radius: 10px;
   padding: 0 6px;
 }
-.randomizer main > .settings .theme_close-settings:hover {
+.randomizer main > .settings .theme_close-settings:hover, .randomizer main > .settings .theme_exit:hover {
   border-color: #000;
 }
-.randomizer main > .settings .theme_close-settings > svg {
+.randomizer main > .settings .theme_close-settings > svg, .randomizer main > .settings .theme_exit > svg {
   fill: #777;
 }
-.randomizer main > .settings .theme_close-settings:hover > svg {
+.randomizer main > .settings .theme_close-settings:hover > svg, .randomizer main > .settings .theme_exit:hover > svg {
   fill: #000;
 }
 .randomizer main > .settings .languages p {
@@ -233,7 +233,13 @@ svg {
 .randomizer main > .settings .languages-add-create__input[type=text]:focus {
   color: #000;
 }
+.randomizer main > .settings .languages-add-create__input_shorthand[type=text] {
+  width: 70px;
+  text-align: center;
+  padding: 5px 20px;
+}
 .randomizer main > .settings .languages-add-create__label {
+  user-select: none;
   padding-left: 20px;
   width: fit-content;
   font-size: 20px;
@@ -515,6 +521,31 @@ svg {
 }
 .randomizer > .dashboard .other-languages__button:hover {
   color: #333;
+}
+.randomizer > .dashboard .other-modes {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+}
+.randomizer > .dashboard .other-modes__button {
+  padding: 0 10px;
+  border-right: 1px solid #aaa;
+}
+.randomizer > .dashboard .other-modes__button > svg {
+  width: 30px;
+  height: 30px;
+  fill: #777;
+}
+.randomizer > .dashboard .other-modes__button:last-of-type {
+  border: none;
+}
+.randomizer > .dashboard .other-modes__button:hover > svg {
+  fill: #000;
+}
+.randomizer > .dashboard .other-modes__button_stroke > svg {
+  stroke: #777;
+}
+.randomizer > .dashboard .other-modes__button_stroke:hover > svg {
+  stroke: #000;
 }
 .randomizer > .dashboard .other-utilities {
   gap: 5px;

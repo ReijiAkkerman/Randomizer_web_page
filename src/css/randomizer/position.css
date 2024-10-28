@@ -55,6 +55,13 @@ svg {
   position: relative;
   justify-content: start;
 }
+.randomizer main > .settings .theme .exit-buttons {
+  display: flex;
+  position: relative;
+  justify-content: start;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
 .randomizer main > .settings .theme-switcher {
   display: flex;
   position: relative;

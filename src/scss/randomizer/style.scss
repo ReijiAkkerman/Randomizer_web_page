@@ -108,7 +108,7 @@
                     }
                 }
 
-                &_close-settings {
+                &_close-settings, &_exit {
                     @include borders.hover;
                     border-radius: 10px;
                     padding: 0 6px;
@@ -254,8 +254,6 @@
                         }
                     }
 
-                    
-
                     &-create {
                         &__input[type="text"] {
                             width: 100%;
@@ -270,7 +268,14 @@
                             }
                         }
 
+                        &__input_shorthand[type="text"] {
+                            width: 70px;
+                            text-align: center;
+                            padding: 5px 20px;
+                        }
+
                         &__label {
+                            user-select: none;
                             padding-left: 20px;
                             width: fit-content;
                             font-size: 20px;
@@ -624,6 +629,44 @@
 
                     &:hover {
                         color: text.$hover;
+                    }
+                }
+            }
+
+            &-modes {
+                @include borders.inactive();
+                border-radius: 10px;
+
+                &__button {
+                    padding: 0 10px;
+                    @include borders.inactive(right);
+
+                    > svg {
+                        width: 30px;
+                        height: 30px;
+                        fill: text.$inactive;
+                    }
+
+                    &:last-of-type {
+                        border: none;
+                    }
+
+                    &:hover {
+                        > svg {
+                            fill: text.$active;
+                        }
+                    }
+
+                    &_stroke {
+                        > svg {
+                            stroke: text.$inactive;
+                        }
+
+                        &:hover {
+                            > svg {
+                                stroke: text.$active;
+                            }
+                        }
                     }
                 }
             }

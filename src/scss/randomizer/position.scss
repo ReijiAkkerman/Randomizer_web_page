@@ -36,6 +36,14 @@
                     justify-content: start;
                 }
 
+                .exit-buttons {
+                    display: flex;
+                    position: relative;
+                    justify-content: start;
+                    flex-direction: row-reverse;
+                    gap: 10px;
+                }
+
                 &-switcher {
                     display: flex;
                     position: relative;
