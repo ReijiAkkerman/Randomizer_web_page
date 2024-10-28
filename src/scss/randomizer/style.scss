@@ -638,6 +638,7 @@
                 border-radius: 10px;
 
                 &__button {
+                    outline: none;
                     padding: 0 10px;
                     @include borders.inactive(right);
 

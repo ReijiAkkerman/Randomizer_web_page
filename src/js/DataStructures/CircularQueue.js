@@ -5,6 +5,8 @@ class CircularQueue {
     #queue_size;
     #last_dequeued_element;
 
+    #now_selected;
+
     constructor(queue_size, last_dequeued_element, init_elements) {
         this.#front = 0;
         this.#rear = 1;
@@ -13,6 +15,7 @@ class CircularQueue {
         this.#last_dequeued_element = last_dequeued_element;
         this.#items[0] = init_elements[0];
         this.#items[1] = init_elements[1];
+        this.#now_selected = init_elements[1];
     }
 
     enQueue(value) {
@@ -24,6 +27,7 @@ class CircularQueue {
                 this.#front = 0;
             this.#rear = (this.#rear + 1) % this.#queue_size;
             this.#items[this.#rear] = value;
+            this.#now_selected = value;
         }
     }
 
@@ -60,6 +64,10 @@ class CircularQueue {
 
     get lastDeQueuedElement() {
         return this.#last_dequeued_element;
+    }
+
+    get nowSelected() {
+        return this.#now_selected;
     }
 }
 

@@ -527,6 +527,7 @@ svg {
   border-radius: 10px;
 }
 .randomizer > .dashboard .other-modes__button {
+  outline: none;
   padding: 0 10px;
   border-right: 1px solid #aaa;
 }

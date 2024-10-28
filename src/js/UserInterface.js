@@ -34,11 +34,8 @@ class UserInterface {
 
     static kanji_mode_enabled = true;
 
-    static source_mode_enabled = true;
-    static translation_mode_enabled = false;
-    static transcription_mode_enabled = true;
-    static mode_switcher_clicks_after_reload = 0;
-    static mode_switcher_queue;
+    static mode_switcher_queue = new CircularQueue(3, 'translation-mode_button', ['transcription-mode_button', 'source-mode_button']);
+    static reversed_mode_enabled = false;
 
     static close_settings() {
         let settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
@@ -255,8 +252,6 @@ class UserInterface {
     }
 
     mode_switcher_buttons() {
-        if(UserInterface.mode_switcher_clicks_after_reload === 0)
-            UserInterface.mode_switcher_queue = new CircularQueue(3, 'translation-mode_button', ['source-mode_button', 'transcription-mode_button']);
         if(this.id === UserInterface.mode_switcher_queue.lastDeQueuedElement) {
             /**
              * включает соответствующую нажатию кнопку
@@ -265,17 +260,14 @@ class UserInterface {
             switch(this.id) {   
                 case 'source-mode_button':
                     UserInterface.mode_switcher_queue.enQueue(this.id);
-                    UserInterface.source_mode_enabled = true;
                     UserInterface.#set_active_colors_to_source_mode_button();
                     break;
                 case 'translation-mode_button':
                     UserInterface.mode_switcher_queue.enQueue(this.id);
-                    UserInterface.translation_mode_enabled = true;
                     UserInterface.#set_active_colors_to_translation_mode_button();
                     break;
                 case 'transcription-mode_button':
                     UserInterface.mode_switcher_queue.enQueue(this.id);
-                    UserInterface.transcription_mode_enabled = true;
                     UserInterface.#set_active_colors_to_transcription_mode_button();
                     break;
             }
@@ -288,22 +280,18 @@ class UserInterface {
              */
             switch(UserInterface.mode_switcher_queue.peek()) {
                 case 'source-mode_button':
-                    UserInterface.source_mode_enabled = false;
                     UserInterface.#set_default_colors_to_source_mode_button();
                     UserInterface.mode_switcher_queue.deQueue();
                     break;
                 case 'translation-mode_button':
-                    UserInterface.translation_mode_enabled = false;
                     UserInterface.#set_default_colors_to_translation_mode_button();
                     UserInterface.mode_switcher_queue.deQueue();
                     break;
                 case 'transcription-mode_button':
-                    UserInterface.transcription_mode_enabled = false;
                     UserInterface.#set_default_colors_to_transcription_mode_button();
                     UserInterface.mode_switcher_queue.deQueue();
                     break;
             }
-            UserInterface.mode_switcher_clicks_after_reload++;
         }
         switch(this.id) {
             case 'source-mode_button':
@@ -321,6 +309,66 @@ class UserInterface {
                 UserInterface.#disable_source_mode();
                 UserInterface.#disable_translation_mode();
                 break;
+        }
+        UserInterface.reversed_mode_enabled = false;
+    }
+
+    static reverse_mode(event) {
+        if(event.code === 'Space') {
+            event.preventDefault();
+            let source_section = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
+            let translation_section = document.querySelector(UserInterface.selectors.get('Перевод слов'));
+            let transcription_section = document.querySelector(UserInterface.selectors.get('Чтения слов'));
+            if(UserInterface.reversed_mode_enabled) {
+                switch(UserInterface.mode_switcher_queue.nowSelected) {
+                    case 'source-mode_button':
+                        source_section.style.display = '';
+                        break;
+                    case 'translation-mode_button':
+                        translation_section.style.display = '';
+                        break;
+                    case 'transcription-mode_button':
+                        transcription_section.style.display = '';
+                        break;
+                }
+                switch(UserInterface.mode_switcher_queue.peek()) {
+                    case 'source-mode_button':
+                        source_section.style.display = 'none';
+                        break;
+                    case 'translation-mode_button':
+                        translation_section.style.display = 'none';
+                        break;
+                    case 'transcription-mode_button':
+                        transcription_section.style.display = 'none';
+                        break;
+                }
+                UserInterface.reversed_mode_enabled = false;
+            }
+            else {
+                switch(UserInterface.mode_switcher_queue.nowSelected) {
+                    case 'source-mode_button':
+                        source_section.style.display = 'none';
+                        break;
+                    case 'translation-mode_button':
+                        translation_section.style.display = 'none';
+                        break;
+                    case 'transcription-mode_button':
+                        transcription_section.style.display = 'none';
+                        break;
+                }
+                switch(UserInterface.mode_switcher_queue.peek()) {
+                    case 'source-mode_button':
+                        source_section.style.display = '';
+                        break;
+                    case 'translation-mode_button':
+                        translation_section.style.display = '';
+                        break;
+                    case 'transcription-mode_button':
+                        transcription_section.style.display = '';
+                        break;
+                }
+                UserInterface.reversed_mode_enabled = true;
+            }
         }
     }
 }
@@ -352,3 +400,5 @@ document.addEventListener('DOMContentLoaded', function() {
         element.addEventListener('click', UI.mode_switcher_buttons);
     }
 });
+
+document.addEventListener('keyup', UserInterface.reverse_mode);
