@@ -1,8 +1,10 @@
 import {CircularQueue} from './DataStructures/CircularQueue.js';
+import {Stack} from './DataStructures/Stack.js';
 
 class UserInterface {
     static text_color = '#000';
-    static selected_text_color ='#00f';
+    static selected_mode_text_color ='#00f';
+    static main_actions_text_color = '#00f';
 
     static selectors = new Map([
         ['Панель настроек', '.settings'],
@@ -27,51 +29,99 @@ class UserInterface {
         ['Кнопка включения переводов', '.other-modes__button_translation'],
         ['Кнопка включения чтений', '.other-modes__button_transcription'],
         ['Кнопки переключения режимов', '.other-modes__button'],
+        ['Кнопка синхронизации с Git', '.actions-main__button_sync-with-github'],
+        ['Кнопка раздела разделения списка', '.actions-main__button_split-list'],
+        ['Кнопка раздела обьединения списков', '.actions-main__button_combine-lists'],
+        ['Кнопка раздела создания нового списка', '.actions-main__button_create-new-list'],
+        ['Кнопка разделения списка', '.actions-additional__button_split-list'],
+        ['Кнопка обьединения списков', '.actions-additional__button_combine-lists'],
+        ['Кнопка сохранения списка', '.actions-additional__button_save-list'],
+        ['Кнопка закрытия основного действия', '.actions-main__button_close-editing'],
+        ['Блок параметров', '.parameters'],
+        ['Параметр количества списков', '.parameters-block__input_lists-number'],
+        ['Параметр количества слов', '.parameters-block__input_words-number'],
+        ['Блок обьединения списков', '.lists-combining'],
     ]);
 
-    static settings_button_enabled = false;
-    static guide_button_enabled = false;
+    static #settings_button_enabled = false;
+    static #guide_button_enabled = false;
 
     static kanji_mode_enabled = true;
 
     static mode_switcher_queue = new CircularQueue(3, 'translation-mode_button', ['transcription-mode_button', 'source-mode_button']);
-    static reversed_mode_enabled = false;
+    static main_actions_stack = new Stack(1);
+    static #reversed_mode_enabled = false;
+
+    static #settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
+    static #settings_button = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
+    static #svg_of_settings_button = UserInterface.#settings_button.firstElementChild;
+    static #guide_panel = document.querySelector(UserInterface.selectors.get('Панель руководства'));
+    static #guide_button = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
+    static #svg_of_guide_button = UserInterface.#guide_button.firstElementChild;
+    static #languages_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела языковых настроек'));
+    static #git_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
+    static #languages_section = document.querySelector(UserInterface.selectors.get('Раздел языковых настроек'));
+    static #git_section = document.querySelector(UserInterface.selectors.get('Раздел настроек Git'));
+    static #additional_options_section = document.querySelector(UserInterface.selectors.get('Раздел дополнительных опций языковых настроек'));
+    static #new_language_header = document.querySelector(UserInterface.selectors.get('"Добавить новый язык"'));
+    static #existent_language_header = document.querySelector(UserInterface.selectors.get('"Изменить параметры языка"'));
+    static #words_panel = document.querySelector(UserInterface.selectors.get('Панель слов'));
+    static #source = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
+    static #translation = document.querySelector(UserInterface.selectors.get('Перевод слов'));
+    static #transcription = document.querySelector(UserInterface.selectors.get('Чтения слов'));
+    static #source_button = document.querySelector(UserInterface.selectors.get('Кнопка включения исходников'));
+    static #translation_button = document.querySelector(UserInterface.selectors.get('Кнопка включения переводов'));
+    static #transcription_button = document.querySelector(UserInterface.selectors.get('Кнопка включения чтений'));
+    static #svg_of_source_button = UserInterface.#source_button.firstElementChild;
+    static #svg_of_translation_button = UserInterface.#translation_button.firstElementChild;
+    static #svg_of_transcription_button = UserInterface.#transcription_button.firstElementChild;
+    static #source_section = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
+    static #translation_section = document.querySelector(UserInterface.selectors.get('Перевод слов'));
+    static #transcription_section = document.querySelector(UserInterface.selectors.get('Чтения слов'));
+    static #button_for_git_sync = document.querySelector(UserInterface.selectors.get('Кнопка синхронизации с Git'));
+    static #button_for_split_list = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
+    static #button_for_combine_lists = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
+    static #button_for_create_new_list = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
+    static #svg_of_button_for_sync_git = UserInterface.#button_for_git_sync.firstElementChild;
+    static #svg_of_button_for_split_list = UserInterface.#button_for_split_list.firstElementChild;
+    static #svg_of_button_for_combine_lists = UserInterface.#button_for_combine_lists.firstElementChild;
+    static #svg_of_button_for_create_new_list = UserInterface.#button_for_create_new_list.firstElementChild;
+    static #split_list_button = document.querySelector(UserInterface.selectors.get('Кнопка разделения списка'));
+    static #combine_lists_button = document.querySelector(UserInterface.selectors.get('Кнопка обьединения списков'));
+    static #create_new_list_button = document.querySelector(UserInterface.selectors.get('Кнопка сохранения списка'));
+    static #parameters_block = document.querySelector(UserInterface.selectors.get('Блок параметров'));
+    static #combine_lists_block = document.querySelector(UserInterface.selectors.get('Блок обьединения списков'));
+    static #close_main_action = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
 
     static close_settings() {
-        let settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
-        settings_panel.style.display = 'none';
+        UserInterface.#settings_panel.style.display = 'none';
         UserInterface.#set_default_colors_to_settings_button();
-        UserInterface.settings_button_enabled = false;
+        UserInterface.#settings_button_enabled = false;
     }
 
     static #open_settings() {
-        let settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
-        settings_panel.style.display = '';
+        UserInterface.#settings_panel.style.display = '';
         UserInterface.#set_active_colors_to_settings_button();
-        UserInterface.settings_button_enabled = true;
+        UserInterface.#settings_button_enabled = true;
     }
 
     static #set_default_colors_to_settings_button() {
-        let settings_button = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
-        let svg_of_settings_button = settings_button.firstElementChild;
-        settings_button.style.borderColor = '';
-        svg_of_settings_button.style.fill = '';
+        UserInterface.#settings_button.style.borderColor = '';
+        UserInterface.#svg_of_settings_button.style.fill = '';
     }
 
     static #set_active_colors_to_settings_button() {
-        let settings_button = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
-        let svg_of_settings_button = settings_button.firstElementChild;
-        settings_button.style.borderColor = UserInterface.text_color;
-        svg_of_settings_button.style.fill = UserInterface.text_color;
+        UserInterface.#settings_button.style.borderColor = UserInterface.text_color;
+        UserInterface.#svg_of_settings_button.style.fill = UserInterface.text_color;
     }
 
     static settings_button() {
-        if(UserInterface.settings_button_enabled) {
+        if(UserInterface.#settings_button_enabled) {
             UserInterface.close_settings();
             UserInterface.open_words_panel();
         }
         else {
-            if(UserInterface.guide_button_enabled)
+            if(UserInterface.#guide_button_enabled)
                 UserInterface.close_guide();
             else 
                 UserInterface.#close_words_panel();
@@ -80,41 +130,34 @@ class UserInterface {
     }
 
     static close_guide() {
-        let guide_panel = document.querySelector(UserInterface.selectors.get('Панель руководства'));
-        guide_panel.style.display = 'none';
+        UserInterface.#guide_panel.style.display = 'none';
         UserInterface.#set_default_colors_to_guide_button();
-        UserInterface.guide_button_enabled = false;
+        UserInterface.#guide_button_enabled = false;
     }
 
     static #open_guide() {
-        let guide_panel = document.querySelector(UserInterface.selectors.get('Панель руководства'));
-        guide_panel.style.display = '';
-
+        UserInterface.#guide_panel.style.display = '';
         UserInterface.#set_active_colors_to_guide_button();
-        UserInterface.guide_button_enabled = true;
+        UserInterface.#guide_button_enabled = true;
     }
 
     static #set_default_colors_to_guide_button() {
-        let guide_button = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
-        let svg_of_guide_button = guide_button.firstElementChild;
-        guide_button.style.borderColor = '';
-        svg_of_guide_button.style.fill = '';
+        UserInterface.#guide_button.style.borderColor = '';
+        UserInterface.#svg_of_guide_button.style.fill = '';
     }
 
     static #set_active_colors_to_guide_button() {
-        let guide_button = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
-        let svg_of_guide_button = guide_button.firstElementChild;
-        guide_button.style.borderColor = UserInterface.text_color;
-        svg_of_guide_button.style.fill = UserInterface.text_color;
+        UserInterface.#guide_button.style.borderColor = UserInterface.text_color;
+        UserInterface.#svg_of_guide_button.style.fill = UserInterface.text_color;
     }
 
     static guide_button() {
-        if(UserInterface.guide_button_enabled) {
+        if(UserInterface.#guide_button_enabled) {
             UserInterface.close_guide();
             UserInterface.open_words_panel();
         }
         else {
-            if(UserInterface.settings_button_enabled) 
+            if(UserInterface.#settings_button_enabled) 
                 UserInterface.close_settings();
             else 
                 UserInterface.#close_words_panel();
@@ -123,132 +166,92 @@ class UserInterface {
     }
 
     static switch_settings_to_languages() {
-        let languages_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела языковых настроек'));
-        let git_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
-        let languages_section = document.querySelector(UserInterface.selectors.get('Раздел языковых настроек'));
-        let git_section = document.querySelector(UserInterface.selectors.get('Раздел настроек Git'));
-        git_button.style.color = '';
-        git_section.style.display = 'none';
-        languages_button.style.color = UserInterface.text_color;
-        languages_section.style.display = '';
+        UserInterface.#git_button.style.color = '';
+        UserInterface.#git_section.style.display = 'none';
+        UserInterface.#languages_button.style.color = UserInterface.text_color;
+        UserInterface.#languages_section.style.display = '';
     }
 
     static switch_settings_to_git() {
-        let languages_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела языковых настроек'));
-        let git_button = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
-        let languages_section = document.querySelector(UserInterface.selectors.get('Раздел языковых настроек'));
-        let git_section = document.querySelector(UserInterface.selectors.get('Раздел настроек Git'));
-        languages_button.style.color = '';
-        languages_section.style.display = 'none';
-        git_button.style.color = UserInterface.text_color;
-        git_section.style.display = '';
+        UserInterface.#languages_button.style.color = '';
+        UserInterface.#languages_section.style.display = 'none';
+        UserInterface.#git_button.style.color = UserInterface.text_color;
+        UserInterface.#git_section.style.display = '';
         UserInterface.close_languages_additional_options();
     }
 
     static open_languages_additional_options() {
-        let additional_options_section = document.querySelector(UserInterface.selectors.get('Раздел дополнительных опций языковых настроек'));
-        additional_options_section.style.display = '';
+        UserInterface.#additional_options_section.style.display = '';
     }
 
     static close_languages_additional_options() {
-        let additional_options_section = document.querySelector(UserInterface.selectors.get('Раздел дополнительных опций языковых настроек'));
-        additional_options_section.style.display = 'none';
+        UserInterface.#additional_options_section.style.display = 'none';
     }
 
     static set_editing_language_header() {
-        let hiding_header = document.querySelector(UserInterface.selectors.get('"Добавить новый язык"'));
-        let exposing_header = document.querySelector(UserInterface.selectors.get('"Изменить параметры языка"'));
-        hiding_header.style.display = 'none';
-        exposing_header.style.display = '';
+        UserInterface.#new_language_header.style.display = 'none';
+        UserInterface.#existent_language_header.style.display = '';
     }
 
     static set_adding_language_header() {
-        let hiding_header = document.querySelector(UserInterface.selectors.get('"Изменить параметры языка"'));
-        let exposing_header = document.querySelector(UserInterface.selectors.get('"Добавить новый язык"'));
-        hiding_header.style.display = 'none';
-        exposing_header.style.display = '';
+        UserInterface.#new_language_header.style.display = '';
+        UserInterface.#existent_language_header.style.display = 'none';
     }
 
     static #close_words_panel() {
-        let words_panel = document.querySelector(UserInterface.selectors.get('Панель слов'));
-        words_panel.style.display = 'none';
+        UserInterface.#words_panel.style.display = 'none';
     }
 
     static open_words_panel() {
-        let words_panel = document.querySelector(UserInterface.selectors.get('Панель слов'));
-        words_panel.style.display = '';
+        UserInterface.#words_panel.style.display = '';
     }
 
     static #enable_source_mode() {
-        let source = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
-        source.style.display = '';
-        UserInterface.source_mode_enabled = true;
+        UserInterface.#source.style.display = '';
     }
 
     static #enable_translation_mode() {
-        let translation = document.querySelector(UserInterface.selectors.get('Перевод слов'));
-        translation.style.display = '';
-        UserInterface.translation_mode_enabled = true;
+        UserInterface.#translation.style.display = '';
     }
 
     static #enable_transcription_mode() {
-        let transcription = document.querySelector(UserInterface.selectors.get('Чтения слов'));
-        transcription.style.display = '';
-        UserInterface.transcription_mode_enabled = true;
+        UserInterface.#transcription.style.display = '';
     }
 
     static #disable_source_mode() {
-        let source = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
-        source.style.display = 'none';
-        UserInterface.source_mode_enabled = false;
+        UserInterface.#source.style.display = 'none';
     }
 
     static #disable_translation_mode() {
-        let translation = document.querySelector(UserInterface.selectors.get('Перевод слов'));
-        translation.style.display = 'none';
-        UserInterface.translation_mode_enabled = false;
+        UserInterface.#translation.style.display = 'none';
     }
 
     static #disable_transcription_mode() {
-        let transcription = document.querySelector(UserInterface.selectors.get('Чтения слов'));
-        transcription.style.display = 'none';
-        UserInterface.transcription_mode_enabled = false;
+        UserInterface.#transcription.style.display = 'none';
     }
 
     static #set_default_colors_to_source_mode_button() {
-        let source_button = document.querySelector(UserInterface.selectors.get('Кнопка включения исходников'));
-        let svg_of_source_button = source_button.firstElementChild;
-        svg_of_source_button.style.fill = '';
+        UserInterface.#svg_of_source_button.style.fill = '';
     }
 
     static #set_default_colors_to_translation_mode_button() {
-        let translation_button = document.querySelector(UserInterface.selectors.get('Кнопка включения переводов'));
-        let svg_of_translation_button = translation_button.firstElementChild;
-        svg_of_translation_button.style.fill = '';
+        UserInterface.#svg_of_translation_button.style.fill = '';
     }
 
     static #set_default_colors_to_transcription_mode_button() {
-        let transcription_button = document.querySelector(UserInterface.selectors.get('Кнопка включения чтений'));
-        let svg_of_transcription_button = transcription_button.firstElementChild;
-        svg_of_transcription_button.style.stroke = '';
+        UserInterface.#svg_of_transcription_button.style.stroke = '';
     }
 
     static #set_active_colors_to_source_mode_button() {
-        let source_button = document.querySelector(UserInterface.selectors.get('Кнопка включения исходников'));
-        let svg_of_source_button = source_button.firstElementChild;
-        svg_of_source_button.style.fill = UserInterface.selected_text_color;
+        UserInterface.#svg_of_source_button.style.fill = UserInterface.selected_mode_text_color;
     }
 
     static #set_active_colors_to_translation_mode_button() {
-        let translation_button = document.querySelector(UserInterface.selectors.get('Кнопка включения переводов'));
-        let svg_of_translation_button = translation_button.firstElementChild;
-        svg_of_translation_button.style.fill = UserInterface.selected_text_color;
+        UserInterface.#svg_of_translation_button.style.fill = UserInterface.selected_mode_text_color;
     }
 
     static #set_active_colors_to_transcription_mode_button() {
-        let transcription_button = document.querySelector(UserInterface.selectors.get('Кнопка включения чтений'));
-        let svg_of_transcription_button = transcription_button.firstElementChild;
-        svg_of_transcription_button.style.stroke = UserInterface.selected_text_color;
+        UserInterface.#svg_of_transcription_button.style.stroke = UserInterface.selected_mode_text_color;
     }
 
     mode_switcher_buttons() {
@@ -310,66 +313,140 @@ class UserInterface {
                 UserInterface.#disable_translation_mode();
                 break;
         }
-        UserInterface.reversed_mode_enabled = false;
+        UserInterface.#reversed_mode_enabled = false;
     }
 
-    static reverse_mode(event) {
+    static reverse_mode_by_keyup(event) {
         if(event.code === 'Space') {
             event.preventDefault();
-            let source_section = document.querySelector(UserInterface.selectors.get('Исходные значения слов'));
-            let translation_section = document.querySelector(UserInterface.selectors.get('Перевод слов'));
-            let transcription_section = document.querySelector(UserInterface.selectors.get('Чтения слов'));
-            if(UserInterface.reversed_mode_enabled) {
-                switch(UserInterface.mode_switcher_queue.nowSelected) {
-                    case 'source-mode_button':
-                        source_section.style.display = '';
-                        break;
-                    case 'translation-mode_button':
-                        translation_section.style.display = '';
-                        break;
-                    case 'transcription-mode_button':
-                        transcription_section.style.display = '';
-                        break;
-                }
-                switch(UserInterface.mode_switcher_queue.peek()) {
-                    case 'source-mode_button':
-                        source_section.style.display = 'none';
-                        break;
-                    case 'translation-mode_button':
-                        translation_section.style.display = 'none';
-                        break;
-                    case 'transcription-mode_button':
-                        transcription_section.style.display = 'none';
-                        break;
-                }
-                UserInterface.reversed_mode_enabled = false;
-            }
-            else {
-                switch(UserInterface.mode_switcher_queue.nowSelected) {
-                    case 'source-mode_button':
-                        source_section.style.display = 'none';
-                        break;
-                    case 'translation-mode_button':
-                        translation_section.style.display = 'none';
-                        break;
-                    case 'transcription-mode_button':
-                        transcription_section.style.display = 'none';
-                        break;
-                }
-                switch(UserInterface.mode_switcher_queue.peek()) {
-                    case 'source-mode_button':
-                        source_section.style.display = '';
-                        break;
-                    case 'translation-mode_button':
-                        translation_section.style.display = '';
-                        break;
-                    case 'transcription-mode_button':
-                        transcription_section.style.display = '';
-                        break;
-                }
-                UserInterface.reversed_mode_enabled = true;
-            }
+            UserInterface.#reverse_mode();
         }
+    }
+
+    static reverse_mode_by_click() {
+        UserInterface.#reverse_mode();
+    }
+
+    static #reverse_mode() {
+        if(UserInterface.#reversed_mode_enabled) {
+            switch(UserInterface.mode_switcher_queue.nowSelected) {
+                case 'source-mode_button':
+                    UserInterface.#source_section.style.display = '';
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.#translation_section.style.display = '';
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.#transcription_section.style.display = '';
+                    break;
+            }
+            switch(UserInterface.mode_switcher_queue.peek()) {
+                case 'source-mode_button':
+                    UserInterface.#source_section.style.display = 'none';
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.#translation_section.style.display = 'none';
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.#transcription_section.style.display = 'none';
+                    break;
+            }
+            UserInterface.#reversed_mode_enabled = false;
+        }
+        else {
+            switch(UserInterface.mode_switcher_queue.nowSelected) {
+                case 'source-mode_button':
+                    UserInterface.#source_section.style.display = 'none';
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.#translation_section.style.display = 'none';
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.#transcription_section.style.display = 'none';
+                    break;
+            }
+            switch(UserInterface.mode_switcher_queue.peek()) {
+                case 'source-mode_button':
+                    UserInterface.#source_section.style.display = '';
+                    break;
+                case 'translation-mode_button':
+                    UserInterface.#translation_section.style.display = '';
+                    break;
+                case 'transcription-mode_button':
+                    UserInterface.#transcription_section.style.display = '';
+                    break;
+            }
+            UserInterface.#reversed_mode_enabled = true;
+        }
+    }
+
+    static open_split_list_section() {
+        if(UserInterface.main_actions_stack.isFull()) {
+            UserInterface.close_main_action();
+        }
+        if(UserInterface.main_actions_stack.push('split-list')) {
+            UserInterface.#svg_of_button_for_split_list.style.fill = UserInterface.main_actions_text_color;
+            UserInterface.#split_list_button.style.display = '';
+            UserInterface.#parameters_block.style.display = '';
+            UserInterface.#close_main_action.style.display = '';
+        }
+    }
+
+    static open_combine_lists_section() {
+        if(UserInterface.main_actions_stack.isFull()) {
+            UserInterface.close_main_action();
+        }
+        if(UserInterface.main_actions_stack.push('combine-lists')) {
+            UserInterface.#svg_of_button_for_combine_lists.style.fill = UserInterface.main_actions_text_color;
+            UserInterface.#combine_lists_button.style.display = '';
+            UserInterface.#combine_lists_block.style.display = '';
+            UserInterface.#close_main_action.style.display = '';
+        }
+    }
+
+    static open_create_new_list_section() {
+        if(UserInterface.main_actions_stack.isFull()) {
+            UserInterface.close_main_action();
+        }
+        if(UserInterface.main_actions_stack.push('create-new-list')) {
+            UserInterface.#svg_of_button_for_create_new_list.style.fill = UserInterface.main_actions_text_color;
+            UserInterface.#create_new_list_button.style.display = '';
+            UserInterface.#close_main_action.style.display = '';
+        }
+    }
+
+    static #close_split_list_section() {
+        UserInterface.#svg_of_button_for_split_list.style.fill = '';
+        UserInterface.#split_list_button.style.display = 'none';
+        UserInterface.#parameters_block.style.display = 'none';
+    }
+
+    static #close_combine_lists_section() {
+        UserInterface.#svg_of_button_for_combine_lists.style.fill = '';
+        UserInterface.#combine_lists_button.style.display = 'none';
+        UserInterface.#combine_lists_block.style.display = 'none';
+    }
+
+    static #close_create_new_list_section() {
+        UserInterface.#svg_of_button_for_create_new_list.style.fill = '';
+        UserInterface.#create_new_list_button.style.display = 'none';
+    }
+
+    static close_main_action(disable_close_button = true) {
+        switch(UserInterface.main_actions_stack.peek()) {
+            case 'split-list':
+                UserInterface.#close_split_list_section();
+                break;
+            case 'combine-lists':
+                UserInterface.#close_combine_lists_section();
+                break;
+            case 'create-new-list':
+                UserInterface.#close_create_new_list_section();
+                break;
+        }
+        UserInterface.main_actions_stack.pop();
+        if(disable_close_button)
+            UserInterface.#close_main_action.style.display = 'none';
     }
 }
 
@@ -399,6 +476,16 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const element of elements) {
         element.addEventListener('click', UI.mode_switcher_buttons);
     }
+    element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
+    element.addEventListener('click', UserInterface.close_main_action);
+    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
+    element.addEventListener('click', UserInterface.open_split_list_section);
+    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
+    element.addEventListener('click', UserInterface.open_combine_lists_section);
+    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
+    element.addEventListener('click', UserInterface.open_create_new_list_section);
+    element = document.querySelector(UserInterface.selectors.get('Панель слов'));
+    element.addEventListener('click', UserInterface.reverse_mode_by_click);
 });
 
-document.addEventListener('keyup', UserInterface.reverse_mode);
+document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);

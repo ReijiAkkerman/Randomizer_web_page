@@ -491,9 +491,9 @@
                 border-radius: 10px;
 
                 &__button {
-                    @include borders.default(right);
+                    @include borders.default(left);
 
-                    &:last-of-type {
+                    &:first-of-type {
                         border: none;
                     }
 

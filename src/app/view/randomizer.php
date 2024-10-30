@@ -205,7 +205,7 @@
                         </svg>
                     </button>
                     <button class="actions-main__button actions-main__button_combine-lists">
-                        <svg viewBox="0 0 16 16">
+                        <svg viewBox="0 0 17 16">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 1l-.5.5v3l.5.5h3l.5-.5v-3L4.5 1h-3zM2 4V2h2v2H2zm-.5 2l-.5.5v3l.5.5h3l.5-.5v-3L4.5 6h-3zM2 9V7h2v2H2zm-1 2.5l.5-.5h3l.5.5v3l-.5.5h-3l-.5-.5v-3zm1 .5v2h2v-2H2zm10.5-7l-.5.5v6l.5.5h3l.5-.5v-6l-.5-.5h-3zM15 8h-2V6h2v2zm0 3h-2V9h2v2zM9.1 8H6v1h3.1l-1 1 .7.6 1.8-1.8v-.7L8.8 6.3l-.7.7 1 1z"/>
                         </svg>
                     </button>
@@ -214,26 +214,26 @@
                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
                         </svg>
                     </button>
-                    <button class="actions-main__button actions-main__button_close-editing">
+                    <button class="actions-main__button actions-main__button_close-editing" style="display:none;">
                         <svg viewBox="0 0 1024 1024">
                             <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                         </svg>
                     </button>
                 </div>
                 <div class="actions-additional">
-                    <button class="actions-additional__button actions-additional__button_save-list">Сохранить список</button>
-                    <button class="actions-additional__button actions-additional__button_split-list">Разделить список на</button>
-                    <button class="actions-additional__button actions-additional__button_combine-lists">Обьединить списки</button>
+                    <button class="actions-additional__button actions-additional__button_save-list" style="display:none;">Сохранить список</button>
+                    <button class="actions-additional__button actions-additional__button_split-list" style="display:none;">Разделить список на</button>
+                    <button class="actions-additional__button actions-additional__button_combine-lists" style="display:none;">Обьединить списки</button>
                 </div>
             </div>
-            <div class="parameters">
+            <div class="parameters" style="display:none;">
                 <div>
                     <input type="text" class="parameters__input parameters-block__input_lists-number" placeholder="списков">
                     <input type="text" class="parameters__input parameters-block__input_words-number" placeholder="слов">
                 </div>
             </div>
             <div class="lists">
-                <div class="lists-combining">
+                <div class="lists-combining" style="display:none;">
                     <p class="lists_title">Списки для объединения</p>
                     <button class="lists-combining__button">Список для обьединения</button>
                     <button class="lists-combining__button">Список для обьединения</button>
@@ -293,7 +293,7 @@
                             <path d="M15,15h16c0.553,0,1-0.447,1-1s-0.447-1-1-1H15c-0.553,0-1,0.447-1,1S14.447,15,15,15z"/>
                         </svg>
                     </button>
-                    <button class="other-modes__button other-modes__button_stroke other-modes__button_transcription" id="transcription-mode_button" style="stroke:#000;">
+                    <button class="other-modes__button other-modes__button_stroke other-modes__button_transcription" id="transcription-mode_button">
                         <svg viewBox="0 0 48 48" style="stroke:#00f;">
                             <defs>
                                 <style>.a{fill:none;stroke-linecap:round;stroke-linejoin:round;}</style>
@@ -348,6 +348,7 @@
         </section>
         <script type="module" src="/src/js/UserInterface.js"></script>
         <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script>
+        <script type="module" src="/src/js/DataStructures/Stack.js"></script>
 
         <?php if($enable_tests) require_once __DIR__ . '/tests/body.php'; ?>
 

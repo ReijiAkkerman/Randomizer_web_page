@@ -414,9 +414,9 @@ svg {
   border-radius: 10px;
 }
 .randomizer > .dashboard .actions-main__button {
-  border-right: 1px solid #000;
+  border-left: 1px solid #000;
 }
-.randomizer > .dashboard .actions-main__button:last-of-type {
+.randomizer > .dashboard .actions-main__button:first-of-type {
   border: none;
 }
 .randomizer > .dashboard .actions-main__button > svg {
