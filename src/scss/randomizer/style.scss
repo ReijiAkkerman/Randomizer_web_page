@@ -559,39 +559,62 @@
                     font-size: 20px;
                     margin-bottom: 5px;
                 }
+            }
 
-                > button {
-                    @include borders.hover;
-                    border-radius: 8px;
+            &_select-list {
+                @include borders.hover;
+                border-radius: 8px;
+                padding-left: 10px;
+                margin: 5px 0;
+                cursor: pointer;
+                
+                > p {
                     font-size: 20px;
-                    padding: 0 10px;
-                    width: 100%;
-                    text-align: left;
-                    margin-bottom: 5px;
                     color: text.$inactive;
+                }
 
-                    &:last-of-type {
-                        margin-bottom: 0;
-                    }
-
-                    &.lists_delete-lists {
-                        width: fit-content;
-                        padding: 0 1px;
-                    }
-
-                    &:hover {
+                &:hover {
+                    > p {
                         color: text.$active;
-
-                        > svg {
-                            fill: text.$active;
-                        }
                     }
 
+                    > button {
+                        visibility: visible;
+                    }
+                }
+            }
+
+            &_delete-list {
+                visibility: hidden;
+                padding-right: 1px;
+                
+                > svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: text.$inactive;
+                }
+
+                &:hover {
                     > svg {
-                        fill: text.$inactive;
-                        width: 20px;
-                        height: 20px;
-                        vertical-align: -13%;
+                        fill: text.$active;
+                    }
+                }
+            }
+
+            &_delete-lists {
+                @include borders.hover;
+                border-radius: 8px;
+                padding: 1px;
+
+                > svg {
+                    width: 20px;
+                    height: 20px;
+                    fill: text.$inactive;
+                }
+
+                &:hover {
+                    > svg {
+                        fill: text.$active;
                     }
                 }
             }

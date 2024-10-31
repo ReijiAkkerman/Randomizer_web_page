@@ -463,37 +463,53 @@ svg {
   font-size: 20px;
   margin-bottom: 5px;
 }
-.randomizer > .dashboard .lists > div > button {
+.randomizer > .dashboard .lists_select-list {
   border: 1px solid #aaa;
   border-radius: 8px;
-  font-size: 20px;
-  padding: 0 10px;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 5px;
-  color: #777;
+  padding-left: 10px;
+  margin: 5px 0;
+  cursor: pointer;
 }
-.randomizer > .dashboard .lists > div > button:hover {
+.randomizer > .dashboard .lists_select-list:hover {
   border-color: #000;
 }
-.randomizer > .dashboard .lists > div > button:last-of-type {
-  margin-bottom: 0;
+.randomizer > .dashboard .lists_select-list > p {
+  font-size: 20px;
+  color: #777;
 }
-.randomizer > .dashboard .lists > div > button.lists_delete-lists {
-  width: fit-content;
-  padding: 0 1px;
-}
-.randomizer > .dashboard .lists > div > button:hover {
+.randomizer > .dashboard .lists_select-list:hover > p {
   color: #000;
 }
-.randomizer > .dashboard .lists > div > button:hover > svg {
-  fill: #000;
+.randomizer > .dashboard .lists_select-list:hover > button {
+  visibility: visible;
 }
-.randomizer > .dashboard .lists > div > button > svg {
-  fill: #777;
+.randomizer > .dashboard .lists_delete-list {
+  visibility: hidden;
+  padding-right: 1px;
+}
+.randomizer > .dashboard .lists_delete-list > svg {
   width: 20px;
   height: 20px;
-  vertical-align: -13%;
+  fill: #777;
+}
+.randomizer > .dashboard .lists_delete-list:hover > svg {
+  fill: #000;
+}
+.randomizer > .dashboard .lists_delete-lists {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  padding: 1px;
+}
+.randomizer > .dashboard .lists_delete-lists:hover {
+  border-color: #000;
+}
+.randomizer > .dashboard .lists_delete-lists > svg {
+  width: 20px;
+  height: 20px;
+  fill: #777;
+}
+.randomizer > .dashboard .lists_delete-lists:hover > svg {
+  fill: #000;
 }
 .randomizer > .dashboard .filters-form {
   gap: 20px;
