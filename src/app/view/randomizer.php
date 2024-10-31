@@ -4,6 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="/src/css/fonts.css">
         <link rel="stylesheet" href="/src/css/randomizer/position.css">
         <link rel="stylesheet" href="/src/css/randomizer/style.css">
@@ -180,7 +181,7 @@
                 </div>
             </section>
         </main>
-        <section class="dashboard">
+        <section class="dashboard" id="dashboard">
             <div class="search">
                 <form action="#" class="search-form">
                     <input type="text" class="search-form__input" placeholder="Искомое слово ...">

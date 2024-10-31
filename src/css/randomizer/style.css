@@ -526,13 +526,13 @@ svg {
   border-radius: 10px;
 }
 .randomizer > .dashboard .other-languages__button {
-  border-right: 1px solid #aaa;
+  border-left: 1px solid #aaa;
   font-size: 25px;
   color: #777;
   width: 60px;
   text-align: center;
 }
-.randomizer > .dashboard .other-languages__button:last-of-type {
+.randomizer > .dashboard .other-languages__button:first-of-type {
   border: none;
 }
 .randomizer > .dashboard .other-languages__button:hover {

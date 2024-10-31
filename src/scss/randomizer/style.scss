@@ -640,13 +640,13 @@
                 border-radius: 10px;
 
                 &__button {
-                    @include borders.border(right, borders.$inactive);
+                    @include borders.border(left, borders.$inactive);
                     font-size: 25px;
                     color: text.$inactive;
                     width: 60px;
                     text-align: center;
 
-                    &:last-of-type {
+                    &:first-of-type {
                         border: none;
                     }
 
@@ -716,6 +716,14 @@
                     }
                 }
             }
+        }
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .randomizer {
+        .dashboard {
+
         }
     }
 }
