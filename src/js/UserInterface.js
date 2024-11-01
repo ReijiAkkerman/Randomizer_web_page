@@ -41,6 +41,7 @@ class UserInterface {
         ['Параметр количества списков', '.parameters-block__input_lists-number'],
         ['Параметр количества слов', '.parameters-block__input_words-number'],
         ['Блок обьединения списков', '.lists-combining'],
+        ['Используемые языки', '.languages-add-select_recent-languages'],
     ]);
 
     static #settings_button_enabled = false;
@@ -92,6 +93,7 @@ class UserInterface {
     static #parameters_block = document.querySelector(UserInterface.selectors.get('Блок параметров'));
     static #combine_lists_block = document.querySelector(UserInterface.selectors.get('Блок обьединения списков'));
     static #close_main_action = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
+    static #used_languages = document.querySelector(UserInterface.selectors.get('Используемые языки'));
 
     static close_settings() {
         UserInterface.#settings_panel.style.display = 'none';
@@ -189,14 +191,24 @@ class UserInterface {
     }
 
     static set_editing_language_header() {
+        UserInterface.#hide_used_languages();
         UserInterface.#new_language_header.style.display = 'none';
         UserInterface.#existent_language_header.style.display = '';
     }
 
     static set_adding_language_header() {
+        UserInterface.#show_used_languages();
         UserInterface.#new_language_header.style.display = '';
         UserInterface.#existent_language_header.style.display = 'none';
     }
+
+    static #show_used_languages() {
+        UserInterface.#used_languages.style.display = '';
+    }
+
+    static #hide_used_languages() {
+        UserInterface.#used_languages.style.display = 'none';
+    } 
 
     static #close_words_panel() {
         UserInterface.#words_panel.style.display = 'none';

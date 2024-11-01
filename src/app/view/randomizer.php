@@ -14,7 +14,7 @@
     </head>
     <body class="randomizer">
         <main>
-            <section class="words">
+            <section class="words" style="display:none;">
                 <div class="source">
                     <div class="counter">
                         <p>1</p>
@@ -49,139 +49,147 @@
             <section class="guide" style="display:none;">
                 <h1>Руководство</h1>
             </section>
-            <section class="settings" style="display:none;">
+            <section class="settings">
                 <div class="theme">
-                    <div class="theme-switcher">
-                        <button class="theme-switcher__button">
-                            <svg viewBox="0 0 32 32">
-                                <path d="M16 8.010c-4.417 0-7.997 3.581-7.997 7.998 0 4.415 3.58 7.996 7.997 7.996s7.997-3.58 7.997-7.996c0-4.416-3.58-7.998-7.997-7.998zM16 22.938c-3.821 0-6.931-3.109-6.931-6.93 0-3.822 3.109-6.932 6.931-6.932s6.931 3.11 6.931 6.932c0 3.821-3.109 6.93-6.931 6.93z"></path>
-                                <path d="M15.471 0.006h1.066v6.405h-1.066v-6.405z"></path>
-                                <path d="M15.471 25.604h1.066v6.39h-1.066v-6.39z"></path>
-                                <path d="M0.006 15.467h6.397v1.066h-6.397v-1.066z"></path>
-                                <path d="M25.596 15.467h6.398v1.066h-6.398v-1.066z"></path>
-                                <path d="M26.936 4.28l0.754 0.754-4.458 4.458-0.754-0.754 4.458-4.458z"></path>
-                                <path d="M5.072 27.653l-0.754-0.754 4.458-4.458 0.754 0.754-4.458 4.458z"></path>
-                                <path d="M5.073 4.281l4.458 4.458-0.754 0.754-4.458-4.458 0.754-0.754z"></path>
-                                <path d="M26.937 27.654l-4.458-4.458 0.754-0.754 4.458 4.458-0.754 0.754z"></path>
-                            </svg>
-                        </button>
-                        <button class="theme-switcher__button">
-                            <svg viewBox="0 0 32 32">
-                                <path d="M29.223 24.178l-0.021-0.057c-0.116-0.274-0.383-0.463-0.694-0.463-0.104 0-0.202 0.021-0.292 0.059l0.005-0.002c-1.272 0.542-2.752 0.857-4.306 0.857-6.213 0-11.25-5.037-11.25-11.25 0-4.66 2.833-8.658 6.871-10.366l0.074-0.028 0.211-0.089c0.267-0.118 0.45-0.381 0.45-0.687 0-0.375-0.276-0.686-0.635-0.74l-0.004-0.001c-0.653-0.103-1.407-0.161-2.174-0.161-8.145 0-14.748 6.603-14.748 14.748s6.603 14.748 14.748 14.748c4.748 0 8.973-2.244 11.67-5.73l0.025-0.034c0.097-0.125 0.155-0.285 0.155-0.458 0-0.127-0.031-0.246-0.086-0.351l0.002 0.004zM22.518 28.24c-1.497 0.637-3.238 1.007-5.066 1.007-7.317 0-13.249-5.932-13.249-13.249 0-7.074 5.543-12.853 12.523-13.23l0.034-0.001c-3.395 2.326-5.594 6.183-5.594 10.554 0 7.043 5.709 12.752 12.752 12.752 0.85 0 1.681-0.083 2.485-0.242l-0.081 0.013c-1.081 0.976-2.339 1.783-3.716 2.364l-0.087 0.033z"></path>
-                            </svg>
-                        </button>
+                    <div class="theme-grid-container theme-switcher">
+                        <div class="theme-switcher theme-flex">
+                            <button class="theme-switcher__button">
+                                <svg viewBox="0 0 32 32">
+                                    <path d="M16 8.010c-4.417 0-7.997 3.581-7.997 7.998 0 4.415 3.58 7.996 7.997 7.996s7.997-3.58 7.997-7.996c0-4.416-3.58-7.998-7.997-7.998zM16 22.938c-3.821 0-6.931-3.109-6.931-6.93 0-3.822 3.109-6.932 6.931-6.932s6.931 3.11 6.931 6.932c0 3.821-3.109 6.93-6.931 6.93z"></path>
+                                    <path d="M15.471 0.006h1.066v6.405h-1.066v-6.405z"></path>
+                                    <path d="M15.471 25.604h1.066v6.39h-1.066v-6.39z"></path>
+                                    <path d="M0.006 15.467h6.397v1.066h-6.397v-1.066z"></path>
+                                    <path d="M25.596 15.467h6.398v1.066h-6.398v-1.066z"></path>
+                                    <path d="M26.936 4.28l0.754 0.754-4.458 4.458-0.754-0.754 4.458-4.458z"></path>
+                                    <path d="M5.072 27.653l-0.754-0.754 4.458-4.458 0.754 0.754-4.458 4.458z"></path>
+                                    <path d="M5.073 4.281l4.458 4.458-0.754 0.754-4.458-4.458 0.754-0.754z"></path>
+                                    <path d="M26.937 27.654l-4.458-4.458 0.754-0.754 4.458 4.458-0.754 0.754z"></path>
+                                </svg>
+                            </button>
+                            <button class="theme-switcher__button">
+                                <svg viewBox="0 0 32 32">
+                                    <path d="M29.223 24.178l-0.021-0.057c-0.116-0.274-0.383-0.463-0.694-0.463-0.104 0-0.202 0.021-0.292 0.059l0.005-0.002c-1.272 0.542-2.752 0.857-4.306 0.857-6.213 0-11.25-5.037-11.25-11.25 0-4.66 2.833-8.658 6.871-10.366l0.074-0.028 0.211-0.089c0.267-0.118 0.45-0.381 0.45-0.687 0-0.375-0.276-0.686-0.635-0.74l-0.004-0.001c-0.653-0.103-1.407-0.161-2.174-0.161-8.145 0-14.748 6.603-14.748 14.748s6.603 14.748 14.748 14.748c4.748 0 8.973-2.244 11.67-5.73l0.025-0.034c0.097-0.125 0.155-0.285 0.155-0.458 0-0.127-0.031-0.246-0.086-0.351l0.002 0.004zM22.518 28.24c-1.497 0.637-3.238 1.007-5.066 1.007-7.317 0-13.249-5.932-13.249-13.249 0-7.074 5.543-12.853 12.523-13.23l0.034-0.001c-3.395 2.326-5.594 6.183-5.594 10.554 0 7.043 5.709 12.752 12.752 12.752 0.85 0 1.681-0.083 2.485-0.242l-0.081 0.013c-1.081 0.976-2.339 1.783-3.716 2.364l-0.087 0.033z"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="setups-switcher">
-                        <button class="setups-switcher__button setups-switcher__button_languages" style="color:#000;">Languages</button>
-                        <button class="setups-switcher__button setups-switcher__button_git">Git</button>
+                    <div class="theme-grid-container setups-switcher">
+                        <div class="setups-switcher theme-flex">
+                            <button class="setups-switcher__button setups-switcher__button_languages" style="color:#000;">Languages</button>
+                            <button class="setups-switcher__button setups-switcher__button_git">Git</button>
+                        </div>
                     </div>
-                    <div class="exit-buttons">
-                        <button class="theme_close-settings">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                        <button class="theme_exit">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"/>
-                                <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="languages">
-                    <div class="languages-main-language">
-                        <p>Основной язык</p>
-                        <button class="languages-main-language__button existent-language">Наименование языка</button>
-                    </div>
-                    <div class="languages-additional-languages">
-                        <p>Изучаемые языки</p>
-                        <div>
-                            <div class="languages-additional-languages-list">
-                                <button class="languages-additional-languages-list__button existent-language">Английский язык</button>
-                                <button class="languages-additional-languages-list__button existent-language">Японский язык</button>
-                                <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language">
-                                    <svg viewBox="0 0 32 32">
-                                        <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="languages-additional-languages-actions">
-                                <button class="languages-additional-languages-actions__button">
-                                    <svg viewBox="0 0 1024 1024">
-                                        <path d="M574.4 590.4l-3.2 7.2 1.6 8L608 740.8l8 33.6 28-20L760 672l5.6-4 2.4-6.4 220-556.8 8.8-22.4-22.4-8.8-140-55.2-21.6-8-8.8 20.8-229.6 559.2z m244-528l140 55.2-13.6-30.4-220 556.8 8-10.4-116 82.4 36 13.6-33.6-135.2-0.8 15.2 229.6-560-29.6 12.8z"/>
-                                        <path d="M872 301.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM718.4 645.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM900.8 224l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 11.2-17.6 8z"/>
-                                        <path d="M930.4 965.6H80c-31.2 0-56-24.8-56-56V290.4c0-31.2 24.8-56 56-56h576c13.6 0 24 10.4 24 24s-10.4 24-24 24H80c-4 0-8 4-8 8v619.2c0 4 4 8 8 8h850.4c4 0 8-4 8-8V320c0-13.6 10.4-24 24-24s24 10.4 24 24v589.6c0 31.2-24.8 56-56 56z"/>
-                                        <path d="M366.4 490.4H201.6c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h165.6c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-26.4 25.6zM409.6 584h-208c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h208c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6zM441.6 676.8h-240c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h240c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6z"/>
-                                    </svg>
-                                </button>
-                                <button class="languages-additional-languages-actions__button">
-                                    <svg viewBox="0 0 1024 1024">
-                                        <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                                    </svg>
-                                </button>
-                            </div>
+                    <div class="theme-grid-container exit-buttons">
+                        <div class="exit-buttons theme-flex">
+                            <button class="theme_close-settings">
+                                <svg viewBox="0 0 1024 1024">
+                                    <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
+                                </svg>
+                            </button>
+                            <button class="theme_exit">
+                                <svg viewBox="0 0 1024 1024">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"/>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="languages-add" style="display:none;">
-                    <div class="languages-add-select languages-add-select_recent-languages">
-                        <button class="languages-add-select__button">Английский</button>
-                        <button class="languages-add-select__button">Японский</button>
-                        <button class="languages-add-select__button">Китайский</button>
-                    </div>
-                    <div class="languages-add-select languages-add-select_all-languages">
-                        <button class="languages-add-select__button">Английский</button>
-                        <button class="languages-add-select__button">Японский</button>
-                        <button class="languages-add-select__button">Китайский</button>
-                        <button class="languages-add-select__button">Английский</button>
-                        <button class="languages-add-select__button">Японский</button>
-                        <button class="languages-add-select__button">Китайский</button>
-                    </div>
-                    <div class="languages-add-create">
-                        <p class="languages-add-create__p_add-language">Добавить новый язык</p>
-                        <p class="languages-add-create__p_edit-language">Изменить параметры языка</p>
-                        <div>
-                            <div class="languages-add-create__div">
-                                <input class="languages-add-create__input" type="text" placeholder="Наименование языка">
-                                <input class="languages-add-create__input" type="text" placeholder="Папка языка">
-                                <input class="languages-add-create__input languages-add-create__input_shorthand" type="text" placeholder="Метка">
+                <div class="settings-content">
+                    <div class="languages">
+                        <div class="languages-main-language">
+                            <p>Основной язык</p>
+                            <button class="languages-main-language__button existent-language">Наименование языка</button>
+                        </div>
+                        <div class="languages-additional-languages">
+                            <p>Изучаемые языки</p>
+                            <div>
+                                <div class="languages-additional-languages-list">
+                                    <button class="languages-additional-languages-list__button existent-language">Английский</button>
+                                    <button class="languages-additional-languages-list__button existent-language">Японский</button>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language">
+                                        <svg viewBox="0 0 32 32">
+                                            <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="languages-additional-languages-actions">
+                                    <button class="languages-additional-languages-actions__button">
+                                        <svg viewBox="0 0 1024 1024">
+                                            <path d="M574.4 590.4l-3.2 7.2 1.6 8L608 740.8l8 33.6 28-20L760 672l5.6-4 2.4-6.4 220-556.8 8.8-22.4-22.4-8.8-140-55.2-21.6-8-8.8 20.8-229.6 559.2z m244-528l140 55.2-13.6-30.4-220 556.8 8-10.4-116 82.4 36 13.6-33.6-135.2-0.8 15.2 229.6-560-29.6 12.8z"/>
+                                            <path d="M872 301.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM718.4 645.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM900.8 224l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 11.2-17.6 8z"/>
+                                            <path d="M930.4 965.6H80c-31.2 0-56-24.8-56-56V290.4c0-31.2 24.8-56 56-56h576c13.6 0 24 10.4 24 24s-10.4 24-24 24H80c-4 0-8 4-8 8v619.2c0 4 4 8 8 8h850.4c4 0 8-4 8-8V320c0-13.6 10.4-24 24-24s24 10.4 24 24v589.6c0 31.2-24.8 56-56 56z"/>
+                                            <path d="M366.4 490.4H201.6c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h165.6c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-26.4 25.6zM409.6 584h-208c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h208c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6zM441.6 676.8h-240c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h240c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="languages-additional-languages-actions__button">
+                                        <svg viewBox="0 0 1024 1024">
+                                            <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                            <input class="languages-add-create__input" type="checkbox" id="present-kanji">
-                            <label class="languages-add-create__label" for="present-kanji">В языке есть иероглифы</label>
-                            <button class="languages-add-create__button">Добавить</button>
                         </div>
                     </div>
-                </div>
-                <div class="git" style="display:none;">
-                    <div class="git-repo">
-                        <p>Репозиторий</p>
-                        <input class="git-repo__input" type="text" placeholder="Репозиторий со списками слов">
-                    </div>
-                    <div class="git-branches">
-                        <p>Ветка</p>
-                        <button class="git-branches__button">main</button>
-                        <input class="git-branches__input" type="checkbox" id="combine-branches">
-                        <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
-                    </div>
-                    <div class="git-lang-folders">
-                        <p>Папки и соответствующие им языки</p>
-                        <div>
-                            <input class="git-lang-folders-foldernames__input" type="text" value="english">
-                            <button class="git-lang-folders-langnames__button">Английский язык</button>
-                            <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
-                            <button class="git-lang-folders-langnames__button">Японский язык</button>
-                            <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
-                            <button class="git-lang-folders-langnames__button">Выбрать язык</button>
+                    <div class="languages-add" style="display:none;">
+                        <div class="languages-add-select languages-add-select_recent-languages">
+                            <button class="languages-add-select__button">Английский</button>
+                            <button class="languages-add-select__button">Японский</button>
+                            <button class="languages-add-select__button">Китайский</button>
+                        </div>
+                        <div class="languages-add-select languages-add-select_all-languages">
+                            <button class="languages-add-select__button">Английский</button>
+                            <button class="languages-add-select__button">Японский</button>
+                            <button class="languages-add-select__button">Китайский</button>
+                            <button class="languages-add-select__button">Английский</button>
+                            <button class="languages-add-select__button">Японский</button>
+                            <button class="languages-add-select__button">Китайский</button>
+                        </div>
+                        <div class="languages-add-create">
+                            <p class="languages-add-create__p_add-language">Добавить новый язык</p>
+                            <p class="languages-add-create__p_edit-language">Изменить параметры языка</p>
+                            <div>
+                                <div class="languages-add-create__div">
+                                    <input class="languages-add-create__input" type="text" placeholder="Наименование языка">
+                                    <input class="languages-add-create__input" type="text" placeholder="Папка языка">
+                                    <input class="languages-add-create__input languages-add-create__input_shorthand" type="text" placeholder="Метка">
+                                </div>
+                                <input class="languages-add-create__input" type="checkbox" id="present-kanji">
+                                <label class="languages-add-create__label" for="present-kanji">В языке есть иероглифы</label>
+                                <button class="languages-add-create__button">Добавить</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style="display:none;">
-
+                    <div class="git" style="display:none;">
+                        <div class="git-repo">
+                            <p>Репозиторий</p>
+                            <input class="git-repo__input" type="text" placeholder="Репозиторий со списками слов">
+                        </div>
+                        <div class="git-branches">
+                            <p>Ветка</p>
+                            <button class="git-branches__button">main</button>
+                            <input class="git-branches__input" type="checkbox" id="combine-branches">
+                            <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
+                        </div>
+                        <div class="git-lang-folders">
+                            <p>Папки и соответствующие им языки</p>
+                            <div>
+                                <input class="git-lang-folders-foldernames__input" type="text" value="english">
+                                <button class="git-lang-folders-langnames__button">Английский язык</button>
+                                <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
+                                <button class="git-lang-folders-langnames__button">Японский язык</button>
+                                <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
+                                <button class="git-lang-folders-langnames__button">Выбрать язык</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:none;">
+    
+                    </div>
                 </div>
             </section>
         </main>
-        <section class="dashboard" id="dashboard">
+        <section class="dashboard">
             <div class="search">
                 <form action="#" class="search-form">
                     <input type="text" class="search-form__input" placeholder="Искомое слово ...">
@@ -347,8 +355,9 @@
             </div>
             <div class="filters">
                 <form class="filters-form">
-                    <input type="text" class="filters-form__input filters-form__input_date-from" placeholder="с (dd.mm.yyyy)">
-                    <input type="text" class="filters-form__input filters-form__input_date-until" placeholder="по (dd.mm.yyyy)">
+                    <input type="text" class="filters-form__input filters-form__input_date-from" placeholder="1.1.1970">
+                    <p>-</p>
+                    <input type="text" class="filters-form__input filters-form__input_date-until" placeholder="31.10.2024">
                 </form>
             </div>
             <div class="other">

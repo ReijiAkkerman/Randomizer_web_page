@@ -26,148 +26,169 @@
             position: relative;
 
             .theme {
-                display: flex;
+                display: grid;
                 position: relative;
-                justify-content: space-between;
+                grid-template-columns: 1fr 1fr 1fr;
 
-                .setups-switcher {
+                &-grid-container {
+                    justify-self: stretch;
+                    align-self: stretch;
                     display: flex;
                     position: relative;
-                    justify-content: start;
-                }
 
-                .exit-buttons {
-                    display: flex;
-                    position: relative;
-                    justify-content: start;
-                    flex-direction: row-reverse;
-                    gap: 10px;
-                }
-
-                &-switcher {
-                    display: flex;
-                    position: relative;
-                    justify-content: start;
-                }
-            }
-
-            .languages {
-                display: block;
-                position: relative;
-
-                &-main-language {
-                    display: block;
-                    position: relative;
-                }
-
-                &-additional-languages {
-                    display: block;
-                    position: relative;
-
-                    > div {
-                        display: flex;
-                        position: relative;
+                    &.theme-switcher {
                         justify-content: start;
-                        gap: 20px;
                     }
 
-                    &-list {
-                        display: block;
-                        position: relative;
+                    &.setups-switcher {
+                        justify-content: center;
                     }
 
-                    &-actions {
-                        display: flex;
-                        position: relative;
+                    &.exit-buttons {
+                        justify-content: end;
+                    }
+                }
+
+                &-flex {
+                    display: flex;
+                    position: relative;
+
+                    &.setups-switcher {
                         justify-content: start;
-                        align-items: start;
+                        width: fit-content;
+                    }
+    
+                    &.exit-buttons {
+                        justify-content: end;
+                        flex-direction: row-reverse;
                         gap: 10px;
                     }
                 }
+            }
 
-                &-add {
+            .settings-content {
+                display: block;
+                position: relative;
+                overflow: hidden;
+
+                .languages {
                     display: block;
                     position: relative;
-
-                    &-select {
-                        display: grid;
-                        position: relative;
-                        grid-template-columns: repeat(3, 1fr);
-                    }
-
-                    &-select-from-all {
-                        display: grid;
-                        position: relative;
-                        grid-template-columns: repeat(3, 1fr);
-                    }
-
-                    &-create {
+    
+                    &-main-language {
                         display: block;
                         position: relative;
-
+                    }
+    
+                    &-additional-languages {
+                        display: block;
+                        position: relative;
+    
                         > div {
-                            display: block;
-                            position: relative;
-                        }
-
-                        &__div {
                             display: flex;
                             position: relative;
-                            justify-content: space-between;
+                            justify-content: start;
                             gap: 20px;
                         }
-
-                        &__input[type="checkbox"] {
-                            display: none;
-                        }
-
-                        &__label {
+    
+                        &-list {
                             display: block;
                             position: relative;
-
-                            &::before {
-                                display: inline-block;
-                                position: absolute;
+                        }
+    
+                        &-actions {
+                            display: flex;
+                            position: relative;
+                            justify-content: start;
+                            align-items: start;
+                            gap: 10px;
+                        }
+                    }
+    
+                    &-add {
+                        display: block;
+                        position: relative;
+    
+                        &-select {
+                            display: grid;
+                            position: relative;
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+    
+                        &-select-from-all {
+                            display: grid;
+                            position: relative;
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+    
+                        &-create {
+                            display: block;
+                            position: relative;
+    
+                            > div {
+                                display: block;
+                                position: relative;
+                            }
+    
+                            &__div {
+                                display: flex;
+                                position: relative;
+                                justify-content: space-between;
+                                gap: 20px;
+                            }
+    
+                            &__input[type="checkbox"] {
+                                display: none;
+                            }
+    
+                            &__label {
+                                display: block;
+                                position: relative;
+    
+                                &::before {
+                                    display: inline-block;
+                                    position: absolute;
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            .git {
-                &-branches {
-                    &__input {
-                        display: none;
-                    }
-
-                    &__label {
-                        display: block;
-                        position: relative;
-
-                        &::before {
+    
+                .git {
+                    &-branches {
+                        &__input {
+                            display: none;
+                        }
+    
+                        &__label {
                             display: block;
-                            position: absolute;
+                            position: relative;
+    
+                            &::before {
+                                display: block;
+                                position: absolute;
+                            }
                         }
                     }
-                }
-
-                &-lang-folders {
-                    display: block;
-                    position: relative;
-
-                    > div {
-                        display: grid;
+    
+                    &-lang-folders {
+                        display: block;
                         position: relative;
-                        grid-template-columns: 1fr 1fr;
-                        justify-items: stretch;
-                        align-items: stretch;
-                        column-gap: 25px;
-                        row-gap: 10px;
-                    }
-
-                    &-foldernames {
-                        &__input {
-                            display: block;
+    
+                        > div {
+                            display: grid;
+                            position: relative;
+                            grid-template-columns: 1fr 1fr;
+                            justify-items: stretch;
+                            align-items: stretch;
+                            column-gap: 25px;
+                            row-gap: 10px;
+                        }
+    
+                        &-foldernames {
+                            &__input {
+                                display: block;
+                            }
                         }
                     }
                 }
@@ -249,7 +270,8 @@
             &-form {
                 display: flex;
                 position: relative;
-                justify-content: space-around;
+                justify-content: space-between;
+                align-items: center;
             }
         }
 
@@ -271,8 +293,52 @@
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
     .randomizer {
+        > main {
+            position: fixed;
+            width: 100% !important;
+            height: 100%;
+            top: 0;
+            left: 0;
+
+            .settings {
+                .settings-content {
+                    .languages {
+                        &-additional-languages {
+                            > div {
+                                justify-content: space-between;
+                            }
+    
+                            &-actions {
+                                justify-content: start;
+                                flex-direction: column-reverse;
+                            }
+                        }
+
+                        &-add {
+                            &-select {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+                    }
+                }
+
+                .theme {
+                    display: grid !important;
+                    grid-template-columns: 1fr 1fr !important;
+                    row-gap: 10px;
+    
+                    .setups-switcher {
+                        grid-column-start: 1;
+                        grid-column-end: 3;
+                        grid-row-start: 2;
+                        grid-row-end: 3;
+                    }
+                }
+            }
+        }
+
         > .dashboard {
             position: fixed;
             width: 100%;

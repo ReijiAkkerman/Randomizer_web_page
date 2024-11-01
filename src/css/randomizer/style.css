@@ -52,57 +52,46 @@ svg {
 }
 .randomizer main > .settings {
   width: 100%;
+  padding: 10px;
 }
 .randomizer main > .settings svg {
   width: 30px;
   height: 30px;
 }
-.randomizer main > .settings > div {
+.randomizer main > .settings .theme {
   border-bottom: 1px solid #000;
-  padding: 0 10px;
-  margin: 0 10px;
-}
-.randomizer main > .settings > div:nth-child(odd) {
-  border: none;
-}
-.randomizer main > .settings > div:first-of-type {
-  margin-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #000;
 }
-.randomizer main > .settings > div:last-of-type {
-  margin-bottom: 10px;
-}
-.randomizer main > .settings .theme .setups-switcher {
+.randomizer main > .settings .theme-flex.setups-switcher {
   border: 1px solid #aaa;
   border-radius: 10px;
 }
-.randomizer main > .settings .theme .setups-switcher__button {
+.randomizer main > .settings .theme-flex .setups-switcher__button {
   font-size: 20px;
   padding: 5px 20px;
   color: #777;
 }
-.randomizer main > .settings .theme .setups-switcher__button:first-of-type {
+.randomizer main > .settings .theme-flex .setups-switcher__button:first-of-type {
   border-right: 1px solid #aaa;
 }
-.randomizer main > .settings .theme .setups-switcher__button:hover {
+.randomizer main > .settings .theme-flex .setups-switcher__button:hover {
   color: #000;
 }
-.randomizer main > .settings .theme-switcher {
+.randomizer main > .settings .theme-flex.theme-switcher {
   border: 1px solid #aaa;
   border-radius: 10px;
 }
-.randomizer main > .settings .theme-switcher__button {
+.randomizer main > .settings .theme-flex .theme-switcher__button {
   border-right: 1px solid #aaa;
   padding: 5px 20px;
 }
-.randomizer main > .settings .theme-switcher__button:last-of-type {
+.randomizer main > .settings .theme-flex .theme-switcher__button:last-of-type {
   border: none;
 }
-.randomizer main > .settings .theme-switcher__button > svg {
+.randomizer main > .settings .theme-flex .theme-switcher__button > svg {
   fill: #777;
 }
-.randomizer main > .settings .theme-switcher__button:hover > svg {
+.randomizer main > .settings .theme-flex .theme-switcher__button:hover > svg {
   fill: #333;
 }
 .randomizer main > .settings .theme_close-settings, .randomizer main > .settings .theme_exit {
@@ -119,110 +108,109 @@ svg {
 .randomizer main > .settings .theme_close-settings:hover > svg, .randomizer main > .settings .theme_exit:hover > svg {
   fill: #000;
 }
-.randomizer main > .settings .languages p {
+.randomizer main > .settings .settings-content .languages p {
   text-align: center;
   font-size: 20px;
   margin-bottom: 10px;
 }
-.randomizer main > .settings .languages > div {
-  border-bottom: 1px solid #aaa;
-  padding: 10px 0;
+.randomizer main > .settings .settings-content .languages > div {
+  border-top: 1px solid #aaa;
+  padding: 10px;
 }
-.randomizer main > .settings .languages > div:last-of-type {
-  border-bottom: none;
+.randomizer main > .settings .settings-content .languages > div:first-of-type {
+  border-top: none;
 }
-.randomizer main > .settings .languages-main-language__button {
+.randomizer main > .settings .settings-content .languages-main-language__button {
   font-size: 20px;
   border: 1px solid #aaa;
   border-radius: 10px;
   color: #777;
   padding: 5px 20px;
 }
-.randomizer main > .settings .languages-main-language__button:hover {
+.randomizer main > .settings .settings-content .languages-main-language__button:hover {
   border-color: #000;
 }
-.randomizer main > .settings .languages-main-language__button:hover {
+.randomizer main > .settings .settings-content .languages-main-language__button:hover {
   color: #000;
 }
-.randomizer main > .settings .languages-additional-languages-list {
+.randomizer main > .settings .settings-content .languages-additional-languages {
+  border-bottom: 1px solid #aaa;
+}
+.randomizer main > .settings .settings-content .languages-additional-languages-list {
   border: 1px solid #aaa;
   border-radius: 10px;
 }
-.randomizer main > .settings .languages-additional-languages-list__button {
+.randomizer main > .settings .settings-content .languages-additional-languages-list__button {
   border-bottom: 1px solid #aaa;
   width: 100%;
   padding: 5px 20px;
   font-size: 20px;
   color: #777;
 }
-.randomizer main > .settings .languages-additional-languages-list__button > svg {
+.randomizer main > .settings .settings-content .languages-additional-languages-list__button > svg {
   width: 20px;
   height: 20px;
   fill: #777;
 }
-.randomizer main > .settings .languages-additional-languages-list__button:last-of-type {
+.randomizer main > .settings .settings-content .languages-additional-languages-list__button:last-of-type {
   border: none;
 }
-.randomizer main > .settings .languages-additional-languages-list__button:hover {
+.randomizer main > .settings .settings-content .languages-additional-languages-list__button:hover {
   color: #000;
 }
-.randomizer main > .settings .languages-additional-languages-list__button:hover > svg {
+.randomizer main > .settings .settings-content .languages-additional-languages-list__button:hover > svg {
   fill: #000;
 }
-.randomizer main > .settings .languages-additional-languages-actions__button {
+.randomizer main > .settings .settings-content .languages-additional-languages-actions__button {
   border: 1px solid #aaa;
   border-radius: 10px;
   padding: 6px;
 }
-.randomizer main > .settings .languages-additional-languages-actions__button:hover {
+.randomizer main > .settings .settings-content .languages-additional-languages-actions__button:hover {
   border-color: #000;
 }
-.randomizer main > .settings .languages-additional-languages-actions__button > svg {
+.randomizer main > .settings .settings-content .languages-additional-languages-actions__button > svg {
   fill: #777;
 }
-.randomizer main > .settings .languages-additional-languages-actions__button:hover > svg {
+.randomizer main > .settings .settings-content .languages-additional-languages-actions__button:hover > svg {
   fill: #000;
 }
-.randomizer main > .settings .languages-add {
+.randomizer main > .settings .settings-content .languages-add {
   margin: 0 10px;
 }
-.randomizer main > .settings .languages-add p {
+.randomizer main > .settings .settings-content .languages-add p {
   text-align: center;
   font-size: 20px;
   margin-bottom: 10px;
 }
-.randomizer main > .settings .languages-add > div {
+.randomizer main > .settings .settings-content .languages-add > div {
   margin: 10px 0;
 }
-.randomizer main > .settings .languages-add > div:last-of-type {
-  margin: 0;
-  padding: 10px 0;
-  border-top: 1px solid #aaa;
-}
-.randomizer main > .settings .languages-add > div:first-of-type {
-  padding: 0;
-}
-.randomizer main > .settings .languages-add-select {
+.randomizer main > .settings .settings-content .languages-add-select {
   border: 1px solid #aaa;
   border-radius: 10px;
 }
-.randomizer main > .settings .languages-add-select__button {
+.randomizer main > .settings .settings-content .languages-add-select__button {
   font-size: 20px;
   padding: 5px 20px;
   color: #777;
   border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
 }
-.randomizer main > .settings .languages-add-select__button:nth-child(3n) {
+.randomizer main > .settings .settings-content .languages-add-select__button:nth-child(3n) {
   border-right: none;
 }
-.randomizer main > .settings .languages-add-select__button:nth-last-child(-n+3) {
+.randomizer main > .settings .settings-content .languages-add-select__button:nth-last-child(-n+3) {
   border-bottom: none;
 }
-.randomizer main > .settings .languages-add-select__button:hover {
+.randomizer main > .settings .settings-content .languages-add-select__button:hover {
   color: #000;
 }
-.randomizer main > .settings .languages-add-create__input[type=text] {
+.randomizer main > .settings .settings-content .languages-add-create {
+  border-top: 1px solid #aaa;
+  padding-top: 10px;
+}
+.randomizer main > .settings .settings-content .languages-add-create__input[type=text] {
   width: 100%;
   font-size: 20px;
   padding: 5px 5px 5px 20px;
@@ -230,22 +218,22 @@ svg {
   border-radius: 10px;
   color: #777;
 }
-.randomizer main > .settings .languages-add-create__input[type=text]:focus {
+.randomizer main > .settings .settings-content .languages-add-create__input[type=text]:focus {
   color: #000;
 }
-.randomizer main > .settings .languages-add-create__input_shorthand[type=text] {
+.randomizer main > .settings .settings-content .languages-add-create__input_shorthand[type=text] {
   width: 70px;
   text-align: center;
   padding: 5px 20px;
 }
-.randomizer main > .settings .languages-add-create__label {
+.randomizer main > .settings .settings-content .languages-add-create__label {
   user-select: none;
   padding-left: 20px;
   width: fit-content;
   font-size: 20px;
   margin: 10px 5px;
 }
-.randomizer main > .settings .languages-add-create__label::before {
+.randomizer main > .settings .settings-content .languages-add-create__label::before {
   content: "";
   top: 2px;
   left: -5px;
@@ -254,13 +242,13 @@ svg {
   border: 1px solid #000;
   border-radius: 5px;
 }
-.randomizer main > .settings .languages-add-create__input[type=checkbox]:checked + label::before {
+.randomizer main > .settings .settings-content .languages-add-create__input[type=checkbox]:checked + label::before {
   content: "✓";
   font-weight: bold;
   font-size: 20px;
   text-align: center;
 }
-.randomizer main > .settings .languages-add-create__button {
+.randomizer main > .settings .settings-content .languages-add-create__button {
   font-size: 20px;
   padding: 5px 20px;
   border: 1px solid #aaa;
@@ -268,25 +256,25 @@ svg {
   color: #777;
   margin: 0 auto;
 }
-.randomizer main > .settings .languages-add-create__button:hover {
+.randomizer main > .settings .settings-content .languages-add-create__button:hover {
   border-color: #000;
 }
-.randomizer main > .settings .languages-add-create__button:hover {
+.randomizer main > .settings .settings-content .languages-add-create__button:hover {
   color: #000;
 }
-.randomizer main > .settings .git p {
+.randomizer main > .settings .settings-content .git p {
   font-size: 20px;
   text-align: center;
   margin-bottom: 10px;
 }
-.randomizer main > .settings .git > div {
+.randomizer main > .settings .settings-content .git > div {
   border-bottom: 1px solid #aaa;
   padding: 10px 0;
 }
-.randomizer main > .settings .git > div:last-of-type {
+.randomizer main > .settings .settings-content .git > div:last-of-type {
   border-bottom: none;
 }
-.randomizer main > .settings .git-repo__input {
+.randomizer main > .settings .settings-content .git-repo__input {
   width: 100%;
   border: 1px solid #aaa;
   border-radius: 10px;
@@ -295,31 +283,31 @@ svg {
   color: #777;
   box-sizing: border-box;
 }
-.randomizer main > .settings .git-repo__input:focus {
+.randomizer main > .settings .settings-content .git-repo__input:focus {
   color: #000;
   border-color: #000;
 }
-.randomizer main > .settings .git-branches__button {
+.randomizer main > .settings .settings-content .git-branches__button {
   font-size: 20px;
   border: 1px solid #aaa;
   border-radius: 10px;
   color: #777;
   padding: 5px 20px;
 }
-.randomizer main > .settings .git-branches__button:hover {
+.randomizer main > .settings .settings-content .git-branches__button:hover {
   border-color: #000;
 }
-.randomizer main > .settings .git-branches__button:hover {
+.randomizer main > .settings .settings-content .git-branches__button:hover {
   color: #000;
 }
-.randomizer main > .settings .git-branches__label {
+.randomizer main > .settings .settings-content .git-branches__label {
   width: fit-content;
   padding-left: 20px;
   font-size: 20px;
   margin-left: 5px;
   margin-top: 10px;
 }
-.randomizer main > .settings .git-branches__label::before {
+.randomizer main > .settings .settings-content .git-branches__label::before {
   content: "";
   width: 20px;
   height: 20px;
@@ -328,43 +316,43 @@ svg {
   border: 1px solid #000;
   border-radius: 5px;
 }
-.randomizer main > .settings .git-branches__input[type=checkbox]:checked + label::before {
+.randomizer main > .settings .settings-content .git-branches__input[type=checkbox]:checked + label::before {
   content: "✓";
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   vertical-align: top;
 }
-.randomizer main > .settings .git-lang-folders-foldernames__input {
+.randomizer main > .settings .settings-content .git-lang-folders-foldernames__input {
   font-size: 20px;
   border: 1px solid #aaa;
   border-radius: 10px;
   padding: 5px 20px;
   color: #777;
 }
-.randomizer main > .settings .git-lang-folders-foldernames__input:focus {
+.randomizer main > .settings .settings-content .git-lang-folders-foldernames__input:focus {
   color: #000;
   border-color: #000;
 }
-.randomizer main > .settings .git-lang-folders-langnames__button {
+.randomizer main > .settings .settings-content .git-lang-folders-langnames__button {
   font-size: 20px;
   border: 1px solid #aaa;
   border-radius: 10px;
   padding: 5px 20px;
   color: #777;
 }
-.randomizer main > .settings .git-lang-folders-langnames__button:hover {
+.randomizer main > .settings .settings-content .git-lang-folders-langnames__button:hover {
   border-color: #000;
 }
-.randomizer main > .settings .git-lang-folders-langnames__button > svg {
+.randomizer main > .settings .settings-content .git-lang-folders-langnames__button > svg {
   width: 20px;
   height: 20px;
   fill: #777;
 }
-.randomizer main > .settings .git-lang-folders-langnames__button:hover {
+.randomizer main > .settings .settings-content .git-lang-folders-langnames__button:hover {
   color: #000;
 }
-.randomizer main > .settings .git-lang-folders-langnames__button:hover > svg {
+.randomizer main > .settings .settings-content .git-lang-folders-langnames__button:hover > svg {
   fill: #000;
 }
 .randomizer > .dashboard {
@@ -512,14 +500,15 @@ svg {
   fill: #000;
 }
 .randomizer > .dashboard .filters-form {
-  gap: 20px;
+  gap: 10px;
 }
 .randomizer > .dashboard .filters-form__input {
   border: 1px solid #000;
-  padding: 5px 5px 5px 20px;
+  padding: 5px;
   border-radius: 10px;
   font-size: 20px;
   width: 100%;
+  text-align: center;
 }
 .randomizer > .dashboard .other-languages {
   border: 1px solid #aaa;
@@ -544,7 +533,7 @@ svg {
 }
 .randomizer > .dashboard .other-modes__button {
   outline: none;
-  padding: 0 10px;
+  padding: 5px 10px;
   border-right: 1px solid #aaa;
 }
 .randomizer > .dashboard .other-modes__button > svg {
@@ -582,6 +571,25 @@ svg {
 }
 .randomizer > .dashboard .other-utilities__button:hover > svg {
   fill: #000;
+}
+
+@media only screen and (max-width: 500px) {
+  .randomizer > main .settings .settings-content .languages-add-select__button {
+    border-right: none;
+    border-top: 1px solid #aaa;
+  }
+  .randomizer > main .settings .settings-content .languages-add-select__button:first-of-type {
+    border-top: none;
+  }
+  .randomizer .dashboard {
+    display: none;
+  }
+  .randomizer .dashboard .other-languages__button {
+    width: 50px;
+  }
+  .randomizer .dashboard .other-utilities {
+    display: none !important;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

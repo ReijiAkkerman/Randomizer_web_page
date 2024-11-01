@@ -46,111 +46,127 @@ svg {
   position: relative;
 }
 .randomizer main > .settings .theme {
-  display: flex;
+  display: grid;
   position: relative;
-  justify-content: space-between;
+  grid-template-columns: 1fr 1fr 1fr;
 }
-.randomizer main > .settings .theme .setups-switcher {
+.randomizer main > .settings .theme-grid-container {
+  justify-self: stretch;
+  align-self: stretch;
   display: flex;
   position: relative;
+}
+.randomizer main > .settings .theme-grid-container.theme-switcher {
   justify-content: start;
 }
-.randomizer main > .settings .theme .exit-buttons {
+.randomizer main > .settings .theme-grid-container.setups-switcher {
+  justify-content: center;
+}
+.randomizer main > .settings .theme-grid-container.exit-buttons {
+  justify-content: end;
+}
+.randomizer main > .settings .theme-flex {
   display: flex;
   position: relative;
+}
+.randomizer main > .settings .theme-flex.setups-switcher {
   justify-content: start;
+  width: fit-content;
+}
+.randomizer main > .settings .theme-flex.exit-buttons {
+  justify-content: end;
   flex-direction: row-reverse;
   gap: 10px;
 }
-.randomizer main > .settings .theme-switcher {
-  display: flex;
+.randomizer main > .settings .settings-content {
+  display: block;
   position: relative;
-  justify-content: start;
+  overflow: hidden;
 }
-.randomizer main > .settings .languages {
+.randomizer main > .settings .settings-content .languages {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-main-language {
+.randomizer main > .settings .settings-content .languages-main-language {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-additional-languages {
+.randomizer main > .settings .settings-content .languages-additional-languages {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-additional-languages > div {
+.randomizer main > .settings .settings-content .languages-additional-languages > div {
   display: flex;
   position: relative;
   justify-content: start;
   gap: 20px;
 }
-.randomizer main > .settings .languages-additional-languages-list {
+.randomizer main > .settings .settings-content .languages-additional-languages-list {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-additional-languages-actions {
+.randomizer main > .settings .settings-content .languages-additional-languages-actions {
   display: flex;
   position: relative;
   justify-content: start;
   align-items: start;
   gap: 10px;
 }
-.randomizer main > .settings .languages-add {
+.randomizer main > .settings .settings-content .languages-add {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-add-select {
+.randomizer main > .settings .settings-content .languages-add-select {
   display: grid;
   position: relative;
   grid-template-columns: repeat(3, 1fr);
 }
-.randomizer main > .settings .languages-add-select-from-all {
+.randomizer main > .settings .settings-content .languages-add-select-from-all {
   display: grid;
   position: relative;
   grid-template-columns: repeat(3, 1fr);
 }
-.randomizer main > .settings .languages-add-create {
+.randomizer main > .settings .settings-content .languages-add-create {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-add-create > div {
+.randomizer main > .settings .settings-content .languages-add-create > div {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-add-create__div {
+.randomizer main > .settings .settings-content .languages-add-create__div {
   display: flex;
   position: relative;
   justify-content: space-between;
   gap: 20px;
 }
-.randomizer main > .settings .languages-add-create__input[type=checkbox] {
+.randomizer main > .settings .settings-content .languages-add-create__input[type=checkbox] {
   display: none;
 }
-.randomizer main > .settings .languages-add-create__label {
+.randomizer main > .settings .settings-content .languages-add-create__label {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .languages-add-create__label::before {
+.randomizer main > .settings .settings-content .languages-add-create__label::before {
   display: inline-block;
   position: absolute;
 }
-.randomizer main > .settings .git-branches__input {
+.randomizer main > .settings .settings-content .git-branches__input {
   display: none;
 }
-.randomizer main > .settings .git-branches__label {
+.randomizer main > .settings .settings-content .git-branches__label {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .git-branches__label::before {
+.randomizer main > .settings .settings-content .git-branches__label::before {
   display: block;
   position: absolute;
 }
-.randomizer main > .settings .git-lang-folders {
+.randomizer main > .settings .settings-content .git-lang-folders {
   display: block;
   position: relative;
 }
-.randomizer main > .settings .git-lang-folders > div {
+.randomizer main > .settings .settings-content .git-lang-folders > div {
   display: grid;
   position: relative;
   grid-template-columns: 1fr 1fr;
@@ -159,7 +175,7 @@ svg {
   column-gap: 25px;
   row-gap: 10px;
 }
-.randomizer main > .settings .git-lang-folders-foldernames__input {
+.randomizer main > .settings .settings-content .git-lang-folders-foldernames__input {
   display: block;
 }
 .randomizer > .dashboard {
@@ -221,7 +237,8 @@ svg {
 .randomizer > .dashboard .filters-form {
   display: flex;
   position: relative;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
 }
 .randomizer > .dashboard .other {
   display: flex;
@@ -237,7 +254,35 @@ svg {
   flex-direction: row-reverse;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
+  .randomizer > main {
+    position: fixed;
+    width: 100% !important;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  .randomizer > main .settings .settings-content .languages-additional-languages > div {
+    justify-content: space-between;
+  }
+  .randomizer > main .settings .settings-content .languages-additional-languages-actions {
+    justify-content: start;
+    flex-direction: column-reverse;
+  }
+  .randomizer > main .settings .settings-content .languages-add-select {
+    grid-template-columns: 1fr;
+  }
+  .randomizer > main .settings .theme {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    row-gap: 10px;
+  }
+  .randomizer > main .settings .theme .setups-switcher {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
   .randomizer > .dashboard {
     position: fixed;
     width: 100%;
