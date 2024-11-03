@@ -8,6 +8,7 @@
         height: 100%;
         top: 0;
         left: 0;
+        overflow-y: scroll;
 
         > .words {
             display: block;
@@ -24,11 +25,14 @@
         > .settings {
             display: block;
             position: relative;
+            // overflow-y: scroll !important;
 
             .theme {
                 display: grid;
-                position: relative;
+                position: sticky;
                 grid-template-columns: 1fr 1fr 1fr;
+                top: 0;
+                z-index: 1;
 
                 &-grid-container {
                     justify-self: stretch;

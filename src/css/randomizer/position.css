@@ -30,6 +30,7 @@ svg {
   height: 100%;
   top: 0;
   left: 0;
+  overflow-y: scroll;
 }
 .randomizer main > .words {
   display: block;
@@ -47,8 +48,10 @@ svg {
 }
 .randomizer main > .settings .theme {
   display: grid;
-  position: relative;
+  position: sticky;
   grid-template-columns: 1fr 1fr 1fr;
+  top: 0;
+  z-index: 1;
 }
 .randomizer main > .settings .theme-grid-container {
   justify-self: stretch;
