@@ -5,6 +5,7 @@ class UserInterface {
     static text_color = '#000';
     static selected_mode_text_color ='#00f';
     static main_actions_text_color = '#00f';
+    static setting_for_editing_text_color = '#090';
 
     static selectors = new Map([
         ['Панель настроек', '.settings'],
@@ -15,7 +16,6 @@ class UserInterface {
         ['Раздел языковых настроек', '.languages'],
         ['Раздел дополнительных опций языковых настроек', '.languages-add'],
         ['Раздел настроек Git', '.git'],
-        ['Кнопка открытия дополнительных опций языковых настроек', '.languages-additional-languages-list__button_add-language'],
         ['"Добавить новый язык"', '.languages-add-create__p_add-language'],
         ['"Изменить параметры языка"', '.languages-add-create__p_edit-language'],
         ['Метка существующего языка', '.existent-language'],
@@ -42,6 +42,14 @@ class UserInterface {
         ['Параметр количества слов', '.parameters-block__input_words-number'],
         ['Блок обьединения списков', '.lists-combining'],
         ['Используемые языки', '.languages-add-select_recent-languages'],
+        ['Все языки', '.languages-add-select_all-languages'],
+        ['Кнопка выбора основного языка', '.languages-main-language__button'],
+        ['Кнопка добавления языка', '.languages-additional-languages-list__button_add-language'],
+        ['Поле наименования языка', '.languages-add-create__input_language-name'],
+        ['Поле папки языка', '.languages-add-create__input_language-folder'],
+        ['Поле метки языка', '.languages-add-create__input_shorthand'],
+        ['"Присутствие в языке иероглифов"', '#present_kanji'],
+        ['Информация о языке', '.languages-add-create'],
     ]);
 
     static #settings_button_enabled = false;
@@ -50,8 +58,12 @@ class UserInterface {
     static kanji_mode_enabled = true;
 
     static mode_switcher_queue = new CircularQueue(3, 'translation-mode_button', ['transcription-mode_button', 'source-mode_button']);
-    static main_actions_stack = new Stack(1);
     static #reversed_mode_enabled = false;
+
+    static main_actions_stack = new Stack(1);
+
+    static #editing_setting = null;
+    static #selected_studied_language = null;
 
     static #settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
     static #settings_button = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
@@ -94,6 +106,14 @@ class UserInterface {
     static #combine_lists_block = document.querySelector(UserInterface.selectors.get('Блок обьединения списков'));
     static #close_main_action = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
     static #used_languages = document.querySelector(UserInterface.selectors.get('Используемые языки'));
+    static #all_languages = document.querySelector(UserInterface.selectors.get('Все языки'));
+    static main_language_button = document.querySelector(UserInterface.selectors.get('Кнопка выбора основного языка'));
+    static add_language_button = document.querySelector(UserInterface.selectors.get('Кнопка добавления языка'));
+    static #language_name_field = document.querySelector(UserInterface.selectors.get('Поле наименования языка'));
+    static #language_folder_field = document.querySelector(UserInterface.selectors.get('Поле папки языка'));
+    static #language_mark_field = document.querySelector(UserInterface.selectors.get('Поле метки языка'));
+    static #kanji_presence = document.querySelector(UserInterface.selectors.get('"Присутствие в языке иероглифов"'));
+    static #language_info = document.querySelector(UserInterface.selectors.get('Информация о языке'));
 
     static close_settings() {
         UserInterface.#settings_panel.style.display = 'none';
@@ -182,7 +202,7 @@ class UserInterface {
         UserInterface.close_languages_additional_options();
     }
 
-    static open_languages_additional_options() {
+    static #open_languages_additional_options() {
         UserInterface.#additional_options_section.style.display = '';
     }
 
@@ -190,16 +210,65 @@ class UserInterface {
         UserInterface.#additional_options_section.style.display = 'none';
     }
 
-    static set_editing_language_header() {
-        UserInterface.#hide_used_languages();
-        UserInterface.#new_language_header.style.display = 'none';
-        UserInterface.#existent_language_header.style.display = '';
+    static select_main_language() {
+        if(UserInterface.#editing_setting) 
+            UserInterface.#set_default_colors_to_language_setting();
+        UserInterface.#editing_setting = UserInterface.main_language_button;
+        UserInterface.#editing_setting.language_type = 'main-language';
+        UserInterface.#set_active_colors_to_language_setting();
+        UserInterface.#open_languages_additional_options();
+        UserInterface.#show_used_languages();
+        UserInterface.#open_language_info();
+        UserInterface.#show_adding_language_header();
     }
 
-    static set_adding_language_header() {
-        UserInterface.#show_used_languages();
-        UserInterface.#new_language_header.style.display = '';
-        UserInterface.#existent_language_header.style.display = 'none';
+    static add_language() {
+        if(UserInterface.#editing_setting)
+            UserInterface.#set_default_colors_to_language_setting();
+        UserInterface.#editing_setting = UserInterface.add_language_button;
+        UserInterface.#editing_setting.language_type = 'add-language';
+        UserInterface.#set_active_colors_to_language_setting();
+        UserInterface.#open_languages_additional_options();
+        UserInterface.#hide_used_languages();
+        UserInterface.#open_language_info();
+        UserInterface.#show_adding_language_header();
+    }
+
+    static change_language() {
+        if(UserInterface.#selected_studied_language) {
+            UserInterface.#language_name_field.value = UserInterface.#selected_studied_language.language;
+            UserInterface.#language_folder_field.value = UserInterface.#selected_studied_language.folder;
+        }
+    }
+
+    static #set_active_colors_to_language_setting() {
+        switch(UserInterface.#editing_setting.language_type) {
+            case 'main-language':
+                UserInterface.#editing_setting.style.color = UserInterface.setting_for_editing_text_color;
+                UserInterface.#editing_setting.style.borderColor = UserInterface.setting_for_editing_text_color;
+                break;
+            case 'studied-language':
+                UserInterface.#editing_setting.style.color = UserInterface.setting_for_editing_text_color;
+                break;
+            case 'add-language':
+                UserInterface.#editing_setting.firstElementChild.style.fill = UserInterface.setting_for_editing_text_color;
+                break;
+        }
+    }
+
+    static #set_default_colors_to_language_setting() {
+        switch(UserInterface.#editing_setting.language_type) {
+            case 'main-language':
+                UserInterface.#editing_setting.style.color = '';
+                UserInterface.#editing_setting.style.borderColor = '';
+                break;
+            case 'studied-language':
+                UserInterface.#editing_setting.style.color = '';
+                break;
+            case 'add-language':
+                UserInterface.#editing_setting.firstElementChild.style.fill = '';
+                break;
+        }
     }
 
     static #show_used_languages() {
@@ -209,6 +278,32 @@ class UserInterface {
     static #hide_used_languages() {
         UserInterface.#used_languages.style.display = 'none';
     } 
+
+    static #show_all_languages() {
+        UserInterface.#all_languages.style.display = '';
+    }
+
+    static #hide_all_languages() {
+        UserInterface.#all_languages.style.display = 'none';
+    }
+
+    static #open_language_info() {
+        UserInterface.#language_info.style.display = '';
+    }
+
+    static #close_language_info() {
+        UserInterface.#language_info.style.display = 'none';
+    }
+
+    static #show_changing_language_header() {
+        UserInterface.#new_language_header.style.display = 'none';
+        UserInterface.#existent_language_header.style.display = '';
+    }
+
+    static #show_adding_language_header() {
+        UserInterface.#new_language_header.style.display = '';
+        UserInterface.#existent_language_header.style.display = 'none';
+    }
 
     static #close_words_panel() {
         UserInterface.#words_panel.style.display = 'none';
@@ -460,6 +555,14 @@ class UserInterface {
         if(disable_close_button)
             UserInterface.#close_main_action.style.display = 'none';
     }
+
+    select_studied_language() {
+        
+        UserInterface.#selected_studied_language = {};
+        UserInterface.#selected_studied_language.language = this.dataset.language;
+        UserInterface.#selected_studied_language.mark = this.dataset.mark;
+        UserInterface.#selected_studied_language.folder = this.dataset.folder;
+    }
 }
 
 var UI = new UserInterface();
@@ -474,17 +577,9 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', UserInterface.switch_settings_to_languages);
     element = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
     element.addEventListener('click', UserInterface.switch_settings_to_git);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка открытия дополнительных опций языковых настроек'));
-    element.addEventListener('click', UserInterface.open_languages_additional_options);
-    element.addEventListener('click', UserInterface.set_adding_language_header);
-    let elements = document.querySelectorAll(UserInterface.selectors.get('Метка существующего языка'));
-    for(const element of elements) {
-        element.addEventListener('click', UserInterface.open_languages_additional_options);
-        element.addEventListener('click', UserInterface.set_editing_language_header);
-    }
     element = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
     element.addEventListener('click', UserInterface.guide_button);
-    elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки переключения режимов'));
+    let elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки переключения режимов'));
     for(const element of elements) {
         element.addEventListener('click', UI.mode_switcher_buttons);
     }
@@ -498,6 +593,8 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', UserInterface.open_create_new_list_section);
     element = document.querySelector(UserInterface.selectors.get('Панель слов'));
     element.addEventListener('click', UserInterface.reverse_mode_by_click);
+    UserInterface.main_language_button.addEventListener('click', UserInterface.select_main_language);
+    UserInterface.add_language_button.addEventListener('click', UserInterface.add_language);
 });
 
 document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);

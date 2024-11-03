@@ -154,6 +154,7 @@ svg {
   width: 20px;
   height: 20px;
   fill: #777;
+  vertical-align: -14%;
 }
 .randomizer main > .settings .settings-content .languages-additional-languages-list__button:last-of-type {
   border: none;

@@ -99,14 +99,14 @@
                     <div class="languages">
                         <div class="languages-main-language">
                             <p>Основной язык</p>
-                            <button class="languages-main-language__button existent-language">Наименование языка</button>
+                            <button class="languages-main-language__button" data-language="Наименование языка" data-mark="na" data-folder="folder">Наименование языка</button>
                         </div>
                         <div class="languages-additional-languages">
                             <p>Изучаемые языки</p>
                             <div>
                                 <div class="languages-additional-languages-list">
-                                    <button class="languages-additional-languages-list__button existent-language">Английский</button>
-                                    <button class="languages-additional-languages-list__button existent-language">Японский</button>
+                                    <button class="languages-additional-languages-list__button" data-language="Английский" data-mark="en" data-folder="english">Английский</button>
+                                    <button class="languages-additional-languages-list__button" data-language="Японский" data-mark="jp" data-folder="japanese">Японский</button>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language">
                                         <svg viewBox="0 0 32 32">
                                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div class="languages-add" style="display:none;">
-                        <div class="languages-add-select languages-add-select_recent-languages">
+                        <div class="languages-add-select languages-add-select_recent-languages" style="display:none;">
                             <button class="languages-add-select__button">Английский</button>
                             <button class="languages-add-select__button">Японский</button>
                             <button class="languages-add-select__button">Китайский</button>
@@ -150,8 +150,8 @@
                             <p class="languages-add-create__p_edit-language">Изменить параметры языка</p>
                             <div>
                                 <div class="languages-add-create__div">
-                                    <input class="languages-add-create__input" type="text" placeholder="Наименование языка">
-                                    <input class="languages-add-create__input" type="text" placeholder="Папка языка">
+                                    <input class="languages-add-create__input languages-add-create__input_language-name" type="text" placeholder="Наименование языка">
+                                    <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" placeholder="Папка языка">
                                     <input class="languages-add-create__input languages-add-create__input_shorthand" type="text" placeholder="Метка">
                                 </div>
                                 <input class="languages-add-create__input" type="checkbox" id="present-kanji">
