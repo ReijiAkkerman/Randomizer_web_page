@@ -81,7 +81,6 @@ svg {
 .randomizer main > .settings .settings-content {
   display: block;
   position: relative;
-  overflow: hidden;
 }
 .randomizer main > .settings .settings-content .languages {
   display: block;
@@ -252,47 +251,6 @@ svg {
 }
 .randomizer > .dashboard .other-utilities {
   flex-direction: row-reverse;
-}
-
-@media only screen and (max-width: 500px) {
-  .randomizer > main {
-    position: fixed;
-    width: 100% !important;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-  .randomizer > main .settings .settings-content .languages-additional-languages > div {
-    justify-content: space-between;
-  }
-  .randomizer > main .settings .settings-content .languages-additional-languages-actions {
-    justify-content: start;
-    flex-direction: column-reverse;
-  }
-  .randomizer > main .settings .settings-content .languages-add-select {
-    grid-template-columns: 1fr;
-  }
-  .randomizer > main .settings .theme {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    row-gap: 10px;
-  }
-  .randomizer > main .settings .theme .setups-switcher {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-  }
-  .randomizer > .dashboard {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-  .randomizer > .dashboard .other-languages__button:last-of-type {
-    display: none;
-  }
 }
 
 /*# sourceMappingURL=position.css.map */

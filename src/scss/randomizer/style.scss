@@ -704,46 +704,5 @@
 }
 
 @media only screen and (max-width: 500px) {
-    .randomizer {
-        > main {
-            .words {
-                
-            }
-
-            .settings {
-                .settings-content {
-                    .languages {
-                        &-add {
-                            &-select {
-                                &__button {
-                                    border-right: none;
-                                    @include borders.inactive(top);
-
-                                    &:first-of-type {
-                                        border-top: none;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .dashboard {
-            display: none;
-
-            .other {
-                &-languages {
-                    &__button {
-                        width: 50px;
-                    }
-                }
-
-                &-utilities {
-                    display: none !important;
-                }
-            }
-        }
-    }
+    
 }

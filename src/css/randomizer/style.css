@@ -573,23 +573,4 @@ svg {
   fill: #000;
 }
 
-@media only screen and (max-width: 500px) {
-  .randomizer > main .settings .settings-content .languages-add-select__button {
-    border-right: none;
-    border-top: 1px solid #aaa;
-  }
-  .randomizer > main .settings .settings-content .languages-add-select__button:first-of-type {
-    border-top: none;
-  }
-  .randomizer .dashboard {
-    display: none;
-  }
-  .randomizer .dashboard .other-languages__button {
-    width: 50px;
-  }
-  .randomizer .dashboard .other-utilities {
-    display: none !important;
-  }
-}
-
 /*# sourceMappingURL=style.css.map */
