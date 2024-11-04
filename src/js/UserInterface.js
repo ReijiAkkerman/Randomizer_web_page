@@ -48,8 +48,10 @@ class UserInterface {
         ['Поле наименования языка', '.languages-add-create__input_language-name'],
         ['Поле папки языка', '.languages-add-create__input_language-folder'],
         ['Поле метки языка', '.languages-add-create__input_shorthand'],
-        ['"Присутствие в языке иероглифов"', '#present_kanji'],
+        ['"Присутствие в языке иероглифов"', '#present-kanji'],
         ['Информация о языке', '.languages-add-create'],
+        ['Кнопки используемых языков', '.languages-additional-languages-list__button_studied-language'],
+        ['Кнопка редактирования языка', '.languages-additional-languages-actions__button_edit-language'],
     ]);
 
     static #settings_button_enabled = false;
@@ -63,7 +65,6 @@ class UserInterface {
     static main_actions_stack = new Stack(1);
 
     static #editing_setting = null;
-    static #selected_studied_language = null;
 
     static #settings_panel = document.querySelector(UserInterface.selectors.get('Панель настроек'));
     static #settings_button = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
@@ -114,6 +115,7 @@ class UserInterface {
     static #language_mark_field = document.querySelector(UserInterface.selectors.get('Поле метки языка'));
     static #kanji_presence = document.querySelector(UserInterface.selectors.get('"Присутствие в языке иероглифов"'));
     static #language_info = document.querySelector(UserInterface.selectors.get('Информация о языке'));
+    static editing_language_button = document.querySelector(UserInterface.selectors.get('Кнопка редактирования языка'));
 
     static close_settings() {
         UserInterface.#settings_panel.style.display = 'none';
@@ -219,7 +221,9 @@ class UserInterface {
         UserInterface.#open_languages_additional_options();
         UserInterface.#show_used_languages();
         UserInterface.#open_language_info();
-        UserInterface.#show_adding_language_header();
+        UserInterface.#show_changing_language_header();
+        UserInterface.#fill_language_fields();
+        UserInterface.#set_default_colors_to_editing_language_button();
     }
 
     static add_language() {
@@ -232,13 +236,44 @@ class UserInterface {
         UserInterface.#hide_used_languages();
         UserInterface.#open_language_info();
         UserInterface.#show_adding_language_header();
+        UserInterface.#clear_language_fields();
+        UserInterface.#set_default_colors_to_editing_language_button();
     }
 
     static change_language() {
-        if(UserInterface.#selected_studied_language) {
-            UserInterface.#language_name_field.value = UserInterface.#selected_studied_language.language;
-            UserInterface.#language_folder_field.value = UserInterface.#selected_studied_language.folder;
+        if(UserInterface.#editing_setting) {
+            if(UserInterface.#editing_setting.language_type === 'studied-language') {
+                UserInterface.#open_languages_additional_options();
+                UserInterface.#fill_language_fields();
+                UserInterface.#show_changing_language_header();
+                UserInterface.#open_language_info();
+                UserInterface.#set_active_colors_to_editing_language_button();
+            }
         }
+    }
+
+    static #clear_language_fields() {
+        UserInterface.#language_name_field.value = '';
+        UserInterface.#language_folder_field.value = '';
+        UserInterface.#language_mark_field.value = '';
+        UserInterface.#kanji_presence.checked = false;
+    }
+
+    static #fill_language_fields() {
+        UserInterface.#language_name_field.value = UserInterface.#editing_setting.dataset.language;
+        UserInterface.#language_folder_field.value = UserInterface.#editing_setting.dataset.folder;
+        UserInterface.#language_mark_field.value = UserInterface.#editing_setting.dataset.mark;
+        UserInterface.#kanji_presence.checked = !!UserInterface.#editing_setting.dataset.kanji;
+    }
+
+    static #set_active_colors_to_editing_language_button() {
+        UserInterface.editing_language_button.firstElementChild.style.fill = UserInterface.text_color;
+        UserInterface.editing_language_button.style.borderColor = UserInterface.text_color;
+    }
+
+    static #set_default_colors_to_editing_language_button() {
+        UserInterface.editing_language_button.firstElementChild.style.fill = '';
+        UserInterface.editing_language_button.style.borderColor = '';
     }
 
     static #set_active_colors_to_language_setting() {
@@ -248,7 +283,7 @@ class UserInterface {
                 UserInterface.#editing_setting.style.borderColor = UserInterface.setting_for_editing_text_color;
                 break;
             case 'studied-language':
-                UserInterface.#editing_setting.style.color = UserInterface.setting_for_editing_text_color;
+                UserInterface.#editing_setting.style.color = UserInterface.text_color;
                 break;
             case 'add-language':
                 UserInterface.#editing_setting.firstElementChild.style.fill = UserInterface.setting_for_editing_text_color;
@@ -557,11 +592,14 @@ class UserInterface {
     }
 
     select_studied_language() {
-        
-        UserInterface.#selected_studied_language = {};
-        UserInterface.#selected_studied_language.language = this.dataset.language;
-        UserInterface.#selected_studied_language.mark = this.dataset.mark;
-        UserInterface.#selected_studied_language.folder = this.dataset.folder;
+        if(UserInterface.#editing_setting)
+            UserInterface.#set_default_colors_to_language_setting();
+        UserInterface.#editing_setting = this;
+        UserInterface.#editing_setting.language_type = 'studied-language';
+        UserInterface.#set_active_colors_to_language_setting();
+        UserInterface.#hide_used_languages();
+        UserInterface.#close_language_info();
+        UserInterface.#set_default_colors_to_editing_language_button();
     }
 }
 
@@ -595,6 +633,11 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', UserInterface.reverse_mode_by_click);
     UserInterface.main_language_button.addEventListener('click', UserInterface.select_main_language);
     UserInterface.add_language_button.addEventListener('click', UserInterface.add_language);
+    elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки используемых языков'));
+    for(const element of elements) {
+        element.addEventListener('click', UI.select_studied_language);
+    }
+    UserInterface.editing_language_button.addEventListener('click', UserInterface.change_language);
 });
 
 document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);
