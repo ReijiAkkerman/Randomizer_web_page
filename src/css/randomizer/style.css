@@ -366,7 +366,7 @@ svg {
 .randomizer > .dashboard > div {
   border-bottom: 1px solid #000;
   border-color: #000;
-  padding: 5px 5px;
+  padding: 5px;
   margin: 0 15px;
 }
 .randomizer > .dashboard > div:first-of-type {
@@ -440,9 +440,12 @@ svg {
   padding: 5px 5px 5px 20px;
   font-size: 20px;
 }
+.randomizer > .dashboard .lists {
+  padding: 0 5px;
+}
 .randomizer > .dashboard .lists > div {
   border-bottom: 1px solid #000;
-  padding: 5px 0;
+  padding-top: 5px;
 }
 .randomizer > .dashboard .lists > div:first-of-type {
   padding-top: 0;
@@ -451,9 +454,9 @@ svg {
   border: none;
   padding-bottom: 0;
 }
-.randomizer > .dashboard .lists > div > p {
+.randomizer > .dashboard .lists_title {
+  width: fit-content;
   font-size: 20px;
-  margin-bottom: 5px;
 }
 .randomizer > .dashboard .lists_select-list {
   border: 1px solid #aaa;
@@ -575,6 +578,18 @@ svg {
 }
 .randomizer > .dashboard .other-utilities__button:hover > svg {
   fill: #000;
+}
+
+@media only screen and (max-width: 500px) {
+  .randomizer > .dashboard .lists_delete-lists {
+    padding: 5px;
+  }
+  .randomizer > .dashboard .lists_delete-list > svg {
+    padding: 5px;
+  }
+  .randomizer > .dashboard .other-languages__button {
+    width: 50px !important;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

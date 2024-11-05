@@ -424,7 +424,7 @@
         > div {
             @include borders.default(bottom);
             border-color: borders.$static;
-            padding: 5px 5px;
+            padding: 5px;
             margin: 0 15px;
 
             &:first-of-type {
@@ -527,9 +527,11 @@
         }
 
         .lists {
+            padding: 0 5px;
+
             > div {
                 @include borders.border(bottom);
-                padding: 5px 0;
+                padding-top: 5px;
 
                 &:first-of-type {
                     padding-top: 0;
@@ -539,11 +541,11 @@
                     border: none;
                     padding-bottom: 0;
                 }
+            }
 
-                > p {
-                    font-size: 20px;
-                    margin-bottom: 5px;
-                }
+            &_title {
+                width: fit-content;
+                font-size: 20px;
             }
 
             &_select-list {
@@ -707,5 +709,41 @@
 }
 
 @media only screen and (max-width: 500px) {
+    .randomizer {
+        main {
+            
+        }
     
+        > .dashboard {
+            .lists {
+                &_title {
+                    
+                }
+
+                &_delete-lists {
+                    padding: 5px;
+                }
+
+                &_select-list {
+                    > p {
+
+                    }
+                }
+
+                &_delete-list {
+                    > svg {
+                        padding: 5px;
+                    }
+                }
+            }
+
+            .other {
+                &-languages {
+                    &__button {
+                        width: 50px !important;
+                    }
+                }
+            }
+        }
+    }
 }

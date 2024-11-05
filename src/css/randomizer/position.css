@@ -228,8 +228,11 @@ svg {
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.randomizer > .dashboard .lists .lists_delete-lists {
-  float: right;
+.randomizer > .dashboard .lists_header {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
 }
 .randomizer > .dashboard .lists_select-list {
   display: flex;
@@ -254,6 +257,28 @@ svg {
 }
 .randomizer > .dashboard .other-utilities {
   flex-direction: row-reverse;
+}
+
+@media only screen and (max-width: 500px) {
+  .randomizer main {
+    display: none;
+  }
+  .randomizer > .dashboard {
+    width: 100% !important;
+  }
+  .randomizer > .dashboard .lists_select-list > p {
+    display: inline-block;
+    margin: auto 0;
+  }
+  .randomizer > .dashboard .lists_delete-list {
+    visibility: visible !important;
+  }
+  .randomizer > .dashboard .other-languages__button:last-of-type {
+    display: none;
+  }
+  .randomizer > .dashboard .other-utilities {
+    display: none !important;
+  }
 }
 
 /*# sourceMappingURL=position.css.map */

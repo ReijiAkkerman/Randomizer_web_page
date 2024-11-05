@@ -258,8 +258,11 @@
             overflow-y: scroll;
             overflow-x: hidden;
 
-            .lists_delete-lists {
-                float: right;
+            &_header {
+                display: flex;
+                position: relative;
+                justify-content: space-between;
+                align-items: center;
             }
 
             &_select-list {
@@ -297,5 +300,40 @@
 }
 
 @media only screen and (max-width: 500px) {
+    .randomizer {
+        main {
+            display: none;
+        }
     
+        > .dashboard {
+            width: 100% !important;
+
+            .lists {
+                &_select-list {
+                    > p {
+                        display: inline-block;
+                        margin: auto 0;
+                    }
+                }
+
+                &_delete-list {
+                    visibility: visible !important;
+                }
+            }
+
+            .other {
+                &-languages {
+                    &__button {
+                        &:last-of-type {
+                            display: none;
+                        }
+                    }
+                }
+
+                &-utilities {
+                    display: none !important;
+                }
+            }
+        }
+    }
 }
