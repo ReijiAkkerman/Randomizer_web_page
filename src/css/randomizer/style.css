@@ -273,7 +273,7 @@ svg {
 }
 .randomizer main > .settings .settings-content .git > div {
   border-bottom: 1px solid #aaa;
-  padding: 10px 0;
+  padding: 10px;
 }
 .randomizer main > .settings .settings-content .git > div:last-of-type {
   border-bottom: none;
@@ -581,6 +581,22 @@ svg {
 }
 
 @media only screen and (max-width: 500px) {
+  .randomizer main > .settings .settings-content .languages-add-select__button {
+    border: none;
+    border-top: 1px solid #aaa;
+  }
+  .randomizer main > .settings .settings-content .languages-add-select__button:first-of-type {
+    border: none;
+  }
+  .randomizer main > .settings .settings-content .languages-add-create__input {
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .randomizer main > .settings .settings-content .languages-add-create__input_shorthand {
+    box-sizing: content-box;
+    width: 60px !important;
+    text-align: start !important;
+  }
   .randomizer > .dashboard .lists_delete-lists {
     padding: 5px;
   }

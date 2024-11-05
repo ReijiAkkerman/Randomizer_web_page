@@ -14,7 +14,7 @@
     </head>
     <body class="randomizer">
         <main>
-            <section class="words" style="display:none;">
+            <section class="words">
                 <div class="source">
                     <div class="counter">
                         <p>1</p>
@@ -49,7 +49,7 @@
             <section class="guide" style="display:none;">
                 <h1>Руководство</h1>
             </section>
-            <section class="settings">
+            <section class="settings" style="display:none;">
                 <div class="theme">
                     <div class="theme-grid-container theme-switcher">
                         <div class="theme-switcher theme-flex">

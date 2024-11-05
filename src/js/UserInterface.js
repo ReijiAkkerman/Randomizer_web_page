@@ -202,6 +202,11 @@ class UserInterface {
         UserInterface.#git_button.style.color = UserInterface.text_color;
         UserInterface.#git_section.style.display = '';
         UserInterface.close_languages_additional_options();
+        if(UserInterface.#editing_setting) {
+            UserInterface.#set_default_colors_to_editing_language_button();
+            UserInterface.#set_default_colors_to_language_setting();
+            UserInterface.#editing_setting = false;
+        }
     }
 
     static #open_languages_additional_options() {

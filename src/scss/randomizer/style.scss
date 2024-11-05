@@ -308,7 +308,7 @@
     
                     > div {
                         @include borders.inactive(bottom);
-                        padding: 10px 0;
+                        padding: 10px;
     
                         &:last-of-type {
                             border-bottom: none;
@@ -711,7 +711,35 @@
 @media only screen and (max-width: 500px) {
     .randomizer {
         main {
-            
+            > .settings {
+                .settings-content {
+                    .languages {
+                        &-add-select {
+                            &__button {
+                                border: none;
+                                @include borders.inactive(top);
+        
+                                &:first-of-type {
+                                    border: none;
+                                }
+                            }
+                        }
+
+                        &-add-create {
+                            &__input {
+                                box-sizing: border-box;
+                                width: 100%;
+
+                                &_shorthand {
+                                    box-sizing: content-box;
+                                    width: 60px !important;
+                                    text-align: start !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     
         > .dashboard {

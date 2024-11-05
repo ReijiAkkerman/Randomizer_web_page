@@ -261,7 +261,34 @@ svg {
 
 @media only screen and (max-width: 500px) {
   .randomizer main {
-    display: none;
+    width: 100% !important;
+    overflow: scroll;
+  }
+  .randomizer main > .settings .theme {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+  }
+  .randomizer main > .settings .theme-grid-container.setups-switcher {
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .randomizer main > .settings .settings-content .languages-add-select {
+    grid-template-columns: 1fr;
+  }
+  .randomizer main > .settings .settings-content .languages-add-create__div {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .randomizer main > .settings .settings-content .languages-additional-languages > div {
+    justify-content: space-between;
+  }
+  .randomizer main > .settings .settings-content .languages-additional-languages-actions {
+    flex-direction: column;
+    align-items: end;
   }
   .randomizer > .dashboard {
     width: 100% !important;
