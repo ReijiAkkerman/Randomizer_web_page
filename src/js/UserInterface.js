@@ -8,6 +8,18 @@ class UserInterface {
     static setting_for_editing_text_color = '#090';
 
     static selectors = new Map([
+        /**
+         * 
+         * Dashboard
+         * 
+         */
+
+        /**
+         * MainActions
+         */
+
+        // Разделение списка
+
         ['Панель настроек', '.settings'],
         ['Кнопка закрытия настроек', '.theme_close-settings'],
         ['Кнопка настроек', '.other-utilities__button_settings'],
@@ -390,15 +402,15 @@ class UserInterface {
     }
 
     static #set_active_colors_to_source_mode_button() {
-        UserInterface.#svg_of_source_button.style.fill = UserInterface.selected_mode_text_color;
+        UserInterface.#svg_of_source_button.style.fill = UserInterface.language_learning_mode_text_color;
     }
 
     static #set_active_colors_to_translation_mode_button() {
-        UserInterface.#svg_of_translation_button.style.fill = UserInterface.selected_mode_text_color;
+        UserInterface.#svg_of_translation_button.style.fill = UserInterface.language_learning_mode_text_color;
     }
 
     static #set_active_colors_to_transcription_mode_button() {
-        UserInterface.#svg_of_transcription_button.style.stroke = UserInterface.selected_mode_text_color;
+        UserInterface.#svg_of_transcription_button.style.stroke = UserInterface.language_learning_mode_text_color;
     }
 
     mode_switcher_buttons() {
@@ -626,14 +638,14 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const element of elements) {
         element.addEventListener('click', UI.mode_switcher_buttons);
     }
-    element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
-    element.addEventListener('click', UserInterface.close_main_action);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
-    element.addEventListener('click', UserInterface.open_split_list_section);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
-    element.addEventListener('click', UserInterface.open_combine_lists_section);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
-    element.addEventListener('click', UserInterface.open_create_new_list_section);
+    // element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
+    // element.addEventListener('click', UserInterface.close_main_action);
+    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
+    // element.addEventListener('click', UserInterface.open_split_list_section);
+    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
+    // element.addEventListener('click', UserInterface.open_combine_lists_section);
+    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
+    // element.addEventListener('click', UserInterface.open_create_new_list_section);
     element = document.querySelector(UserInterface.selectors.get('Панель слов'));
     element.addEventListener('click', UserInterface.reverse_mode_by_click);
     UserInterface.main_language_button.addEventListener('click', UserInterface.select_main_language);
@@ -644,5 +656,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     UserInterface.editing_language_button.addEventListener('click', UserInterface.change_language);
 });
+
+export {UserInterface};
 
 document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);

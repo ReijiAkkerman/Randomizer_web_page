@@ -203,27 +203,27 @@
             </div>
             <div class="actions">
                 <div class="actions-main">
-                    <button class="actions-main__button actions-main__button_sync-with-github">
+                    <button class="actions-main__button actions-main__button_sync-with-github" data-action_type="sync-with-github">
                         <svg viewBox="0 0 291.32 291.32">
                             <path d="M145.66,0C65.219,0,0,65.219,0,145.66c0,80.45,65.219,145.66,145.66,145.66 s145.66-65.21,145.66-145.66C291.319,65.219,226.1,0,145.66,0z M186.462,256.625c-0.838-11.398-1.775-25.518-1.83-31.235 c-0.364-4.388-0.838-15.549-11.434-22.677c42.068-3.523,62.087-26.774,63.526-57.499c1.202-17.497-5.754-32.883-18.107-45.3 c0.628-13.282-0.401-29.023-1.256-35.941c-9.486-2.731-31.608,8.949-37.79,13.947c-13.037-5.062-44.945-6.837-64.336,0 c-13.747-9.668-29.396-15.64-37.926-13.974c-7.875,17.452-2.813,33.948-1.275,35.914c-10.142,9.268-24.289,20.675-20.447,44.572 c6.163,35.04,30.816,53.94,70.508,58.564c-8.466,1.73-9.896,8.048-10.606,10.788c-26.656,10.997-34.275-6.791-37.644-11.425 c-11.188-13.847-21.23-9.832-21.849-9.614c-0.601,0.218-1.056,1.092-0.992,1.511c0.564,2.986,6.655,6.018,6.955,6.263 c8.257,6.154,11.316,17.27,13.2,20.438c11.844,19.473,39.374,11.398,39.638,11.562c0.018,1.702-0.191,16.032-0.355,27.184 C64.245,245.992,27.311,200.2,27.311,145.66c0-65.365,52.984-118.348,118.348-118.348S264.008,80.295,264.008,145.66 C264.008,196.668,231.69,239.992,186.462,256.625z"/>
                         </svg>
                     </button>
-                    <button class="actions-main__button actions-main__button_split-list">
+                    <button class="actions-main__button actions-main__button_split-list" data-action_type="split-list">
                         <svg viewBox="0 0 17 17">
                             <path d="M10.646 13.146l0.707 0.707-2.853 2.854-2.854-2.854 0.707-0.707 1.647 1.647v-3.772h1v3.772l1.646-1.647zM8 2.207v3.772h1v-3.772l1.646 1.646 0.707-0.707-2.853-2.853-2.854 2.853 0.707 0.707 1.647-1.646zM0 8v1h17v-1h-17z"/>
                         </svg>
                     </button>
-                    <button class="actions-main__button actions-main__button_combine-lists">
+                    <button class="actions-main__button actions-main__button_combine-lists" data-action_type="combine-lists">
                         <svg viewBox="0 0 17 16">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 1l-.5.5v3l.5.5h3l.5-.5v-3L4.5 1h-3zM2 4V2h2v2H2zm-.5 2l-.5.5v3l.5.5h3l.5-.5v-3L4.5 6h-3zM2 9V7h2v2H2zm-1 2.5l.5-.5h3l.5.5v3l-.5.5h-3l-.5-.5v-3zm1 .5v2h2v-2H2zm10.5-7l-.5.5v6l.5.5h3l.5-.5v-6l-.5-.5h-3zM15 8h-2V6h2v2zm0 3h-2V9h2v2zM9.1 8H6v1h3.1l-1 1 .7.6 1.8-1.8v-.7L8.8 6.3l-.7.7 1 1z"/>
                         </svg>
                     </button>
-                    <button class="actions-main__button actions-main__button_create-new-list">
+                    <button class="actions-main__button actions-main__button_create-new-list" data-action_type="create-new-list">
                         <svg viewBox="0 0 32 32">
                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
                         </svg>
                     </button>
-                    <button class="actions-main__button actions-main__button_close-editing" style="display:none;">
+                    <button class="actions-main__button actions-main__button_close-editing" data-action_type="close-editing" style="display:none;">
                         <svg viewBox="0 0 1024 1024">
                             <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                         </svg>
@@ -439,8 +439,10 @@
             </div>
         </section>
         <script type="module" src="/src/js/UserInterface.js"></script>
-        <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script>
+        <!-- <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script> -->
         <script type="module" src="/src/js/DataStructures/Stack.js"></script>
+        
+        <script type="module" src="/src/js/Dashboard/MainActions.js"></script>
 
         <?php if($enable_tests) require_once __DIR__ . '/tests/body.php'; ?>
 
