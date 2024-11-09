@@ -439,10 +439,12 @@
             </div>
         </section>
         <script type="module" src="/src/js/UserInterface.js"></script>
-        <!-- <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script> -->
+        <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script>
         <script type="module" src="/src/js/DataStructures/Stack.js"></script>
         
         <script type="module" src="/src/js/Dashboard/MainActions.js"></script>
+        <script type="module" src="/src/js/Dashboard/QuickAccess.js"></script>
+        <script type="module" src="/src/js/MainFrame/Words.js"></script>
 
         <?php if($enable_tests) require_once __DIR__ . '/tests/body.php'; ?>
 

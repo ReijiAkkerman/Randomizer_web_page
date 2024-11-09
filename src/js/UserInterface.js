@@ -622,41 +622,41 @@ class UserInterface {
 
 var UI = new UserInterface();
 
-document.addEventListener('DOMContentLoaded', function() {
-    let element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия настроек'));
-    element.addEventListener('click', UserInterface.close_settings);
-    element.addEventListener('click', UserInterface.open_words_panel);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
-    element.addEventListener('click', UserInterface.settings_button);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела языковых настроек'));
-    element.addEventListener('click', UserInterface.switch_settings_to_languages);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
-    element.addEventListener('click', UserInterface.switch_settings_to_git);
-    element = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
-    element.addEventListener('click', UserInterface.guide_button);
-    let elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки переключения режимов'));
-    for(const element of elements) {
-        element.addEventListener('click', UI.mode_switcher_buttons);
-    }
-    // element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
-    // element.addEventListener('click', UserInterface.close_main_action);
-    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
-    // element.addEventListener('click', UserInterface.open_split_list_section);
-    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
-    // element.addEventListener('click', UserInterface.open_combine_lists_section);
-    // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
-    // element.addEventListener('click', UserInterface.open_create_new_list_section);
-    element = document.querySelector(UserInterface.selectors.get('Панель слов'));
-    element.addEventListener('click', UserInterface.reverse_mode_by_click);
-    UserInterface.main_language_button.addEventListener('click', UserInterface.select_main_language);
-    UserInterface.add_language_button.addEventListener('click', UserInterface.add_language);
-    elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки используемых языков'));
-    for(const element of elements) {
-        element.addEventListener('click', UI.select_studied_language);
-    }
-    UserInterface.editing_language_button.addEventListener('click', UserInterface.change_language);
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     let element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия настроек'));
+//     element.addEventListener('click', UserInterface.close_settings);
+//     element.addEventListener('click', UserInterface.open_words_panel);
+//     element = document.querySelector(UserInterface.selectors.get('Кнопка настроек'));
+//     element.addEventListener('click', UserInterface.settings_button);
+//     element = document.querySelector(UserInterface.selectors.get('Кнопка раздела языковых настроек'));
+//     element.addEventListener('click', UserInterface.switch_settings_to_languages);
+//     element = document.querySelector(UserInterface.selectors.get('Кнопка раздела настроек Git'));
+//     element.addEventListener('click', UserInterface.switch_settings_to_git);
+//     element = document.querySelector(UserInterface.selectors.get('Кнопка руководства'));
+//     element.addEventListener('click', UserInterface.guide_button);
+//     let elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки переключения режимов'));
+//     // for(const element of elements) {
+//     //     element.addEventListener('click', UI.mode_switcher_buttons);
+//     // }
+//     // element = document.querySelector(UserInterface.selectors.get('Кнопка закрытия основного действия'));
+//     // element.addEventListener('click', UserInterface.close_main_action);
+//     // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела разделения списка'));
+//     // element.addEventListener('click', UserInterface.open_split_list_section);
+//     // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела обьединения списков'));
+//     // element.addEventListener('click', UserInterface.open_combine_lists_section);
+//     // element = document.querySelector(UserInterface.selectors.get('Кнопка раздела создания нового списка'));
+//     // element.addEventListener('click', UserInterface.open_create_new_list_section);
+//     element = document.querySelector(UserInterface.selectors.get('Панель слов'));
+//     element.addEventListener('click', UserInterface.reverse_mode_by_click);
+//     UserInterface.main_language_button.addEventListener('click', UserInterface.select_main_language);
+//     UserInterface.add_language_button.addEventListener('click', UserInterface.add_language);
+//     elements = document.querySelectorAll(UserInterface.selectors.get('Кнопки используемых языков'));
+//     for(const element of elements) {
+//         element.addEventListener('click', UI.select_studied_language);
+//     }
+//     UserInterface.editing_language_button.addEventListener('click', UserInterface.change_language);
+// });
 
 export {UserInterface};
 
-document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);
+// document.addEventListener('keyup', UserInterface.reverse_mode_by_keyup);
