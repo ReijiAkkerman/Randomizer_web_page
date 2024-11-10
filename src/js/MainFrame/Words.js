@@ -29,6 +29,14 @@ class Words {
 
 
 
+    /** 
+     * Отображение раздела 
+     */
+
+    static main_section = document.querySelector(Words.selectors.get('Область слов'));
+
+
+
 
 
     static reverse_mode_by_keyup(event) {
@@ -129,6 +137,20 @@ class Words {
 
     static translation_disable() {
         Words.translation.style.display = 'none';
+    }
+
+
+
+    /**
+     * Отображение раздела
+     */
+
+    static show_section() {
+        Words.main_section.style.display = '';
+    }
+
+    static hide_section() {
+        Words.main_section.style.display = 'none';
     }
 }
 
