@@ -445,8 +445,14 @@
         
         <script type="module" src="/src/js/Dashboard/MainActions.js"></script>
         <script type="module" src="/src/js/Dashboard/QuickAccess.js"></script>
+        
         <script type="module" src="/src/js/MainFrame/Words.js"></script>
+
         <script type="module" src="/src/js/MainFrame/Settings.js"></script>
+
+        <script type="module" src="/src/js/MainFrame/Settings/Git.js"></script>
+        <script type="module" src="/src/js/MainFrame/Settings/Languages.js"></script>
+
         <script type="module" src="/src/js/MainFrame/Guide.js"></script>
 
         <?php if($enable_tests) require_once __DIR__ . '/tests/body.php'; ?>

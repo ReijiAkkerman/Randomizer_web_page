@@ -1,9 +1,8 @@
-import {UserInterface} from '../UserInterface.js';
-import {Words} from '../MainFrame/Words.js';
-import {Settings} from '../MainFrame/Settings.js';
-import {Guide} from '../MainFrame/Guide.js';
-import {CircularQueue} from '../DataStructures/CircularQueue.js';
-import {Stack} from '../DataStructures/Stack.js';
+import {UserInterface} from '/src/js/UserInterface.js';
+import {Words} from '/src/js/MainFrame/Words.js';
+import {Settings} from '/src/js/MainFrame/Settings.js';
+import {Guide} from '/src/js/MainFrame/Guide.js';
+import {CircularQueue} from '/src/js/DataStructures/CircularQueue.js';
 
 class QuickAccess {
     static selectors = new Map([
@@ -169,7 +168,7 @@ class QuickAccess {
                 break;
             case 'settings':
                 Settings.hide_section();
-                QuickAccess.#settings_button_unset_active_color();
+                QuickAccess.settings_button_unset_active_color();
                 break;
             case 'guide':
                 Guide.hide_section();
@@ -204,7 +203,7 @@ class QuickAccess {
         QuickAccess.#svg_of_settings_button.style.fill = UserInterface.text_color;
     }
 
-    static #settings_button_unset_active_color() {
+    static settings_button_unset_active_color() {
         QuickAccess.#settings_button.style.borderColor = '';
         QuickAccess.#svg_of_settings_button.style.fill = '';
     }
