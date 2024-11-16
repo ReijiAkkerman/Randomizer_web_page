@@ -1,5 +1,5 @@
-import {UserInterface} from '../UserInterface.js';
-import {Stack} from '../DataStructures/Stack.js';
+import {UserInterface} from '/src/js/UserInterface.js';
+import {Stack} from '/src/js/DataStructures/Stack.js';
 
 class MainActions {
     static selectors = new Map([
@@ -51,25 +51,36 @@ class MainActions {
     // Основное действие 
 
     activate() {
+        const activateCloseButton = () => {
+            MainActions.#stack.push(this.dataset.action_type);
+            MainActions.#close_main_action_show_button();
+        };
+        const deactivateCloseButton = () => {
+            MainActions.#close_main_action();
+            MainActions.#close_main_action_hide_button();
+        };
         if(MainActions.#stack.peek() !== this.dataset.action_type)
             MainActions.#close_main_action();
         switch(this.dataset.action_type) {
+            case 'sync-with-github':
+                deactivateCloseButton();
+                break;
             case 'split-list':
                 MainActions.#split_list_activate();
+                activateCloseButton();
                 break;
             case 'combine-lists':
                 MainActions.#combine_lists_activate();
+                activateCloseButton();
                 break;
             case 'create-new-list':
                 MainActions.#create_new_list_activate();
+                activateCloseButton();
                 break;
             case 'close-editing':
-                MainActions.#close_main_action();
-                MainActions.#close_main_action_hide_button();
-                return;
+                deactivateCloseButton();
+                break;
         }
-        MainActions.#stack.push(this.dataset.action_type);
-        MainActions.#close_main_action_show_button();
     }
 
 
