@@ -13,8 +13,6 @@ class Git {
 
     static switcher = document.querySelector(Git.selectors.get('Кнопка включения раздела'));
     static #main_section = document.querySelector(Git.selectors.get('Основной раздел'));
-
-    static main_section_enabled = false;
     
 
 
@@ -36,12 +34,10 @@ class Git {
 
     static #enable_main_section() {
         Git.#main_section.style.display = '';
-        Git.main_section_enabled = true;
     }
 
     static #disable_main_section() {
         Git.#main_section.style.display = 'none';
-        Git.main_section_enabled = false;
     }
 
     static #main_section_button_set_active_color() {

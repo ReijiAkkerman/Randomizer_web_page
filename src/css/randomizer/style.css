@@ -225,6 +225,9 @@ svg {
 .randomizer main > .settings .settings-content .languages-add-create__input[type=text]:focus {
   color: #000;
 }
+.randomizer main > .settings .settings-content .languages-add-create__input[type=text]:focus {
+  border-color: #000;
+}
 .randomizer main > .settings .settings-content .languages-add-create__input_shorthand[type=text] {
   width: 70px;
   text-align: center;

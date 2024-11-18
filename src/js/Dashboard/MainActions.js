@@ -61,6 +61,7 @@ class MainActions {
         };
         if(MainActions.#stack.peek() !== this.dataset.action_type)
             MainActions.#close_main_action();
+        else return;
         switch(this.dataset.action_type) {
             case 'sync-with-github':
                 deactivateCloseButton();

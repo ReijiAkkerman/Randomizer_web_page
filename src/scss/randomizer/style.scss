@@ -251,6 +251,10 @@
                                     color: text.$active;
                                 }
                             }
+
+                            &__input[type="text"]:focus {
+                                border-color: borders.$active;
+                            }
     
                             &__input_shorthand[type="text"] {
                                 width: 70px;
