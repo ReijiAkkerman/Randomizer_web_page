@@ -314,9 +314,9 @@
                         @include borders.inactive(bottom);
                         padding: 10px;
     
-                        &:last-of-type {
-                            border-bottom: none;
-                        }
+                        // &:last-of-type {
+                        //     border-bottom: none;
+                        // }
                     }
     
                     &-repo {
@@ -350,6 +350,7 @@
                         }
     
                         &__label {
+                            user-select: none;
                             width: fit-content;
                             padding-left: 20px;
                             font-size: 20px;

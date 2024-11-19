@@ -46,7 +46,7 @@ class Languages {
 
     /** Включение дополнительного раздела */
 
-    static #additional_section = document.querySelector(Languages.selectors.get('Дополнительный раздел'));
+    static additional_section = document.querySelector(Languages.selectors.get('Дополнительный раздел'));
 
 
 
@@ -86,7 +86,7 @@ class Languages {
 
     static switch_off() {
         Languages.#disable_main_section();
-        Languages.#disable_additional_section();
+        Languages.disable_additional_section();
         Languages.#deactivate_active_language_button();
         Languages.#active_language = false;
         Languages.#main_section_button_unset_active_color();
@@ -114,12 +114,12 @@ class Languages {
      * Включение дополнительного раздела
      */
 
-    static #enable_additional_section() {
-        Languages.#additional_section.style.display = '';
+    static enable_additional_section() {
+        Languages.additional_section.style.display = '';
     }
 
-    static #disable_additional_section() {
-        Languages.#additional_section.style.display = 'none';
+    static disable_additional_section() {
+        Languages.additional_section.style.display = 'none';
     }
 
 
@@ -132,10 +132,10 @@ class Languages {
         const enable_set = () => {
             Languages.#main_language_button_set_active_color();
             Languages.#enable_learning_languages_block();
-            Languages.#enable_all_languages_block();
-            Languages.#enable_adding_language_title();
+            Languages.enable_all_languages_block();
+            Languages.enable_adding_language_title();
             Languages.#complete_fields(this);
-            Languages.#enable_additional_section();
+            Languages.enable_additional_section();
             Languages.#write_language_data(this);
         };
         if(Languages.#active_language === false) {
@@ -190,10 +190,10 @@ class Languages {
     static add_learning_language() {
         const enable_set = () => {
             Languages.#add_learning_language_button_set_active_color();
-            Languages.#enable_all_languages_block();
-            Languages.#enable_adding_language_title();
+            Languages.enable_all_languages_block();
+            Languages.enable_adding_language_title();
             Languages.#complete_fields(this);
-            Languages.#enable_additional_section();
+            Languages.enable_additional_section();
             Languages.#write_language_data(this);
         };
         if(Languages.#active_language === false) {
@@ -220,10 +220,10 @@ class Languages {
     static edit_learning_language() {
         if(Languages.#active_language && Languages.#active_language.type === 'learning') {
             Languages.#editing_learning_language_button_set_active_color();
-            Languages.#enable_all_languages_block();
+            Languages.enable_all_languages_block();
             Languages.#enable_changing_language_title();
             Languages.#complete_fields(Languages.#active_language);
-            Languages.#enable_additional_section();
+            Languages.enable_additional_section();
         }
     }
 
@@ -253,10 +253,10 @@ class Languages {
             }
             Languages.#clear_fields();
             Languages.#disable_learning_languages_block();
-            Languages.#disable_all_languages_block();
-            Languages.#disable_adding_language_title();
+            Languages.disable_all_languages_block();
+            Languages.disable_adding_language_title();
             Languages.#disable_changing_language_title();
-            Languages.#disable_additional_section();
+            Languages.disable_additional_section();
             Languages.#editing_learning_language_button_unset_active_color();
         }
     }
@@ -275,19 +275,19 @@ class Languages {
         Languages.#learning_languages_block.style.display = 'none';
     }
 
-    static #enable_all_languages_block() {
+    static enable_all_languages_block() {
         Languages.#all_languages_block.style.display = '';
     }
 
-    static #disable_all_languages_block() {
+    static disable_all_languages_block() {
         Languages.#all_languages_block.style.display = 'none';
     }
 
-    static #enable_adding_language_title() {
+    static enable_adding_language_title() {
         Languages.#adding_language_title.style.display = '';
     }
 
-    static #disable_adding_language_title() {
+    static disable_adding_language_title() {
         Languages.#adding_language_title.style.display = 'none';
     }
 
@@ -379,8 +379,6 @@ class Languages {
 }
 
 export {Languages};
-
-var languages = new Languages();
 
 document.addEventListener('DOMContentLoaded', function() {
     Languages.switcher.addEventListener('click', Languages.switch_on);

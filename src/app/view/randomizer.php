@@ -162,7 +162,12 @@
                         </div>
                         <div class="git-branches">
                             <p>Ветка</p>
-                            <button class="git-branches__button">main</button>
+                            <div class="git-branches-block">
+                                <button class="git-branches__button">main</button>
+                                <button class="git-branches__button">test1</button>
+                                <button class="git-branches__button">test2</button>
+                                <button class="git-branches__button">test3</button>
+                            </div>
                             <input class="git-branches__input" type="checkbox" id="combine-branches">
                             <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
                         </div>
@@ -170,11 +175,11 @@
                             <p>Папки и соответствующие им языки</p>
                             <div>
                                 <input class="git-lang-folders-foldernames__input" type="text" value="english">
-                                <button class="git-lang-folders-langnames__button">Английский язык</button>
+                                <button class="git-lang-folders-langnames__button" data-language="Английский">Английский язык</button>
                                 <input class="git-lang-folders-foldernames__input" type="text" value="japanese">
-                                <button class="git-lang-folders-langnames__button">Японский язык</button>
+                                <button class="git-lang-folders-langnames__button" data-language="Японский">Японский язык</button>
                                 <input class="git-lang-folders-foldernames__input" type="text" placeholder="Наименование папки">
-                                <button class="git-lang-folders-langnames__button">Выбрать язык</button>
+                                <button class="git-lang-folders-langnames__button" data-language="Выбрать">Выбрать язык</button>
                             </div>
                         </div>
                     </div>

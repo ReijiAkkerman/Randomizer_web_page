@@ -82,8 +82,9 @@ svg {
   gap: 10px;
 }
 .randomizer main > .settings .settings-content {
-  display: block;
+  display: grid;
   position: relative;
+  grid-template-columns: 1fr;
 }
 .randomizer main > .settings .settings-content .languages {
   display: block;
@@ -152,6 +153,13 @@ svg {
 .randomizer main > .settings .settings-content .languages-add-create__label::before {
   display: inline-block;
   position: absolute;
+}
+.randomizer main > .settings .settings-content .git-branches-block {
+  display: flex;
+  position: relative;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 .randomizer main > .settings .settings-content .git-branches__input {
   display: none;

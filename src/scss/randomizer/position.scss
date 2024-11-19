@@ -71,8 +71,9 @@
             }
 
             .settings-content {
-                display: block;
+                display: grid;
                 position: relative;
+                grid-template-columns: 1fr;
 
                 .languages {
                     display: block;
@@ -159,6 +160,14 @@
     
                 .git {
                     &-branches {
+                        &-block {
+                            display: flex;
+                            position: relative;
+                            justify-content: start;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                        }
+
                         &__input {
                             display: none;
                         }

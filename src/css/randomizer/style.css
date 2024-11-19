@@ -278,9 +278,6 @@ svg {
   border-bottom: 1px solid #aaa;
   padding: 10px;
 }
-.randomizer main > .settings .settings-content .git > div:last-of-type {
-  border-bottom: none;
-}
 .randomizer main > .settings .settings-content .git-repo__input {
   width: 100%;
   border: 1px solid #aaa;
@@ -308,6 +305,7 @@ svg {
   color: #000;
 }
 .randomizer main > .settings .settings-content .git-branches__label {
+  user-select: none;
   width: fit-content;
   padding-left: 20px;
   font-size: 20px;
