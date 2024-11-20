@@ -716,6 +716,18 @@
 @media only screen and (max-width: 500px) {
     .randomizer {
         main {
+            > .red {
+                background-color: #f00;
+            }
+
+            > .white {
+                background-color: #aaa;
+            }
+
+            > .blue {
+                background-color: #00f;
+            }
+
             > .settings {
                 .settings-content {
                     .languages {

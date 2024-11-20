@@ -9,7 +9,7 @@
     </head>
     <body class="randomizer">
         <main>
-            <section class="words">
+            <section class="words" style="display:none;">
                 <div class="source">
                     <div class="counter">
                         <p>1</p>
@@ -188,8 +188,17 @@
                     </div>
                 </div>
             </section>
+            <section class="red" style="display:none;">
+
+            </section>
+            <section class="white">
+
+            </section>
+            <section class="blue" style="display:none;">
+
+            </section>
         </main>
-        <section class="dashboard">
+        <section class="dashboard" style="display:none;">
             <div class="search">
                 <form action="#" class="search-form">
                     <input type="text" class="search-form__input" placeholder="Искомое слово ...">
@@ -454,5 +463,9 @@
         <script type="module" src="/src/js/MainFrame/Settings/Languages.js"></script>
 
         <script type="module" src="/src/js/MainFrame/Guide.js"></script>
+
+
+
+        <script type="module" src="/src/js/mobile/Swipes.js"></script>
     </body>
 </html>

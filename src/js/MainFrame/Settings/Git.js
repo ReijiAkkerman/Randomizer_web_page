@@ -94,7 +94,8 @@ class Git {
         Languages.disable_all_languages_block();
         Languages.disable_adding_language_title();
         Languages.additional_section.style.gridRow = '';
-        Git.#select_language_button_unset_active_color();
+        if(Git.#selected_language)
+            Git.#select_language_button_unset_active_color();
     }
 
     static #select_language_button_set_active_color(obj) {
