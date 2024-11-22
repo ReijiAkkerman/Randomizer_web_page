@@ -15,7 +15,7 @@ class Swipes {
         [0, Swipes.dashboard],
         [1, Words.main_section],
         [2, Settings.main_section],
-        [3, Guide.main_section],
+        // [3, Guide.main_section],
     ]);
 
     static show_permission = false;
@@ -97,7 +97,6 @@ document.addEventListener('touchstart', (event) => {
 );
 document.addEventListener('touchmove', function(event) {
     Swipes.get_current_position(event);
-    // Swipes.define_show_permission();
 });
 document.addEventListener('touchend', function() {
     Swipes.define_show_permission();

@@ -755,24 +755,35 @@
                             }
                         }
                     }
+
+                    .git {
+                        &-lang-folders {
+                            &-langnames {
+                                &__button {
+                                    margin-bottom: 10px;
+
+                                    &:last-of-type {
+                                        margin-bottom: 0;
+                                    }
+                                }
+                            }
+
+                            &-foldernames {
+                                &__input {
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     
         > .dashboard {
             .lists {
-                &_title {
-                    
-                }
-
                 &_delete-lists {
                     padding: 5px;
-                }
-
-                &_select-list {
-                    > p {
-
-                    }
                 }
 
                 &_delete-list {

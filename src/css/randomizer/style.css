@@ -607,6 +607,16 @@ svg {
     width: 60px !important;
     text-align: start !important;
   }
+  .randomizer main > .settings .settings-content .git-lang-folders-langnames__button {
+    margin-bottom: 10px;
+  }
+  .randomizer main > .settings .settings-content .git-lang-folders-langnames__button:last-of-type {
+    margin-bottom: 0;
+  }
+  .randomizer main > .settings .settings-content .git-lang-folders-foldernames__input {
+    width: 100%;
+    box-sizing: border-box;
+  }
   .randomizer > .dashboard .lists_delete-lists {
     padding: 5px;
   }

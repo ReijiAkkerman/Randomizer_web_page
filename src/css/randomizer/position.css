@@ -306,6 +306,19 @@ svg {
     flex-direction: column;
     align-items: end;
   }
+  .randomizer main > .settings .settings-content .git {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+    width: 300px;
+  }
+  .randomizer main > .settings .settings-content .git-branches-block {
+    flex-direction: column;
+  }
+  .randomizer main > .settings .settings-content .git-lang-folders > div {
+    grid-template-columns: 1fr;
+    row-gap: 5px;
+  }
   .randomizer > .dashboard {
     width: 100% !important;
   }
