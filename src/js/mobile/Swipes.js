@@ -96,18 +96,17 @@ class Swipes {
     static define_swipe_direction() {
         if(Swipes.error_call)
             Swipes.error_call = false;
-        else {
+        else 
             Swipes.switching_permitted = false;
-            let scrollableElement = document.querySelector(Swipes.selectors.get('Скролл'));
-            if(scrollableElement.scrollLeft + scrollableElement.clientWidth >= scrollableElement.scrollWidth) 
-                Swipes.permit_right_panel_opening = true;
-            else 
-                Swipes.permit_right_panel_opening = false;
-            if(scrollableElement.scrollLeft === scrollableElement.clientLeft) 
-                Swipes.permit_left_panel_opening = true;
-            else 
-                Swipes.permit_left_panel_opening = false;
-        }
+        let scrollableElement = document.querySelector(Swipes.selectors.get('Скролл'));
+        if(scrollableElement.scrollLeft + scrollableElement.clientWidth >= scrollableElement.scrollWidth) 
+            Swipes.permit_right_panel_opening = true;
+        else 
+            Swipes.permit_right_panel_opening = false;
+        if(scrollableElement.scrollLeft === scrollableElement.clientLeft) 
+            Swipes.permit_left_panel_opening = true;
+        else 
+            Swipes.permit_left_panel_opening = false;
     }
 
     /** 
