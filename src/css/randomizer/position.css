@@ -310,7 +310,6 @@ svg {
     display: block;
     position: relative;
     box-sizing: border-box;
-    width: 300px;
   }
   .randomizer main > .settings .settings-content .git-branches-block {
     flex-direction: column;
