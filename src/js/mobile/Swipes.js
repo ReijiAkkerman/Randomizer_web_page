@@ -5,6 +5,7 @@ import {Guide} from '/src/js/MainFrame/Guide.js';
 class Swipes {
     static selectors = new Map([
         ['Навигационная панель', '.dashboard'],
+        ['Скролл', 'main'],
     ]);
 
     static dashboard = document.querySelector(Swipes.selectors.get('Навигационная панель'));
@@ -30,9 +31,18 @@ class Swipes {
     static #current_panel_number = 1;
     static #previous_panel_number = 1;
 
+    static permit_right_panel_opening = false;
+    static permit_left_panel_opening = true;
+    static switching_permitted = true;
+    static error_call = false;
+
     
 
 
+
+    /**
+     * Функции для работы непосредственно свайпа
+     */
 
     static show_target_panel() {
         let panel = Swipes.#panels.get(Swipes.#current_panel_number);
@@ -61,19 +71,48 @@ class Swipes {
         Swipes.#deltaY = Swipes.#currentY - Swipes.#startY;
         let deltaX = Swipes.#toPositive(Swipes.#deltaX);
         let deltaY = Swipes.#toPositive(Swipes.#deltaY);
-        if(deltaX > 40) {
-            if(deltaY < 40) {
-                if(Swipes.#change_panel_number_permission) {
-                    if(Swipes.#deltaX > 0)
-                        Swipes.#current_panel_number = --Swipes.#current_panel_number < 0 ? Swipes.#panels.size - 1 : Swipes.#current_panel_number;
-                    else 
-                        Swipes.#current_panel_number = ++Swipes.#current_panel_number % Swipes.#panels.size;
-                    Swipes.show_permission = true;
-                    Swipes.#change_panel_number_permission = false;
+        label_if: {
+            if(deltaX > 40) {
+                if(deltaY < 40) {
+                    if(Swipes.#change_panel_number_permission) {
+                        if(Swipes.#deltaX > 0)
+                            if(Swipes.permit_left_panel_opening && Swipes.switching_permitted)
+                                Swipes.#current_panel_number = --Swipes.#current_panel_number < 0 ? Swipes.#panels.size - 1 : Swipes.#current_panel_number;
+                            else 
+                                break label_if;
+                        else 
+                            if(Swipes.permit_right_panel_opening && Swipes.switching_permitted)
+                                Swipes.#current_panel_number = ++Swipes.#current_panel_number % Swipes.#panels.size;
+                            else 
+                                break label_if;
+                        Swipes.show_permission = true;
+                        Swipes.#change_panel_number_permission = false;
+                    }
                 }
             }
         }
     }
+
+    static define_swipe_direction() {
+        if(Swipes.error_call)
+            Swipes.error_call = false;
+        else {
+            Swipes.switching_permitted = false;
+            let scrollableElement = document.querySelector(Swipes.selectors.get('Скролл'));
+            if(scrollableElement.scrollLeft + scrollableElement.clientWidth >= scrollableElement.scrollWidth) 
+                Swipes.permit_right_panel_opening = true;
+            else 
+                Swipes.permit_right_panel_opening = false;
+            if(scrollableElement.scrollLeft === scrollableElement.clientLeft) 
+                Swipes.permit_left_panel_opening = true;
+            else 
+                Swipes.permit_left_panel_opening = false;
+        }
+    }
+
+    /** 
+     * Вспомогательные функции
+     */
 
     static #toPositive(num) {
         return num < 0 ? -num : num;
@@ -93,8 +132,7 @@ class Swipes {
 
 document.addEventListener('touchstart', (event) => {
     Swipes.get_initial_position(event);
-}
-);
+});
 document.addEventListener('touchmove', function(event) {
     Swipes.get_current_position(event);
 });
@@ -103,5 +141,13 @@ document.addEventListener('touchend', function() {
     if(Swipes.show_permission) {
         Swipes.hide_current_panel();
         Swipes.show_target_panel();
+        Swipes.define_swipe_direction();
+        Swipes.error_call = true;
     }
+    Swipes.switching_permitted = true;
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    let element = document.querySelector(Swipes.selectors.get('Скролл'));
+    element.addEventListener('scroll', Swipes.define_swipe_direction);
 });

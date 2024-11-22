@@ -10,13 +10,13 @@
     <body class="randomizer">
         <main>
             <section class="words">
-                <div class="source">
+                <div class="source scrollable">
                     <div class="counter">
                         <p>1</p>
                         <p>2</p>
                     </div>
                     <div>
-                        <pre>source1</pre>
+                        <pre>source11111111111111111111111111111111111111111111111111</pre>
                         <pre>source2</pre>
                     </div>
                 </div>
