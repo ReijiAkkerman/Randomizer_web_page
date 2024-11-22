@@ -314,6 +314,10 @@
             width: 100% !important;
             overflow: scroll;
 
+            .words {
+                height: 100%;
+            }
+
             > .red, .white, .blue {
                 display: block;
                 position: relative;

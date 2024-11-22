@@ -272,6 +272,9 @@ svg {
     width: 100% !important;
     overflow: scroll;
   }
+  .randomizer main .words {
+    height: 100%;
+  }
   .randomizer main > .red, .randomizer main .white, .randomizer main .blue {
     display: block;
     position: relative;
