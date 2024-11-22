@@ -38,7 +38,7 @@ class Swipes {
         let panel = Swipes.#panels.get(Swipes.#current_panel_number);
         panel.style.display = '';
         Swipes.#previous_panel_number = Swipes.#current_panel_number;
-        Swipes.#change_panel_number_permission = true;
+        Swipes.#reset_positions();
     }
 
     static hide_current_panel() {
@@ -77,6 +77,17 @@ class Swipes {
 
     static #toPositive(num) {
         return num < 0 ? -num : num;
+    }
+
+    static #reset_positions() {
+        Swipes.show_permission = false;
+        Swipes.#change_panel_number_permission = true;
+        Swipes.#startX = undefined;
+        Swipes.#startY = undefined;
+        Swipes.#currentX = undefined;
+        Swipes.#currentY = undefined;
+        Swipes.#deltaX = undefined;
+        Swipes.#deltaY = undefined;
     }
 }
 
