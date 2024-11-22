@@ -9,7 +9,7 @@
     </head>
     <body class="randomizer">
         <main>
-            <section class="words" style="display:none;">
+            <section class="words">
                 <div class="source">
                     <div class="counter">
                         <p>1</p>
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </section>
-            <section class="red" style="display:none;">
+            <!-- <section class="red" style="display:none;">
 
             </section>
             <section class="white">
@@ -196,7 +196,7 @@
             </section>
             <section class="blue" style="display:none;">
 
-            </section>
+            </section> -->
         </main>
         <section class="dashboard" style="display:none;">
             <div class="search">

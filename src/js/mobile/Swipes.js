@@ -1,92 +1,97 @@
+import {Words} from '/src/js/MainFrame/Words.js';
+import {Settings} from '/src/js/MainFrame/Settings.js';
+import {Guide} from '/src/js/MainFrame/Guide.js';
+
 class Swipes {
     static selectors = new Map([
-        ['Красная панель', '.red'],
-        ['Синяя панель', '.blue'],
-        ['Белая панель', '.white'],
+        ['Навигационная панель', '.dashboard'],
     ]);
 
-    static red = document.querySelector(Swipes.selectors.get('Красная панель'));
-    static blue = document.querySelector(Swipes.selectors.get('Синяя панель'));
-    static white = document.querySelector(Swipes.selectors.get('Белая панель'));
+    static dashboard = document.querySelector(Swipes.selectors.get('Навигационная панель'));
 
-    static startX = false;
-    static touchX = false;
+    /** Работа */
 
-    static panel_number = 1;
-    static touchend = true;
+    static #panels = new Map([
+        [0, Swipes.dashboard],
+        [1, Words.main_section],
+        [2, Settings.main_section],
+        [3, Guide.main_section],
+    ]);
+
+    static show_permission = false;
+    static #change_panel_number_permission = true;
+    static #startX;
+    static #startY;
+    static #currentX;
+    static #currentY;
+    static #deltaX;
+    static #deltaY;
+
+    static #current_panel_number = 1;
+    static #previous_panel_number = 1;
+
+    
 
 
 
+    static show_target_panel() {
+        let panel = Swipes.#panels.get(Swipes.#current_panel_number);
+        panel.style.display = '';
+        Swipes.#previous_panel_number = Swipes.#current_panel_number;
+        Swipes.#change_panel_number_permission = true;
+    }
 
+    static hide_current_panel() {
+        let panel = Swipes.#panels.get(Swipes.#previous_panel_number);
+        panel.style.display = 'none';
+    }
 
-    // static show_left_panel(event) {
-    //     Swipes.initial_position(event);
-    //     Swipes.current_position(event);
-    // }
+    static get_initial_position(event) {
+        Swipes.#startX = event.touches[0].clientX;
+        Swipes.#startY = event.touches[0].clientY;
+    }
 
-    // static show_right_panel(event) {
-    //     Swipes.#initial_position(event);
-    //     Swipes.#current_position(event);
-        
-    // }
+    static get_current_position(event) {
+        Swipes.#currentX = event.touches[0].clientX;
+        Swipes.#currentY = event.touches[0].clientY;
+    }
 
-    static define_direction() {
-        if(Swipes.touchend) {
-            if(Swipes.startX < Swipes.touchX) {
-                Swipes.panel_number--;
+    static define_show_permission() {
+        Swipes.#deltaX = Swipes.#currentX - Swipes.#startX;
+        Swipes.#deltaY = Swipes.#currentY - Swipes.#startY;
+        let deltaX = Swipes.#toPositive(Swipes.#deltaX);
+        let deltaY = Swipes.#toPositive(Swipes.#deltaY);
+        if(deltaX > 40) {
+            if(deltaY < 40) {
+                if(Swipes.#change_panel_number_permission) {
+                    if(Swipes.#deltaX > 0)
+                        Swipes.#current_panel_number = --Swipes.#current_panel_number < 0 ? Swipes.#panels.size - 1 : Swipes.#current_panel_number;
+                    else 
+                        Swipes.#current_panel_number = ++Swipes.#current_panel_number % Swipes.#panels.size;
+                    Swipes.show_permission = true;
+                    Swipes.#change_panel_number_permission = false;
+                }
             }
-            else {
-                Swipes.panel_number++;
-            }
-            Swipes.touchend = false;
         }
     }
 
-    static initial_position(event) {
-        Swipes.startX = event.touches[0].clientX;
-    }
-
-    static current_position(event) {
-        Swipes.touchX = event.touches[0].clientX;
-        Swipes.define_direction();
-        Swipes.#show();
-    }
-
-    static #show() {
-        switch(Swipes.panel_number) {
-            case 0:
-                Swipes.#show_red();
-                break;
-            case 1: 
-                Swipes.#show_white();
-                break;
-            case 2:
-                Swipes.#show_blue();
-                break;
-        }
-    }
-
-    static #show_red() {
-        Swipes.white.style.display = 'none';
-        Swipes.blue.style.display = 'none';
-        Swipes.red.style.display = '';
-    }
-
-    static #show_white() {
-        Swipes.red.style.display = 'none';
-        Swipes.blue.style.display = 'none';
-        Swipes.white.style.display = '';
-    }
-
-    static #show_blue() {
-        Swipes.red.style.display = 'none';
-        Swipes.white.style.display = 'none';
-        Swipes.blue.style.display = '';
+    static #toPositive(num) {
+        return num < 0 ? -num : num;
     }
 }
 
-document.addEventListener('touchstart', Swipes.initial_position);
-document.addEventListener('touchmove', Swipes.current_position);
+document.addEventListener('touchstart', (event) => {
+    Swipes.get_initial_position(event);
+}
+);
+document.addEventListener('touchmove', function(event) {
+    Swipes.get_current_position(event);
+    // Swipes.define_show_permission();
+});
 document.addEventListener('touchend', function() {
-    Swipes.touchend = true;
+    Swipes.define_show_permission();
+    if(Swipes.show_permission) {
+        Swipes.hide_current_panel();
+        Swipes.show_target_panel();
+    }
 });
