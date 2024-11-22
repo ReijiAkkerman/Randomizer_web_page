@@ -109,6 +109,18 @@ class Swipes {
             Swipes.permit_left_panel_opening = false;
     }
 
+    static check_swipe_direction() {
+        let scrollableElement = document.querySelector(Swipes.selectors.get('Скролл'));
+        if(scrollableElement.scrollLeft + scrollableElement.clientWidth >= scrollableElement.scrollWidth) 
+            Swipes.permit_right_panel_opening = true;
+        else 
+            Swipes.permit_right_panel_opening = false;
+        if(scrollableElement.scrollLeft === scrollableElement.clientLeft) 
+            Swipes.permit_left_panel_opening = true;
+        else 
+            Swipes.permit_left_panel_opening = false;
+    }
+
     /** 
      * Вспомогательные функции
      */
@@ -136,6 +148,7 @@ document.addEventListener('touchmove', function(event) {
     Swipes.get_current_position(event);
 });
 document.addEventListener('touchend', function() {
+    Swipes.check_swipe_direction();
     Swipes.define_show_permission();
     if(Swipes.show_permission) {
         Swipes.hide_current_panel();
