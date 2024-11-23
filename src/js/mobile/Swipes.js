@@ -34,7 +34,6 @@ class Swipes {
     static permit_right_panel_opening = false;
     static permit_left_panel_opening = true;
     static switching_permitted = true;
-    static error_call = false;
 
     
 
@@ -94,10 +93,7 @@ class Swipes {
     }
 
     static define_swipe_direction() {
-        if(Swipes.error_call)
-            Swipes.error_call = false;
-        else 
-            Swipes.switching_permitted = false;
+        Swipes.switching_permitted = false;
         let scrollableElement = document.querySelector(Swipes.selectors.get('Скролл'));
         if(scrollableElement.scrollLeft + scrollableElement.clientWidth >= scrollableElement.scrollWidth) 
             Swipes.permit_right_panel_opening = true;
@@ -148,13 +144,11 @@ document.addEventListener('touchmove', function(event) {
     Swipes.get_current_position(event);
 });
 document.addEventListener('touchend', function() {
-    Swipes.check_swipe_direction();
     Swipes.define_show_permission();
     if(Swipes.show_permission) {
         Swipes.hide_current_panel();
         Swipes.show_target_panel();
         Swipes.define_swipe_direction();
-        Swipes.error_call = true;
     }
     Swipes.switching_permitted = true;
 });
@@ -162,4 +156,16 @@ document.addEventListener('touchend', function() {
 document.addEventListener('DOMContentLoaded', function() {
     let element = document.querySelector(Swipes.selectors.get('Скролл'));
     element.addEventListener('scroll', Swipes.define_swipe_direction);
+
+    const edgeScrollEvent = new CustomEvent('edgeScroll');
+    element.addEventListener('edgeScroll', () => {
+        Swipes.switching_permitted = true;
+    });
+    element.addEventListener('scroll', () => {
+        const {scrollLeft, clientWidth, scrollWidth, clientLeft} = element;
+        if(scrollLeft + clientWidth >= scrollWidth)
+            element.dispatchEvent(edgeScrollEvent);
+        if(scrollLeft === clientLeft)
+            element.dispatchEvent(edgeScrollEvent);
+    });
 });
