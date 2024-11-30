@@ -97,6 +97,16 @@ class Swipes {
         else Swipes.panel_edge = 'both';
     }
 
+    static reset_values() {
+        Swipes.#startX,
+        Swipes.#startY,
+        Swipes.#currentX,
+        Swipes.#currentY,
+        Swipes.#deltaX,
+        Swipes.#deltaY,
+        Swipes.direction = undefined;
+    }
+
     static #to_positive(num) {
         return num < 0 ? -num : num;
     }
@@ -110,9 +120,11 @@ document.addEventListener('touchend', () => {
         Swipes.define_direction();
         if(Swipes.panel_edge === 'both') {
             Swipes.switch_panel();
+            Swipes.reset_values();
         }
         else if(Swipes.panel_edge === Swipes.direction) {
             Swipes.switch_panel();
+            Swipes.reset_values();
         }
     }
 });
