@@ -91,7 +91,7 @@ class Swipes {
         const {scrollLeft, clientWidth, scrollWidth, clientLeft} = Swipes.main;
         if(clientWidth !== scrollWidth) {
             if(scrollLeft === clientLeft) Swipes.panel_edge = 'left';
-            else if(scrollLeft + clientWidth >= scrollWidth) Swipes.panel_edge = 'right';
+            else if(scrollLeft + clientWidth >= scrollWidth - 1) Swipes.panel_edge = 'right';
             else Swipes.panel_edge = 'none';
         }
         else Swipes.panel_edge = 'both';
