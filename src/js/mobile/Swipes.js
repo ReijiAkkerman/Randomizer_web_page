@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     element.addEventListener('touchstart', () => {
         const {scrollLeft, clientWidth, scrollWidth, clientLeft} = element;
-        if(scrollLeft + clientWidth >= scrollWidth - 1)
+        if(scrollLeft + clientWidth >= scrollWidth - 10)
             element.dispatchEvent(edgeScrollEvent);
         if(scrollLeft === clientLeft)
             element.dispatchEvent(edgeScrollEvent);
