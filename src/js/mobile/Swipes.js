@@ -1,6 +1,6 @@
 import {Words} from '/src/js/MainFrame/Words.js';
 import {Settings} from '/src/js/MainFrame/Settings.js';
-import {Guide} from '/src/js/MainFrame/Guide.js';
+//import {Guide} from '/src/js/MainFrame/Guide.js';
 
 class Swipes {
     static selectors = new Map([
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('edgeScroll', () => {
         Swipes.switching_permitted = true;
     });
-    element.addEventListener('scroll', () => {
+    element.addEventListener('touchstart', () => {
         const {scrollLeft, clientWidth, scrollWidth, clientLeft} = element;
         if(scrollLeft + clientWidth >= scrollWidth)
             element.dispatchEvent(edgeScrollEvent);
