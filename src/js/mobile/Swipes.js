@@ -14,7 +14,7 @@ class Swipes {
 
     static dashboard = document.querySelector(Swipes.selectors.get('Навигационная панель'));
     static main = document.querySelector(Swipes.selectors.get('Скролл'));
-
+    
     static #panels = new Map([
         [0, Swipes.dashboard],
         [1, Words.main_section],
@@ -97,13 +97,17 @@ class Swipes {
         else Swipes.panel_edge = 'both';
     }
 
+    static set_default_panel_number() {
+        Swipes.#panel_number = 1;
+    }
+
     static reset_values() {
-        Swipes.#startX,
-        Swipes.#startY,
-        Swipes.#currentX,
-        Swipes.#currentY,
-        Swipes.#deltaX,
-        Swipes.#deltaY,
+        Swipes.#startX = undefined;
+        Swipes.#startY = undefined;
+        Swipes.#currentX = undefined;
+        Swipes.#currentY = undefined;
+        Swipes.#deltaX = undefined;
+        Swipes.#deltaY = undefined;
         Swipes.direction = undefined;
     }
 
@@ -111,6 +115,8 @@ class Swipes {
         return num < 0 ? -num : num;
     }
 }
+
+export {Swipes};
 
 document.addEventListener('touchstart', Swipes.set_initial_coordinates);
 document.addEventListener('touchstart', Swipes.getPanelEdge);
@@ -120,11 +126,10 @@ document.addEventListener('touchend', () => {
         Swipes.define_direction();
         if(Swipes.panel_edge === 'both') {
             Swipes.switch_panel();
-            Swipes.reset_values();
         }
         else if(Swipes.panel_edge === Swipes.direction) {
             Swipes.switch_panel();
-            Swipes.reset_values();
         }
     }
+    Swipes.reset_values();
 });

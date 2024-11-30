@@ -1,5 +1,6 @@
 import {QuickAccess} from "/src/js/Dashboard/QuickAccess.js";
 import {Words} from '/src/js/MainFrame/Words.js';
+import {Swipes} from '/src/js/mobile/Swipes.js';
 
 class Settings {
     static selectors = new Map([
@@ -44,4 +45,6 @@ export {Settings};
 
 document.addEventListener('DOMContentLoaded', function() {
     Settings.close_main_section_button.addEventListener('click', Settings.close);
+    Settings.close_main_section_button.addEventListener('click', Swipes.set_default_panel_number);
+    Settings.close_main_section_button.addEventListener('click', Swipes.reset_values);
 });

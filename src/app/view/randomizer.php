@@ -447,6 +447,10 @@
                 </div>
             </div>
         </section>
+        <script type="module" src="/src/js/mobile/Swipes.js"></script>
+
+
+
         <script type="module" src="/src/js/UserInterface.js"></script>
 
         <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script>
@@ -463,9 +467,5 @@
         <script type="module" src="/src/js/MainFrame/Settings/Languages.js"></script>
 
         <script type="module" src="/src/js/MainFrame/Guide.js"></script>
-
-
-
-        <script type="module" src="/src/js/mobile/Swipes.js"></script>
     </body>
 </html>
