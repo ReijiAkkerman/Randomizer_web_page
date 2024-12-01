@@ -188,15 +188,6 @@
                     </div>
                 </div>
             </section>
-            <!-- <section class="red" style="display:none;">
-
-            </section>
-            <section class="white">
-
-            </section>
-            <section class="blue" style="display:none;">
-
-            </section> -->
         </main>
         <section class="dashboard" style="display:none;">
             <div class="search">
