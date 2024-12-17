@@ -7,6 +7,8 @@
         public array $args;
         public static string $folder;
 
+        private const DEFAULT_URL = 'auth/view';
+
         public function __construct() {
             $this->args = [];
             $this->getRequestElements();
@@ -38,7 +40,7 @@
         public function getController(array $requestElements): string {
             $controllerPart = ucfirst($requestElements[1]);
             if(!$controllerPart) {
-                header("Location: ../randomizer/view");
+                $this->setDefaultHeader();
                 exit;
             }
             $fileExists = file_exists(__DIR__ . "/../control/{$controllerPart}.php");
@@ -48,7 +50,7 @@
                 return $controller;
             }
             else {
-                header("Location: ../randomizer/view");
+                $this->setDefaultHeader();
                 exit;
             }
         }
@@ -89,5 +91,9 @@
             }
             else 
                 return $request;
+        }
+
+        private function setDefaultHeader() {
+            header('Location: ../' . Router::DEFAULT_URL);
         }
     }

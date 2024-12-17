@@ -6,12 +6,12 @@
         <style>input{display:block;margin:10px;}</style>
     </head>
     <body>
-        <form action="auth/log">
+        <form action="/auth/log" method="POST">
             <input type="text" name="login" placeholder="Логин или почта">
             <input type="password" name="password" placeholder="Пароль">
             <button>Войти</button>
         </form>
-        <form action="auth/reg">
+        <form action="/auth/reg" method="POST">
             <input type="text" name="email" placeholder="Электронная почта">
             <input type="text" name="login" placeholder="Логин">
             <input type="text" name="name" placeholder="Имя">
