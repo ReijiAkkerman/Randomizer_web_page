@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  font-family: jura;
+}
+
+button {
+  display: block;
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
+}
+
+input {
+  outline: none;
+}
+
+svg {
+  vertical-align: middle;
+}
+
+.auth main .form {
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding: 15px 30px;
+}
+.auth main .form-switcher {
+  padding-bottom: 10px;
+}
+.auth main .form-switcher__button {
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
+  padding: 0 20px 10px 20px;
+  font-size: 25px;
+}
+.auth main .form-switcher__button:hover {
+  border-color: #000;
+}
+.auth main .form-switcher__button:hover {
+  border-color: #aaa;
+}
+.auth main .form-error {
+  width: 380px;
+  font-size: 14px;
+  color: #f00;
+  margin-top: 10px;
+  line-height: 13px;
+}
+.auth main .form-error___ {
+  margin-top: 5px !important;
+}
+.auth main .form__input {
+  width: 350px;
+  font-size: 25px;
+  padding: 5px 10px 5px 20px;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.auth main .form__button {
+  font-size: 25px;
+  padding: 5px 20px;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  margin-top: 20px;
+}
+.auth main .form__button:hover {
+  border-color: #000;
+  background-color: #ccc;
+}
+
+/*# sourceMappingURL=style.css.map */

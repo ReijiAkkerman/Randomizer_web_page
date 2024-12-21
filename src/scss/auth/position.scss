@@ -1,0 +1,41 @@
+@use "../reset";
+
+.auth {
+    main {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        input {
+            display: block;
+        }
+
+        .form {
+            display: block;
+            position: relative;
+            
+            form {
+                display: block;
+                position: relative;
+                width: fit-content;
+                margin: auto;
+            }
+
+            &__button {
+                margin: auto;
+            }
+
+            &-switcher {
+                display: flex;
+                position: relative;
+                justify-content: center;
+            }
+        }
+    }
+}

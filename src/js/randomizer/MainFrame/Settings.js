@@ -1,6 +1,6 @@
-import {QuickAccess} from "/src/js/Dashboard/QuickAccess.js";
-import {Words} from '/src/js/MainFrame/Words.js';
-import {Swipes} from '/src/js/mobile/Swipes.js';
+import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
+import {Words} from '/src/js/randomizer/MainFrame/Words.js';
+import {Swipes} from '/src/js/randomizer/mobile/Swipes.js';
 
 class Settings {
     static selectors = new Map([

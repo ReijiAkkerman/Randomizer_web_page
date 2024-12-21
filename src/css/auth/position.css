@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  font-family: jura;
+}
+
+button {
+  display: block;
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
+}
+
+input {
+  outline: none;
+}
+
+svg {
+  vertical-align: middle;
+}
+
+.auth main {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.auth main input {
+  display: block;
+}
+.auth main .form {
+  display: block;
+  position: relative;
+}
+.auth main .form form {
+  display: block;
+  position: relative;
+  width: fit-content;
+  margin: auto;
+}
+.auth main .form__button {
+  margin: auto;
+}
+.auth main .form-switcher {
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+
+/*# sourceMappingURL=position.css.map */

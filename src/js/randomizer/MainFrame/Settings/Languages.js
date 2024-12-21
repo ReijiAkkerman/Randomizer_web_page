@@ -1,5 +1,5 @@
-import {UserInterface} from "/src/js/UserInterface.js";
-import {Git} from "/src/js/MainFrame/Settings/Git.js";
+import {UserInterface} from "/src/js/randomizer/UserInterface.js";
+import {Git} from "/src/js/randomizer/MainFrame/Settings/Git.js";
 
 class Languages {
     static selectors = new Map([

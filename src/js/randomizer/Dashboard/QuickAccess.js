@@ -1,8 +1,8 @@
-import {UserInterface} from '/src/js/UserInterface.js';
-import {Words} from '/src/js/MainFrame/Words.js';
-import {Settings} from '/src/js/MainFrame/Settings.js';
-import {Guide} from '/src/js/MainFrame/Guide.js';
-import {CircularQueue} from '/src/js/DataStructures/CircularQueue.js';
+import {UserInterface} from '/src/js/randomizer/UserInterface.js';
+import {Words} from '/src/js/randomizer/MainFrame/Words.js';
+import {Settings} from '/src/js/randomizer/MainFrame/Settings.js';
+import {Guide} from '/src/js/randomizer/MainFrame/Guide.js';
+import {CircularQueue} from '/src/js/randomizer/DataStructures/CircularQueue.js';
 
 class QuickAccess {
     static selectors = new Map([

@@ -1,0 +1,61 @@
+@use "../reset";
+@use "../_components/background";
+@use "../_components/borders";
+@use "../_components/text";
+
+.auth {
+    main {
+        .form {
+            @include borders.default;
+            border-radius: 20px;
+            padding: 15px 30px;
+
+            &-switcher {
+                padding-bottom: 10px;
+
+                &__button {
+                    @include borders.invisible(bottom);
+                    padding: 0 20px 10px 20px;
+                    font-size: 25px;
+
+                    &:hover {
+                        border-color: borders.$inactive;
+                    }
+                }
+            }
+
+            &-error {
+                width: 380px;
+                font-size: 14px;
+                color: #f00;
+                margin-top: 10px;
+                line-height: 13px;
+            }
+
+            &-error___ {
+                margin-top: 5px !important;
+            }
+
+            &__input {
+                width: 350px;
+                font-size: 25px;
+                padding: 5px 10px 5px 20px;
+                @include borders.default(top);
+                @include borders.default(bottom);
+            }
+
+            &__button {
+                font-size: 25px;
+                padding: 5px 20px;
+                @include borders.inactive(left);
+                @include borders.inactive(right);
+                margin-top: 20px;
+
+                &:hover {
+                    border-color: borders.$active;
+                    background-color: background.$hover;
+                }
+            }
+        }
+    }
+}

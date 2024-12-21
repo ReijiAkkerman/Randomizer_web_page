@@ -1,4 +1,4 @@
-import {QuickAccess} from "../Dashboard/QuickAccess.js";
+import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
 
 class Words {
     static selectors = new Map([

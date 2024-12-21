@@ -1,5 +1,5 @@
-import {Words} from '/src/js/MainFrame/Words.js';
-import {Settings} from '/src/js/MainFrame/Settings.js';
+import {Words} from '/src/js/randomizer/MainFrame/Words.js';
+import {Settings} from '/src/js/randomizer/MainFrame/Settings.js';
 
 /** Описание функций */
 // сamelCase для разрешений

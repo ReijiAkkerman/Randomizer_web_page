@@ -1,42 +1,106 @@
 <?php
     /**
-     * $snake_notation для данных пользователей
+     * $snake_notation для работы скрипта
+     * 
+     * $_snake_notation для Cookie клиента
      * 
      * $SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для данных полученных из БД
      * причем независимо от регистра колонок из которых они взяты
      * 
-     * $CamelCaseBeginningWithCapitalLetter для работы скрипта
+     * $CamelCaseBeginningWithCapitalLetter для данных пользователей
      * 
      * usualCamelCase для именования методов
+     * 
+     * $usualCamelCase для именования переменных (не свойств!)
      */
 
     namespace project\model;
 
     use project\model\interfaces\Auth as iAuth;
     use project\model\regex\Auth as rAuth;
+    use project\model\components\AuthErrors;
 
     use project\control\parent\Page;
 
     class Auth implements iAuth {
-        public static $ErrorMessage = '';
+        private string $Email;
+        private string $Login;
+        private string $Name;
+        private string $Password;
 
-        private string $email;
-        private string $login;
-        private string $name;
+        private \mysqli $mysql;
+        private bool $redirect;
+        private AuthErrors $errors;
+        private string $error_field;
+        private string $error_message;
         private string $password;
-        private string $encrypted_password;
-
-        private \mysqli $Mysql;
 
         private int $ID;
         private string $CREATED;
+        private string $PASSWORD;
 
 
 
 
+
+        public function __construct() {
+            $this->redirect = true;
+            $this->errors = new AuthErrors();
+        }
+
+
+
+
+
+        public function log(): void {
+            $functionsNeedTrue = [
+                'checkLogin',
+                'checkPassword',
+                'validateLogin',
+                'validatePassword',
+            ];
+            foreach($functionsNeedTrue as $function) {
+                if($this->$function() === false) {
+                    $this->redirect = false;
+                    if(in_array($this->error_field, $this->errors->fields));
+                    else $this->writeError();
+                }
+            }
+            $this->Password = $_POST['password'];
+            if($this->redirect) {
+                $this->createAuthConnection();
+                $query = "SELECT ID,password,created FROM users WHERE login='{$this->Login}'";
+                $result = $this->mysql->query($query);
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $this->ID = $value['ID'];
+                        $this->CREATED = $value['created'];
+                        $this->PASSWORD = $value['password'];
+                    }
+                    if($this->comparePassword() === false) {
+                        $this->redirect = false;
+                        $this->error_field = 'password';
+                        $this->error_message = 'Пароль неверный!';
+                        $this->writeError();
+                    }
+                }
+                else {
+                    $this->redirect = false;
+                    $this->error_field = 'login';
+                    $this->error_message = 'Указанный пользователь не найлен!';
+                    $this->writeError();
+                }
+                if($this->redirect) {
+                    $this->setCookie();
+                    echo '{"redirect":true}';
+                }
+                else $this->sendErrors();
+            }
+            else $this->sendErrors();
+        }
 
         public function reg(): void {
-            $FunctionsNeedTrue = [
+            $functionsNeedTrue = [
                 'checkEmail',
                 'checkLogin',
                 'checkName',
@@ -49,37 +113,105 @@
                 'validateRepeatedPassword',
                 'comparePasswords',
             ];
-            foreach($FunctionsNeedTrue as $Function) {
-                if($this->$Function() === false) {
-                    header('Location: ../auth/view');
-                    exit;
+            $dataNeedNotExists = [
+                'isEmailExists',
+                'isLoginExists'
+            ];
+            foreach($functionsNeedTrue as $function) {
+                if($this->$function() === false) {
+                    $this->redirect = false;
+                    if(in_array($this->error_field, $this->errors->fields));
+                    else $this->writeError();
                 }
             }
-            $this->encryptPassword();
-            $Mysql = new \mysqli(Page::DB_HOST, Page::HOSTING_USER.'Auth', 'kISARAGIeKI4', Page::HOSTING_USER.'Auth');
-            $Query = "INSERT INTO users(email,login,name,password,created) VALUES ('{$this->email}','{$this->login}','{$this->name}','{$this->encrypted_password}',NOW())";
-            $Mysql->query($Query);
-            $Query = "SELECT ID,created FROM users WHERE BINARY login='{$this->login}'";
-            $Result = $Mysql->query($Query);
-            foreach($Result as $Value) {
-                $this->ID = $Value['ID'];
-                $this->CREATED = $Value['created'];
+            if($this->redirect) {
+                $this->Email = strtolower($this->Email);
+                $this->createAuthConnection();
+                foreach($dataNeedNotExists as $function) {
+                    if($this->$function() === true) {
+                        $this->redirect = false;
+                        $this->writeError();
+                    }
+                }
+                if($this->redirect) {
+                    $this->encryptPassword();
+                    $query = "INSERT INTO users(
+                        email,
+                        login,
+                        name,
+                        password,
+                        created
+                    ) VALUES (
+                        '{$this->Email}',
+                        '{$this->Login}',
+                        '{$this->Name}',
+                        '{$this->password}',
+                        NOW()
+                    )";
+                    $this->mysql->query($query);
+                    $query = "SELECT ID,created FROM users WHERE login='{$this->login}'";
+                    $result = $this->mysql->query($query);
+                    foreach($result as $value) {
+                        $this->ID = $value['ID'];
+                        $this->CREATED = $value['created'];
+                    }
+                    $this->closeAuthConnection();
+                    $this->setCookie();
+                    echo '{"redirect":true}';
+                }
+                else $this->sendErrors();
             }
-            $Mysql->close();
-            $this->encryptConfirmation();
-            $this->setCookie();
-            header('Location: ../randomizer/view');
+            else $this->sendErrors();
         }
 
         public function init(): void {
-            $Functions = [
+            $functions = [
                 'createAuth',
             ];
-            $this->Mysql = new \mysqli('localhost', 'root', 'KisaragiEki4');
-            foreach($Functions as $Function) {
-                $this->$Function();
+            $this->mysql = new \mysqli('localhost', 'root', 'KisaragiEki4');
+            foreach($functions as $function) {
+                $this->$function();
             }
-            $this->Mysql->close();
+            $this->mysql->close();
+        }
+
+
+
+
+
+        private function createAuthConnection(): void {
+            $this->mysql = new \mysqli(
+                'localhost',
+                Page::HOSTING_USER.'Auth',
+                'kISARAGIeKI4',
+                Page::HOSTING_USER.'Auth'
+            );
+        }
+
+        private function closeAuthConnection(): void {
+            $this->mysql->close();
+        }
+
+        private function isLoginExists(): bool {
+            $query = "SELECT * FROM users WHERE login='{$this->Login}'";
+            $result = $this->mysql->query($query);
+            if($result->num_rows) {
+                $this->error_field = 'login';
+                $this->error_message = 'Пользователь с таким логином уже существует!';
+                return true;
+            } 
+            else return false;
+        }
+
+        private function isEmailExists(): bool {
+            $query = "SELECT * FROM users WHERE email='{$this->Email}'";
+            $result = $this->mysql->query($query);
+            if($result->num_rows) {
+                $this->error_field = 'email';
+                $this->error_message = 'Пользователь с указанной почтой уже существует!';
+                return true;
+            }
+            else return false;
         }
 
 
@@ -90,7 +222,8 @@
 
         private function checkEmail(): bool {
             if($_POST['email'] === '') {
-                self::$ErrorMessage = 'Не указана электронная почта!';
+                $this->error_field = 'email';
+                $this->error_message = 'Не указана электронная почта!';
                 return false;
             }
             else return true;
@@ -98,7 +231,8 @@
 
         private function checkLogin(): bool {
             if($_POST['login'] === '') {
-                self::$ErrorMessage = 'Логин не указан!';
+                $this->error_field = 'login';
+                $this->error_message = 'Логин не указан!';
                 return false;
             }
             else return true;
@@ -106,7 +240,8 @@
 
         private function checkName(): bool {
             if($_POST['name'] === '') {
-                self::$ErrorMessage = 'Имя не указано!';
+                $this->error_field = 'name';
+                $this->error_message = 'Имя не указано!';
                 return false;
             }
             else return true;
@@ -114,7 +249,8 @@
 
         private function checkPassword(): bool {
             if($_POST['password'] === '') {
-                self::$ErrorMessage = 'Пароль не указан!';
+                $this->error_field = 'password';
+                $this->error_message = 'Пароль не указан!';
                 return false;
             }
             else return true;
@@ -122,7 +258,8 @@
 
         private function checkRepeatedPassword(): bool {
             if($_POST['repeat_password'] === '') {
-                self::$ErrorMessage = 'Повторный пароль не указан!';
+                $this->error_field = 'repeat_password';
+                $this->error_message = 'Повторный пароль не указан!';
                 return false;
             }
             else return true;
@@ -133,15 +270,17 @@
         private function validateEmail(): bool {
             $result = preg_match(rAuth::email->value, $_POST['email']);
             if($result === 1) {
-                $this->email = $_POST['email'];
+                $this->Email = $_POST['email'];
                 return true;
             }
             else if($result === 0) {
-                self::$ErrorMessage = 'Электронная почта не соответствует шаблону!';
+                $this->error_field = 'email';
+                $this->error_message = 'Электронная почта не соответствует шаблону!';
                 return false;
             }
             else {
-                self::$ErrorMessage = '|Во время обработки электронной почты произошла ошибка!';
+                $this->error_field = 'alert';
+                $this->error_message = 'Во время обработки электронной почты произошла ошибка!';
                 return false;
             }
         }
@@ -149,15 +288,17 @@
         private function validateLogin(): bool {
             $result = preg_match(rAuth::login->value, $_POST['login']);
             if($result === 1) {
-                $this->login = $_POST['login'];
+                $this->Login = $_POST['login'];
                 return true;
             }
             else if($result === 0) {
-                self::$ErrorMessage = 'Логин не соответствует шаблону!';
+                $this->error_field = 'login';
+                $this->error_message = 'Логин не соответствует шаблону!';
                 return false;
             }
             else {
-                self::$ErrorMessage = '|Во время обработки логина произошла ошибка!';
+                $this->error_field = 'alert';
+                $this->error_message = 'Во время обработки логина произошла ошибка!';
                 return false;
             }
         }
@@ -165,15 +306,17 @@
         private function validateName(): bool {
             $result = preg_match(rAuth::name->value, $_POST['name']);
             if($result === 1) {
-                $this->name = $_POST['name'];
+                $this->Name = $_POST['name'];
                 return true;
             }
             else if($result === 0) {
-                self::$ErrorMessage = 'Имя не соответствует шаблону!';
+                $this->error_field = 'name';
+                $this->error_message = 'Имя не соответствует шаблону!';
                 return false;
             }
             else {
-                self::$ErrorMessage = '|Во время обработки имени произошла ошибка!';
+                $this->error_field = 'alert';
+                $this->error_message = 'Во время обработки имени произошла ошибка!';
                 return false;
             }
         }
@@ -184,11 +327,13 @@
                 return true;
             }
             else if($result === 0) {
-                self::$ErrorMessage = 'Пароль не соответствует шаблону!';
+                $this->error_field = 'password';
+                $this->error_message = 'Пароль не соответствует шаблону!';
                 return false;
             }
             else {
-                self::$ErrorMessage = '|Во время обработки пароля произошла ошибка!';
+                $this->error_field = 'alert';
+                $this->error_message = 'Во время обработки пароля произошла ошибка!';
                 return false;
             }
         }
@@ -199,11 +344,13 @@
                 return true;
             }
             else if($result === 0) {
-                self::$ErrorMessage = 'Повторный пароль не соответствует шаблону!';
+                $this->error_field = 'repeat_password';
+                $this->error_message = 'Повторный пароль не соответствует шаблону!';
                 return false;
             }
             else {
-                self::$ErrorMessage = '|Во время обработки повторного пароля произошла ошибка!';
+                $this->error_field = 'repeat_password';
+                $this->error_message = 'Во время обработки повторного пароля произошла ошибка!';
                 return false;
             }
         }
@@ -216,26 +363,27 @@
 
         private function comparePasswords(): bool {
             if($_POST['password'] === $_POST['repeat_password']) {
-                $this->password = $_POST['password'];
+                $this->Password = $_POST['password'];
                 return true;
             }
             else {
-                self::$ErrorMessage = 'Пароли не совпадают!';
+                $this->error_field = 'repeat_password';
+                $this->error_message = 'Пароли не совпадают!';
                 return false;
             }
-        }
-
-        // Шифрует пароль
-
-        private function encryptPassword(): void {
-            $this->encrypted_password = password_hash($this->password, PASSWORD_DEFAULT);
         }
 
         // Проверяет совпадает ли введенный пароль с тем что 
         // хранится в базе данных
 
         private function comparePassword(): bool {
+            return password_verify($this->Password, $this->PASSWORD);
+        }
 
+        // Шифрует пароль
+
+        private function encryptPassword(): void {
+            $this->password = password_hash($this->Password, PASSWORD_DEFAULT);
         }
 
         /**
@@ -247,16 +395,12 @@
          */
 
         private function setCookie(): void {
-            setcookie('ID', $this->ID, 3600*24*30, '/');
-            setcookie('conf', $this->Confirmation, 3600*24*30, '/');
+            setcookie('ID', $this->ID, time()+3600*24*30, '/');
+            setcookie('conf', $this->CREATED, time()+3600*24*30, '/');
         }
 
-        private function encryptConfirmation(): void {
-            $this->Confirmation = bin2hex($this->CREATED);
-        }
-
-        private function decryptConfirmation(): void {
-            $this->Confirmation = hex2bin($_COOKIE['conf']);
+        private function sendErrors(): void {
+            echo json_encode($this->errors, JSON_UNESCAPED_UNICODE);
         }
 
 
@@ -266,7 +410,7 @@
         // init функциональность
 
         private function createAuth(): void {
-            $Queries = [
+            $queries = [
                 'CREATE DATABASE IF NOT EXISTS Auth',
                 "CREATE USER IF NOT EXISTS 'Auth'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'kISARAGIeKI4'",
                 "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Auth.* TO 'Auth'@'localhost'",
@@ -274,14 +418,14 @@
                 'CREATE TABLE IF NOT EXISTS users(
                     ID SERIAL,
                     email VARCHAR(80) UNIQUE NOT NULL,
-                    login VARCHAR(55) UNIQUE NOT NULL,
+                    login VARCHAR(55) BINARY UNIQUE NOT NULL,
                     name VARCHAR(25) NOT NULL,
                     password VARCHAR(255) NOT NULL,
                     created DATETIME NOT NULL
                 )'
             ];
-            foreach($Queries as $Query) {
-                $this->Mysql->query($Query);
+            foreach($queries as $query) {
+                $this->mysql->query($query);
             }
         }
 
@@ -291,5 +435,22 @@
 
         private function createSettings(): void {
             ;
+        }
+
+
+
+
+
+        /**
+         * Перед записью ошибки в класс AuthErrors
+         * данные ошибки должны быть записаны в 
+         * $this->error_field - для указания какому полю выводить ошибку
+         * $this->error_message - для указания содержимого ошибки 
+         */
+
+        private function writeError(): void {
+            $error_field = 
+            $this->errors->fields[] = $this->error_field;
+            $this->errors->$error_field = $this->error_message;
         }
     }

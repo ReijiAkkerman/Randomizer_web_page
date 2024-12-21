@@ -82,10 +82,12 @@
                                 </svg>
                             </button>
                             <button class="theme_exit">
-                                <svg viewBox="0 0 1024 1024">
-                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"/>
-                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"/>
-                                </svg>
+                                <a href="/randomizer/exit">
+                                    <svg viewBox="0 0 1024 1024">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"/>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"/>
+                                    </svg>
+                                </a>
                             </button>
                         </div>
                     </div>
@@ -438,25 +440,25 @@
                 </div>
             </div>
         </section>
-        <script type="module" src="/src/js/mobile/Swipes.js"></script>
+        <script type="module" src="/src/js/randomizer/mobile/Swipes.js"></script>
 
 
 
-        <script type="module" src="/src/js/UserInterface.js"></script>
+        <script type="module" src="/src/js/randomizer/UserInterface.js"></script>
 
-        <script type="module" src="/src/js/DataStructures/CircularQueue.js"></script>
-        <script type="module" src="/src/js/DataStructures/Stack.js"></script>
+        <script type="module" src="/src/js/randomizer/DataStructures/CircularQueue.js"></script>
+        <script type="module" src="/src/js/randomizer/DataStructures/Stack.js"></script>
         
-        <script type="module" src="/src/js/Dashboard/MainActions.js"></script>
-        <script type="module" src="/src/js/Dashboard/QuickAccess.js"></script>
+        <script type="module" src="/src/js/randomizer/Dashboard/MainActions.js"></script>
+        <script type="module" src="/src/js/randomizer/Dashboard/QuickAccess.js"></script>
         
-        <script type="module" src="/src/js/MainFrame/Words.js"></script>
+        <script type="module" src="/src/js/randomizer/MainFrame/Words.js"></script>
 
-        <script type="module" src="/src/js/MainFrame/Settings.js"></script>
+        <script type="module" src="/src/js/randomizer/MainFrame/Settings.js"></script>
 
-        <script type="module" src="/src/js/MainFrame/Settings/Git.js"></script>
-        <script type="module" src="/src/js/MainFrame/Settings/Languages.js"></script>
+        <script type="module" src="/src/js/randomizer/MainFrame/Settings/Git.js"></script>
+        <script type="module" src="/src/js/randomizer/MainFrame/Settings/Languages.js"></script>
 
-        <script type="module" src="/src/js/MainFrame/Guide.js"></script>
+        <script type="module" src="/src/js/randomizer/MainFrame/Guide.js"></script>
     </body>
 </html>

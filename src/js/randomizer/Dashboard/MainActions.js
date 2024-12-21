@@ -1,5 +1,5 @@
-import {UserInterface} from '/src/js/UserInterface.js';
-import {Stack} from '/src/js/DataStructures/Stack.js';
+import {UserInterface} from '/src/js/randomizer/UserInterface.js';
+import {Stack} from '/src/js/randomizer/DataStructures/Stack.js';
 
 class MainActions {
     static selectors = new Map([
