@@ -267,7 +267,7 @@ svg {
   flex-direction: row-reverse;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1050px) {
   .randomizer main {
     width: 100% !important;
     overflow: scroll;

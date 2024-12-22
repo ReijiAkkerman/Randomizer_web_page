@@ -585,7 +585,7 @@ svg {
   fill: #000;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1050px) {
   .randomizer main > .red {
     background-color: #f00;
   }

@@ -460,5 +460,9 @@
         <script type="module" src="/src/js/randomizer/MainFrame/Settings/Languages.js"></script>
 
         <script type="module" src="/src/js/randomizer/MainFrame/Guide.js"></script>
+
+
+
+        <script type="module" src="/src/js/randomizer/Adaptive.js"></script>
     </body>
 </html>
