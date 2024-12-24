@@ -146,6 +146,7 @@
                             <p class="languages-add-create__p_add-language" style="display:none;">Добавить новый язык</p>
                             <p class="languages-add-create__p_edit-language" style="display:none;">Изменить параметры языка</p>
                             <div>
+                                
                                 <div class="languages-add-create__div">
                                     <input class="languages-add-create__input languages-add-create__input_language-name" type="text" placeholder="Наименование языка">
                                     <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" placeholder="Папка языка">
@@ -160,7 +161,9 @@
                     <div class="git" style="display:none;">
                         <div class="git-repo">
                             <p>Репозиторий</p>
-                            <input class="git-repo__input" type="text" placeholder="Репозиторий со списками слов">
+                            <form class="git-repo__form">
+                                <input class="git-repo__input" type="text" name="repo" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
+                            </form>
                         </div>
                         <div class="git-branches">
                             <p>Ветка</p>
@@ -191,7 +194,7 @@
                 </div>
             </section>
         </main>
-        <section class="dashboard" style="display:none;">
+        <section class="dashboard">
             <div class="search">
                 <form action="#" class="search-form">
                     <input type="text" class="search-form__input" placeholder="Искомое слово ...">
@@ -464,5 +467,9 @@
 
 
         <script type="module" src="/src/js/randomizer/Adaptive.js"></script>
+
+
+
+        <script type="module" src="/src/js/randomizer/async/MainFrame/Git.js"></script>
     </body>
 </html>

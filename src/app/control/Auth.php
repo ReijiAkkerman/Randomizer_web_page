@@ -9,7 +9,7 @@
     use project\model\Auth as m_Auth;
 
     class Auth extends Page implements iAuth {
-        // use View;
+        use View;
 
 
 
@@ -33,12 +33,12 @@
         }
 
         public function log(): void {
-            $Auth = new m_Auth();
-            $Auth->log();
+            $auth = new m_Auth();
+            $auth->log();
         }
 
         public function reg(): void {
-            $Auth = new m_Auth();
-            $Auth->reg();
+            $auth = new m_Auth();
+            $auth->reg();
         }
     }

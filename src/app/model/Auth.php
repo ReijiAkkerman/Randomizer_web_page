@@ -1,6 +1,6 @@
 <?php
     /**
-     * $snake_notation для работы скрипта
+     * $snake_notation для работы скрипта (наименования свойств)
      * 
      * $_snake_notation для Cookie клиента
      * 
@@ -16,13 +16,13 @@
 
     namespace project\model;
 
-    use project\model\interfaces\Auth as iAuth;
+    use project\control\interfaces\Auth as c_iAuth;
     use project\model\regex\Auth as rAuth;
     use project\model\components\AuthErrors;
+    use project\model\traits\WriteError;
+    use project\model\traits\AuthConnection;
 
-    use project\control\parent\Page;
-
-    class Auth implements iAuth {
+    class Auth implements c_iAuth {
         private string $Email;
         private string $Login;
         private string $Name;
@@ -149,7 +149,7 @@
                         NOW()
                     )";
                     $this->mysql->query($query);
-                    $query = "SELECT ID,created FROM users WHERE login='{$this->login}'";
+                    $query = "SELECT ID,created FROM users WHERE login='{$this->Login}'";
                     $result = $this->mysql->query($query);
                     foreach($result as $value) {
                         $this->ID = $value['ID'];
@@ -167,6 +167,7 @@
         public function init(): void {
             $functions = [
                 'createAuth',
+                'createSettings'
             ];
             $this->mysql = new \mysqli('localhost', 'root', 'KisaragiEki4');
             foreach($functions as $function) {
@@ -179,18 +180,7 @@
 
 
 
-        private function createAuthConnection(): void {
-            $this->mysql = new \mysqli(
-                'localhost',
-                Page::HOSTING_USER.'Auth',
-                'kISARAGIeKI4',
-                Page::HOSTING_USER.'Auth'
-            );
-        }
-
-        private function closeAuthConnection(): void {
-            $this->mysql->close();
-        }
+        use AuthConnection;
 
         private function isLoginExists(): bool {
             $query = "SELECT * FROM users WHERE login='{$this->Login}'";
@@ -416,7 +406,7 @@
                 "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Auth.* TO 'Auth'@'localhost'",
                 'USE Auth',
                 'CREATE TABLE IF NOT EXISTS users(
-                    ID SERIAL,
+                    ID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
                     email VARCHAR(80) UNIQUE NOT NULL,
                     login VARCHAR(55) BINARY UNIQUE NOT NULL,
                     name VARCHAR(25) NOT NULL,
@@ -434,23 +424,40 @@
         }
 
         private function createSettings(): void {
-            ;
+            $queries = [
+                "CREATE DATABASE IF NOT EXISTS Settings",
+                "CREATE USER IF NOT EXISTS 'Settings'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'kISARAGIeKI4'",
+                "USE Settings",
+                "CREATE TABLE IF NOT EXISTS all_languages(
+                    ID SMALLINT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
+                    name VARCHAR(50) NOT NULL,
+                    mark VARCHAR(3) NOT NULL,
+                    kanji BOOLEAN DEFAULT 0 NOT NULL
+                )",
+                "CREATE TABLE IF NOT EXISTS git(
+                    USER_ID INT UNSIGNED UNIQUE NOT NULL,
+                    repository VARCHAR(255) NULL,
+                    branches VARCHAR(1023) NULL,
+                    active_branch VARCHAR(50) NULL,
+                    show_all_branches BOOLEAN DEFAULT 0 NOT NULL,
+                    foldernames VARCHAR(1023)
+                )",
+                "CREATE TABLE IF NOT EXISTS languages(
+                    USER_ID INT UNSIGNED UNIQUE NOT NULL,
+                    main SMALLINT NULL,
+                    studied VARCHAR(255) NULL
+                )",
+                "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.git TO 'Settings'@'localhost'",
+                "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.languages TO 'Settings'@'localhost'",
+            ];
+            foreach($queries as $query) {
+                $this->mysql->query($query);
+            }
         }
 
 
 
 
 
-        /**
-         * Перед записью ошибки в класс AuthErrors
-         * данные ошибки должны быть записаны в 
-         * $this->error_field - для указания какому полю выводить ошибку
-         * $this->error_message - для указания содержимого ошибки 
-         */
-
-        private function writeError(): void {
-            $error_field = 
-            $this->errors->fields[] = $this->error_field;
-            $this->errors->$error_field = $this->error_message;
-        }
+        use WriteError;
     }
