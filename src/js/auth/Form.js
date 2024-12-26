@@ -62,13 +62,22 @@ class Form {
     }
 
     static resetErrors(type) {
-        let fields = [
-            'email',
-            'login',
-            'name',
-            'password',
-            'repeat_password'
-        ];
+        let fields;
+        if(type === 'log') {
+            fields = [
+                'login',
+                'password'
+            ];    
+        }
+        else {
+            fields = [
+                'email',
+                'login',
+                'name',
+                'password',
+                'repeat_password'
+            ];
+        }
         for(const field of fields) 
             Form[`${type}_error_${field}`].textContent = '';
     }

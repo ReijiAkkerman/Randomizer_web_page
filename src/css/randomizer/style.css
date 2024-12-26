@@ -301,6 +301,7 @@ svg {
   border-radius: 10px;
   color: #777;
   padding: 5px 20px;
+  white-space: nowrap;
 }
 .randomizer main > .settings .settings-content .git-branches__button:hover {
   border-color: #000;
@@ -332,6 +333,16 @@ svg {
   text-align: center;
   vertical-align: top;
 }
+.randomizer main > .settings .settings-content .git-branches__form {
+  margin-top: 10px;
+}
+.randomizer main > .settings .settings-content .git-branches__input[type=text] {
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  font-size: 20px;
+  padding: 5px 5px 5px 20px;
+  width: 100%;
+}
 .randomizer main > .settings .settings-content .git-lang-folders-foldernames__input {
   font-size: 20px;
   border: 1px solid #aaa;
@@ -349,6 +360,7 @@ svg {
   border-radius: 10px;
   padding: 5px 20px;
   color: #777;
+  white-space: nowrap;
 }
 .randomizer main > .settings .settings-content .git-lang-folders-langnames__button:hover {
   border-color: #000;
@@ -611,6 +623,12 @@ svg {
     width: 60px !important;
     text-align: start !important;
   }
+  .randomizer main > .settings .settings-content .git-repo__input {
+    padding-left: 10px;
+  }
+  .randomizer main > .settings .settings-content .git-branches__input[type=text] {
+    padding-left: 10px;
+  }
   .randomizer main > .settings .settings-content .git-lang-folders-langnames__button {
     margin-bottom: 10px;
   }
@@ -620,6 +638,7 @@ svg {
   .randomizer main > .settings .settings-content .git-lang-folders-foldernames__input {
     width: 100%;
     box-sizing: border-box;
+    padding-left: 10px;
   }
   .randomizer > .dashboard .lists_delete-lists {
     padding: 5px;

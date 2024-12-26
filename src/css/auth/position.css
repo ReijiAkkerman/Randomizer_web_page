@@ -56,4 +56,12 @@ svg {
   justify-content: center;
 }
 
+@media only screen and (max-width: 1050px) {
+  .auth main {
+    display: block;
+    position: relative;
+    padding: 10px;
+  }
+}
+
 /*# sourceMappingURL=position.css.map */

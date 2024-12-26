@@ -11,13 +11,18 @@
 
     class Git extends User implements iGit {
         private string $Repo;
+        private string $Branch;
 
         private \mysqli $mysql;
         private GitErrors $errors;
         private string $error_field;
         private string $error_message;
 
+        
+
         public string $REPOSITORY;
+        public string|null $ACTIVE_BRANCH;
+        public array $BRANCHES;
 
 
 
@@ -33,6 +38,10 @@
 
 
 
+
+        /**
+         * Функции для установки настроек
+         */
 
         public function setRepository(): void {
             if($this->getCookie()) {
@@ -59,9 +68,36 @@
             }
         }
 
+        public function createNewBranch(): void {
+            if($this->getCookie()) {
+                $this->Branch = $_POST['new_branch'];
+                if($this->validateBranch()) {
+                    $this->createSettingsConnection();
+                    $query = "SELECT * FROM git WHERE USER_ID={$this->_id}";
+                    $result = $this->mysql->query($query);
+                    if($result->num_rows) {
+                        foreach($result as $value) {
+
+                        }
+                    }
+                    else {
+
+                    }
+                }
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
 
 
 
+
+
+        /** 
+         * Функции для получения настроек
+         */
 
         public function getSettings(int $user_id): void {
             $this->createSettingsConnection();
@@ -79,7 +115,9 @@
 
 
 
-        // Проверяет указанный репозиторий на соответствие шаблону
+        /**
+         * Проверка данных пользователя
+         */
 
         private function validateRepository(): bool {
             $result = preg_match(rGit::repo->value, $_POST['repo']);
@@ -91,6 +129,21 @@
             else {
                 $this->error_field = 'alert';
                 $this->error_message = 'Во время проверки репозитория на соответствие шаблону произошла ошибка!';
+                return false;
+            }
+        }
+
+        private function validateBranch(): bool {
+            $result = preg_match(rGit::branch->value, $this->Branch);
+            if($result === 1) return true;
+            else if($result === 0) {
+                $this->error_field = 'branch';
+                $this->error_message = 'Имя ветки не соответствует шаблону!';
+                return false;
+            }
+            else {
+                $this->error_field = 'alert';
+                $this->error_message = 'Во время проверки имени ветки произошла ошибка!';
                 return false;
             }
         }

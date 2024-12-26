@@ -168,13 +168,17 @@
                         <div class="git-branches">
                             <p>Ветка</p>
                             <div class="git-branches-block">
-                                <button class="git-branches__button">main</button>
-                                <button class="git-branches__button">test1</button>
-                                <button class="git-branches__button">test2</button>
-                                <button class="git-branches__button">test3</button>
+                                <button class="git-branches__button git-branches__button_change-branch">main</button>
+                                <button class="git-branches__button git-branches__button_change-branch">test1</button>
+                                <button class="git-branches__button git-branches__button_change-branch">test2</button>
+                                <button class="git-branches__button git-branches__button_change-branch">test3</button>
                             </div>
                             <input class="git-branches__input" type="checkbox" id="combine-branches">
                             <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
+                            <form class="git-branches__form">
+                                <input class="git-branches__input" type="text" name="new_branch" placeholder="Новая ветка">
+                                <button class="git-branches__button git-branches__button_create-branch">Создать ветку</button>
+                            </form>
                         </div>
                         <div class="git-lang-folders">
                             <p>Папки и соответствующие им языки</p>

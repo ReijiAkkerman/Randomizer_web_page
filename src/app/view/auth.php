@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <!-- <style>input{display:block;margin:10px;}</style> -->
         <link rel="stylesheet" href="/src/css/fonts.css">
         <link rel="stylesheet" href="/src/css/auth/position.css">
         <link rel="stylesheet" href="/src/css/auth/style.css">

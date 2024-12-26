@@ -2,6 +2,7 @@ class Git {
     static selectors = new Map([
         ['Репозиторий со списками слов', '.git-repo__input'],
         ['Форма репозитория со списками слов', '.git-repo__form'],
+        ['Форма создания новой ветки', '.git-branches__form'],
     ]);
 
 
@@ -10,6 +11,7 @@ class Git {
 
     static repo = document.querySelector(Git.selectors.get('Репозиторий со списками слов'));
     static repo__form = document.querySelector(Git.selectors.get('Форма репозитория со списками слов'));
+    static new_branch__form = document.querySelector(Git.selectors.get('Форма создания новой ветки'));
 
     
     
@@ -28,6 +30,18 @@ class Git {
                 location.href = '/auth/view';
             else alert(xhr.response.alert);
             // alert(xhr.responseText);
+        };
+    }
+
+    static createNewBranch(event) {
+        event.preventDefault();
+        let data = new FormData(Git.new_branch__form);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/settings/createNewBranch');
+        xhr.send(data);
+        xhr.reponseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.responseText);
         };
     }
 }

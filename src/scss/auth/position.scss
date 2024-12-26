@@ -39,3 +39,17 @@
         }
     }
 }
+
+@media only screen and (max-width: 1050px) {    // 500px
+    .auth {
+        main {
+            display: block;
+            position: relative;
+            padding: 10px;
+
+            .form {
+                
+            }
+        }
+    }
+}

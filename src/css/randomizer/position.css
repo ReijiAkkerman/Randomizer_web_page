@@ -161,7 +161,7 @@ svg {
   flex-wrap: wrap;
   gap: 10px;
 }
-.randomizer main > .settings .settings-content .git-branches__input {
+.randomizer main > .settings .settings-content .git-branches__input[type=checkbox] {
   display: none;
 }
 .randomizer main > .settings .settings-content .git-branches__label {
@@ -171,6 +171,13 @@ svg {
 .randomizer main > .settings .settings-content .git-branches__label::before {
   display: block;
   position: absolute;
+}
+.randomizer main > .settings .settings-content .git-branches__form {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  column-gap: 20px;
+  row-gap: 5px;
 }
 .randomizer main > .settings .settings-content .git-lang-folders {
   display: block;
@@ -316,6 +323,12 @@ svg {
   }
   .randomizer main > .settings .settings-content .git-branches-block {
     flex-direction: column;
+  }
+  .randomizer main > .settings .settings-content .git-branches__form {
+    flex-direction: column;
+  }
+  .randomizer main > .settings .settings-content .git-branches__input {
+    box-sizing: border-box;
   }
   .randomizer main > .settings .settings-content .git-lang-folders > div {
     grid-template-columns: 1fr;

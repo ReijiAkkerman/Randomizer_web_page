@@ -348,6 +348,7 @@
                             border-radius: 10px;
                             color: text.$inactive;
                             padding: 5px 20px;
+                            white-space: nowrap;
     
                             &:hover {
                                 color: text.$active;
@@ -380,6 +381,18 @@
                             text-align: center;
                             vertical-align: top;
                         }
+
+                        &__form {
+                            margin-top: 10px;
+                        }
+
+                        &__input[type="text"] {
+                            @include borders.inactive;
+                            border-radius: 10px;
+                            font-size: 20px;
+                            padding: 5px 5px 5px 20px;
+                            width: 100%;
+                        }
                     }
     
                     &-lang-folders {
@@ -405,6 +418,7 @@
                                 border-radius: 10px;
                                 padding: 5px 20px;
                                 color: text.$inactive;
+                                white-space: nowrap;
     
                                 > svg {
                                     width: 20px;
@@ -762,6 +776,18 @@
                     }
 
                     .git {
+                        &-repo {
+                            &__input {
+                                padding-left: 10px;
+                            }
+                        }
+
+                        &-branches {
+                            &__input[type="text"] {
+                                padding-left: 10px;
+                            }
+                        }
+
                         &-lang-folders {
                             &-langnames {
                                 &__button {
@@ -777,6 +803,7 @@
                                 &__input {
                                     width: 100%;
                                     box-sizing: border-box;
+                                    padding-left: 10px;
                                 }
                             }
                         }

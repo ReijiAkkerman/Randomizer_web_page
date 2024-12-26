@@ -71,4 +71,25 @@ svg {
   background-color: #ccc;
 }
 
+@media only screen and (max-width: 1050px) {
+  .auth main {
+    box-sizing: border-box;
+  }
+  .auth main .form {
+    border: none;
+    padding: 0;
+    width: 100%;
+  }
+  .auth main .form-error {
+    width: 100%;
+    box-sizing: border-box;
+    white-space: wrap;
+  }
+  .auth main .form__input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 5px 5px 10px;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */
