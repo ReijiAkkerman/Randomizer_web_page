@@ -146,7 +146,6 @@
                             <p class="languages-add-create__p_add-language" style="display:none;">Добавить новый язык</p>
                             <p class="languages-add-create__p_edit-language" style="display:none;">Изменить параметры языка</p>
                             <div>
-                                
                                 <div class="languages-add-create__div">
                                     <input class="languages-add-create__input languages-add-create__input_language-name" type="text" placeholder="Наименование языка">
                                     <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" placeholder="Папка языка">
@@ -162,20 +161,25 @@
                         <div class="git-repo">
                             <p>Репозиторий</p>
                             <form class="git-repo__form">
-                                <input class="git-repo__input" type="text" name="repo" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
+                                <input class="git-repo__input" type="text" name="repo" data-checked="off" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
                             </form>
                         </div>
                         <div class="git-branches">
                             <p>Ветка</p>
-                            <div class="git-branches-block">
+                            <p class="git-branches_no-info">Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные.</p>
+                            <div class="git-branches-block git-branches_display">
+                                <template class="git-branches__template">
+                                    <button class="git-branches__button git-branches__button_change-branch"></button>
+                                </template>
                                 <button class="git-branches__button git-branches__button_change-branch">main</button>
                                 <button class="git-branches__button git-branches__button_change-branch">test1</button>
                                 <button class="git-branches__button git-branches__button_change-branch">test2</button>
                                 <button class="git-branches__button git-branches__button_change-branch">test3</button>
                             </div>
-                            <input class="git-branches__input" type="checkbox" id="combine-branches">
-                            <label class="git-branches__label" for="combine-branches">Отображать списки со всех веток</label>
-                            <form class="git-branches__form">
+                            <input class="git-branches__input git-branches_display" type="checkbox" id="combine-branches">
+                            <label class="git-branches__label git-branches_display" for="combine-branches">Отображать списки со всех веток</label>
+                            <p class="git-branches_error git-branches_display"></p>
+                            <form class="git-branches__form git-branches_display">
                                 <input class="git-branches__input" type="text" name="new_branch" placeholder="Новая ветка">
                                 <button class="git-branches__button git-branches__button_create-branch">Создать ветку</button>
                             </form>

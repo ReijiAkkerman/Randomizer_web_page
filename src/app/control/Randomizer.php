@@ -58,4 +58,14 @@
             $git = new Git();
             $git->setRepository();
         }
+
+        public function createNewBranch(): void {
+            $git = new Git();
+            $git->createNewBranch();
+        }
+
+        public function syncWithGithub(): void {
+            $git = new Git();
+            $git->syncWithGithub();
+        }
     }

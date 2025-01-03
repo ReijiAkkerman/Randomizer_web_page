@@ -1,17 +1,28 @@
 <?php
     /**
-     * $snake_notation для работы скрипта (наименования свойств)
+     * $this->snake_notation для работы скрипта (наименования свойств)
      * 
-     * $_snake_notation для Cookie клиента
+     * $this->_snake_notation для Cookie клиента
      * 
-     * $SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для данных полученных из БД
+     * $this->SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для данных полученных из БД
      * причем независимо от регистра колонок из которых они взяты
      * 
-     * $CamelCaseBeginningWithCapitalLetter для данных пользователей
+     * $this->CamelCaseBeginningWithCapitalLetter для данных 
+     * полученных от пользователя
      * 
-     * usualCamelCase для именования методов
+     * $this->usualCamelCase для именования методов
      * 
      * $usualCamelCase для именования переменных (не свойств!)
+     * для работы скрипта
+     * 
+     * $CamelCaseBeginningWithCapitalLetter для данных 
+     * отправляемых пользователю
+     * 
+     * $SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для переменных
+     * данные которой записываются в БД
+     * причем независимо от регистра колонки которой они предназначены
+     * 
+     * $snake_notation для аргументов функций
      */
 
     namespace project\model;
@@ -21,6 +32,8 @@
     use project\model\components\AuthErrors;
     use project\model\traits\WriteError;
     use project\model\traits\AuthConnection;
+
+    use project\model\Git;
 
     class Auth implements c_iAuth {
         private string $Email;
@@ -156,6 +169,8 @@
                         $this->CREATED = $value['created'];
                     }
                     $this->closeAuthConnection();
+                    $git = new Git();
+                    $git->initUserSettings($this->ID);
                     $this->setCookie();
                     echo '{"redirect":true}';
                 }

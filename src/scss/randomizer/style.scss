@@ -382,16 +382,25 @@
                             vertical-align: top;
                         }
 
-                        &__form {
-                            margin-top: 10px;
-                        }
-
                         &__input[type="text"] {
                             @include borders.inactive;
                             border-radius: 10px;
                             font-size: 20px;
                             padding: 5px 5px 5px 20px;
                             width: 100%;
+                        }
+
+                        &_error {
+                            margin: 10px 0 2px 10px !important;
+                            color: #f00;
+                            font-size: 14px !important;
+                            text-align: start !important;
+                            line-height: 12px;
+                        }
+
+                        &_no-info {
+                            text-align: start !important;
+                            color: text.$inactive;
                         }
                     }
     
