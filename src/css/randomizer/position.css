@@ -161,6 +161,13 @@ svg {
   flex-wrap: wrap;
   gap: 10px;
 }
+.randomizer main > .settings .settings-content .git-branches__div {
+  display: flex;
+  position: relative;
+  justify-content: end;
+  margin-top: 10px;
+  width: 100%;
+}
 .randomizer main > .settings .settings-content .git-branches__input[type=checkbox] {
   display: none;
 }

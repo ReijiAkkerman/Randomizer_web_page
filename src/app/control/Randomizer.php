@@ -33,6 +33,7 @@
                 $git->getSettings($this->_id);
 
                 $data->repository = $git->REPOSITORY;
+                $data->branches = $git->BRANCHES;
                 
                 require_once __DIR__ . '/../view/randomizer.php';
             }

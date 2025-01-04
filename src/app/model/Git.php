@@ -24,7 +24,7 @@
 
         public string $REPOSITORY;
         public string $ACTIVE_BRANCH;
-        public string $BRANCHES;
+        public string|array $BRANCHES;
 
 
 
@@ -60,9 +60,10 @@
             if($this->getCookie()) {
                 if($this->validateRepository()) {
                     $this->createSettingsConnection();
-                    $query = "UPDATE git SET repository='{$this->Repo}' WHERE USER_ID={$this->_id}";
+                    $query = "UPDATE git SET repository='{$this->Repo}',branches=NULL,active_branch=NULL WHERE USER_ID={$this->_id}";
                     $this->mysql->query($query);
                     $this->closeSettingsConnection();
+                    $this->deleteRepository();
                     echo '{"updated":true}';
                 }
                 else {
@@ -106,7 +107,13 @@
             if($result->num_rows) {
                 foreach($result as $value) {
                     $this->REPOSITORY = $value['repository'] ?? '';
+                    $this->BRANCHES = $value['branches'] ?? '';
                 }
+                // if($this->BRANCHES) 
+                //     $this->BRANCHES = explode(',', $this->BRANCHES);
+                // else 
+                //     $this->BRANCHES = [];
+                $this->BRANCHES = ($this->BRANCHES) ? explode(',', $this->BRANCHES) : [];
             }
             $this->closeSettingsConnection();
         }
@@ -173,6 +180,11 @@
             chmod 775 -R user{$this->_id};`;
         }
 
+        private function deleteRepository(): void {
+            `cd {$this->git_clone_folder}; \
+            rm -Rf user{$this->_id}`;
+        }
+
         private function isRepository(): bool {
             $dir = $this->git_clone_folder . "user{$this->_id}";
             return is_dir($dir);
@@ -185,6 +197,11 @@
             foreach($matches[0] as $branch) {
                 $this->branches[] = ltrim($branch);
             }
+            
+            $keyOfMain = array_search('main', $this->branches, true);
+            if($keyOfMain !== false) 
+                unset($this->branches[$keyOfMain]);
+            $this->branches = array_values($this->branches);
             
             $BRANCHES = '';
             foreach($this->branches as $branch) {

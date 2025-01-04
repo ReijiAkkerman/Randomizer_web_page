@@ -6,6 +6,7 @@
      * 
      * $this->SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для данных полученных из БД
      * причем независимо от регистра колонок из которых они взяты
+     * данные в свойстве лежат в неизменном от БД виде
      * 
      * $this->CamelCaseBeginningWithCapitalLetter для данных 
      * полученных от пользователя

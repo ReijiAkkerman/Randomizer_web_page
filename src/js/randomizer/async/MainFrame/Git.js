@@ -56,8 +56,11 @@ class Git {
         xhr.send();
         xhr.responseType = 'json';
         xhr.onloadend = () => {
-            if(xhr.response.hasOwnProperty('branches')) {
+            if(xhr.response === null)
+                alert('Репозиторий недоступен!');
+            else if(xhr.response.hasOwnProperty('branches')) {
                 // Удалить все имеющиеся кнопки веток
+                Git.select_branch_button__array = document.querySelectorAll(Git.selectors.get('Кнопки выбора ветки'));
                 for(const element of Git.select_branch_button__array) {
                     element.remove();
                 }
@@ -101,9 +104,15 @@ class Git {
             Git.branches_info.style.display = '';
         }
     }
+
+    static defaultRepoValues() {
+        Git.repo.dataset['checked'] = 'off';
+        Git.isRepositoryInfo();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    Git.repo.addEventListener('input', Git.defaultRepoValues);
     Git.repo.addEventListener('input', Git.setRepository);
     Git.sync__button.addEventListener('click', Git.syncWithGithub);
 });

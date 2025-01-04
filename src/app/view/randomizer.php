@@ -161,7 +161,7 @@
                         <div class="git-repo">
                             <p>Репозиторий</p>
                             <form class="git-repo__form">
-                                <input class="git-repo__input" type="text" name="repo" data-checked="off" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
+                                <input class="git-repo__input" type="text" name="repo" data-checked="<?php if($data->branches) echo 'on' ?>" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
                             </form>
                         </div>
                         <div class="git-branches">
@@ -171,10 +171,14 @@
                                 <template class="git-branches__template">
                                     <button class="git-branches__button git-branches__button_change-branch"></button>
                                 </template>
-                                <button class="git-branches__button git-branches__button_change-branch">main</button>
-                                <button class="git-branches__button git-branches__button_change-branch">test1</button>
-                                <button class="git-branches__button git-branches__button_change-branch">test2</button>
-                                <button class="git-branches__button git-branches__button_change-branch">test3</button>
+                                <?php if($data->branches) { ?>
+                                <?php foreach($data->branches as $branch) { ?>
+                                <button class="git-branches__button git-branches__button_change-branch"><?= $branch ?></button>
+                                <?php } ?>
+                                <?php } ?>
+                            </div>
+                            <div class="git-branches__div git-branches_display">
+                                <button class="git-branches__button git-branches_delete-branch">Удалить ветку</button>
                             </div>
                             <input class="git-branches__input git-branches_display" type="checkbox" id="combine-branches">
                             <label class="git-branches__label git-branches_display" for="combine-branches">Отображать списки со всех веток</label>

@@ -637,6 +637,9 @@ svg {
   .randomizer main > .settings .settings-content .git-branches__input[type=text] {
     padding-left: 10px;
   }
+  .randomizer main > .settings .settings-content .git-branches__button {
+    width: 100%;
+  }
   .randomizer main > .settings .settings-content .git-lang-folders-langnames__button {
     margin-bottom: 10px;
   }
