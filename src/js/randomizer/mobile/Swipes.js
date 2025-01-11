@@ -1,5 +1,7 @@
 import {Words} from '/src/js/randomizer/MainFrame/Words.js';
 import {Settings} from '/src/js/randomizer/MainFrame/Settings.js';
+import {Guide} from '/src/js/randomizer/MainFrame/Guide.js';
+import {Adaptive} from '/src/js/randomizer/Adaptive.js';
 
 /** Описание функций */
 // сamelCase для разрешений
@@ -19,6 +21,7 @@ class Swipes {
         [0, Swipes.dashboard],
         [1, Words.main_section],
         [2, Settings.main_section],
+        [3, Guide.main_section],
     ]);
 
     static #startX;
@@ -58,6 +61,7 @@ class Swipes {
         Swipes.#hide_current_panel();
         Swipes.#change_panel_number();
         Swipes.#show_next_panel();
+        Swipes.#remember_window();
     }
 
     static #change_panel_number() {
@@ -113,6 +117,27 @@ class Swipes {
 
     static #to_positive(num) {
         return num < 0 ? -num : num;
+    }
+
+
+
+
+
+    static #remember_window() {
+        switch(Swipes.#panel_number) {
+            case 0:
+                Adaptive.remember_dashboard_window();
+                break;
+            case 1:
+                Adaptive.remember_words_window();
+                break;
+            case 2:
+                Adaptive.remember_settings_window();
+                break;
+            case 3:
+                Adaptive.remember_guide_window();
+                break;
+        }
     }
 }
 

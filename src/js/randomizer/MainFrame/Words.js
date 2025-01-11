@@ -1,4 +1,5 @@
 import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
+import {Adaptive} from "/src/js/randomizer/Adaptive.js";
 
 class Words {
     static selectors = new Map([
@@ -146,6 +147,7 @@ class Words {
      */
 
     static show_section() {
+        Adaptive.remember_words_window();
         Words.main_section.style.display = '';
     }
 

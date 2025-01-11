@@ -1,6 +1,7 @@
 import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
 import {Words} from '/src/js/randomizer/MainFrame/Words.js';
 import {Swipes} from '/src/js/randomizer/mobile/Swipes.js';
+import {Adaptive} from '/src/js/randomizer/Adaptive.js';
 
 class Settings {
     static selectors = new Map([
@@ -26,6 +27,7 @@ class Settings {
      */
 
     static show_section() {
+        Adaptive.remember_settings_window();
         Settings.main_section.style.display = '';
     }
 

@@ -1,3 +1,5 @@
+import {Adaptive} from '/src/js/randomizer/Adaptive.js';
+
 class Guide {
     static selectors = new Map([
         ['Раздел руководства', '.guide'],
@@ -20,6 +22,7 @@ class Guide {
      */
 
     static show_section() {
+        Adaptive.remember_guide_window();
         Guide.main_section.style.display = '';
     }
 

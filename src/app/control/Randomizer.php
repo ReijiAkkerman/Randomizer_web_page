@@ -30,10 +30,11 @@
                 $data = new Data();
                 $git = new Git();
 
-                $git->getSettings($this->_id);
+                $git->getSettings();
 
                 $data->repository = $git->REPOSITORY;
                 $data->branches = $git->BRANCHES;
+                $data->switching_commit_exists = ($git->SWITCHING_COMMIT) ? true : false;
                 
                 require_once __DIR__ . '/../view/randomizer.php';
             }
@@ -60,6 +61,11 @@
             $git->setRepository();
         }
 
+        public function initRepository(): void {
+            $git = new Git();
+            $git->initRepository();
+        }
+
         public function createNewBranch(): void {
             $git = new Git();
             $git->createNewBranch();
@@ -68,5 +74,10 @@
         public function syncWithGithub(): void {
             $git = new Git();
             $git->syncWithGithub();
+        }
+
+        public function commit(): void {
+            $git = new Git();
+            $git->commit();
         }
     }

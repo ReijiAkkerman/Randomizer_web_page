@@ -154,6 +154,15 @@ svg {
   display: inline-block;
   position: absolute;
 }
+.randomizer main > .settings .settings-content .git-repo__div {
+  display: flex;
+  position: relative;
+  justify-content: end;
+  flex-direction: row-reverse;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
 .randomizer main > .settings .settings-content .git-branches-block {
   display: flex;
   position: relative;

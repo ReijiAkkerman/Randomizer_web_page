@@ -159,6 +159,18 @@
                 }
     
                 .git {
+                    &-repo {
+                        &__div {
+                            display: flex;
+                            position: relative;
+                            justify-content: end;
+                            flex-direction: row-reverse;
+                            gap: 10px;
+                            width: 100%;
+                            margin-top: 10px;
+                        }
+                    }
+
                     &-branches {
                         &-block {
                             display: flex;

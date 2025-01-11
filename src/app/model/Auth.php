@@ -26,12 +26,15 @@
      * $snake_notation для аргументов функций
      */
 
+    // class::method() указывает какая функция вызывает описанный ниже метод
+
     namespace project\model;
 
     use project\control\interfaces\Auth as c_iAuth;
     use project\model\regex\Auth as rAuth;
     use project\model\components\AuthErrors;
     use project\model\traits\WriteError;
+    use project\model\traits\SendErrors;
     use project\model\traits\AuthConnection;
 
     use project\model\Git;
@@ -66,6 +69,7 @@
 
 
 
+        // control\Auth::log()
         public function log(): void {
             $functionsNeedTrue = [
                 'checkLogin',
@@ -113,6 +117,7 @@
             else $this->sendErrors();
         }
 
+        // control\Auth::reg()
         public function reg(): void {
             $functionsNeedTrue = [
                 'checkEmail',
@@ -172,6 +177,8 @@
                     $this->closeAuthConnection();
                     $git = new Git();
                     $git->initUserSettings($this->ID);
+                    $lists = new Lists();
+                    $lists->createListsTable($this->ID);
                     $this->setCookie();
                     echo '{"redirect":true}';
                 }
@@ -180,10 +187,12 @@
             else $this->sendErrors();
         }
 
+        // вызов из /src/test.php
         public function init(): void {
             $functions = [
                 'createAuth',
-                'createSettings'
+                'createSettings',
+                'createLists'
             ];
             $this->mysql = new \mysqli('localhost', 'root', 'KisaragiEki4');
             foreach($functions as $function) {
@@ -196,8 +205,7 @@
 
 
 
-        use AuthConnection;
-
+        // model\Auth::reg()
         private function isLoginExists(): bool {
             $query = "SELECT * FROM users WHERE login='{$this->Login}'";
             $result = $this->mysql->query($query);
@@ -209,6 +217,7 @@
             else return false;
         }
 
+        // model\Auth::reg()
         private function isEmailExists(): bool {
             $query = "SELECT * FROM users WHERE email='{$this->Email}'";
             $result = $this->mysql->query($query);
@@ -226,6 +235,7 @@
 
         // Проверяет заполенно ли поле в принципе
 
+        // model\Auth::reg()
         private function checkEmail(): bool {
             if($_POST['email'] === '') {
                 $this->error_field = 'email';
@@ -235,6 +245,8 @@
             else return true;
         }
 
+        // model\Auth::reg()
+        // model\Auth::log()
         private function checkLogin(): bool {
             if($_POST['login'] === '') {
                 $this->error_field = 'login';
@@ -244,6 +256,7 @@
             else return true;
         }
 
+        // model\Auth::reg()
         private function checkName(): bool {
             if($_POST['name'] === '') {
                 $this->error_field = 'name';
@@ -253,6 +266,8 @@
             else return true;
         }
 
+        // model\Auth::reg()
+        // model\Auth::log()
         private function checkPassword(): bool {
             if($_POST['password'] === '') {
                 $this->error_field = 'password';
@@ -262,6 +277,7 @@
             else return true;
         }
 
+        // model\Auth::reg()
         private function checkRepeatedPassword(): bool {
             if($_POST['repeat_password'] === '') {
                 $this->error_field = 'repeat_password';
@@ -273,6 +289,7 @@
 
         // Проверяет правильно ли заполнено поле
 
+        // model\Auth::reg()
         private function validateEmail(): bool {
             $result = preg_match(rAuth::email->value, $_POST['email']);
             if($result === 1) {
@@ -291,6 +308,8 @@
             }
         }
 
+        // model\Auth::reg()
+        // model\Auth::log()
         private function validateLogin(): bool {
             $result = preg_match(rAuth::login->value, $_POST['login']);
             if($result === 1) {
@@ -309,6 +328,7 @@
             }
         }
 
+        // model\Auth::reg()
         private function validateName(): bool {
             $result = preg_match(rAuth::name->value, $_POST['name']);
             if($result === 1) {
@@ -327,6 +347,8 @@
             }
         }
 
+        // model\Auth::reg()
+        // model\Auth::log()
         private function validatePassword(): bool {
             $result = preg_match(rAuth::password->value, $_POST['password']);
             if($result === 1) {
@@ -344,6 +366,7 @@
             }
         }
 
+        // model\Auth::reg()
         private function validateRepeatedPassword(): bool {
             $result = preg_match(rAuth::password->value, $_POST['repeat_password']);
             if($result === 1) {
@@ -367,6 +390,7 @@
 
         // Сравнивает введенные пароли
 
+        // model\Auth::reg()
         private function comparePasswords(): bool {
             if($_POST['password'] === $_POST['repeat_password']) {
                 $this->Password = $_POST['password'];
@@ -382,12 +406,14 @@
         // Проверяет совпадает ли введенный пароль с тем что 
         // хранится в базе данных
 
+        // model\Auth::log()
         private function comparePassword(): bool {
             return password_verify($this->Password, $this->PASSWORD);
         }
 
         // Шифрует пароль
 
+        // model\Auth::reg()
         private function encryptPassword(): void {
             $this->password = password_hash($this->Password, PASSWORD_DEFAULT);
         }
@@ -400,13 +426,11 @@
          * 
          */
 
+        // model\Auth::reg()
+        // model\Auth::log()
         private function setCookie(): void {
             setcookie('ID', $this->ID, time()+3600*24*30, '/');
             setcookie('conf', $this->CREATED, time()+3600*24*30, '/');
-        }
-
-        private function sendErrors(): void {
-            echo json_encode($this->errors, JSON_UNESCAPED_UNICODE);
         }
 
 
@@ -415,6 +439,7 @@
 
         // init функциональность
 
+        // model\Auth::init()
         private function createAuth(): void {
             $queries = [
                 'CREATE DATABASE IF NOT EXISTS Auth',
@@ -435,10 +460,20 @@
             }
         }
 
+        // model\Auth::init()
         private function createLists(): void {
-            ;
+            $queries = [
+                "CREATE DATABASE IF NOT EXISTS Lists",
+                "CREATE USER IF NOT EXISTS 'Lists'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'kISARAGIeKI4'",
+                "USE Lists",
+                "GRANT SELECT,INSERT,UPDATE,DELETE,DROP,CREATE ON Lists.* TO 'Lists'@'localhost'"
+            ];
+            foreach($queries as $query) {
+                $this->mysql->query($query);
+            }
         }
 
+        //model\Auth::init()
         private function createSettings(): void {
             $queries = [
                 "CREATE DATABASE IF NOT EXISTS Settings",
@@ -448,7 +483,8 @@
                     ID SMALLINT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
                     name VARCHAR(50) NOT NULL,
                     mark VARCHAR(3) NOT NULL,
-                    kanji BOOLEAN DEFAULT 0 NOT NULL
+                    kanji BOOLEAN DEFAULT 0 NOT NULL,
+                    foldername VARCHAR(50) NULL
                 )",
                 "CREATE TABLE IF NOT EXISTS git(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
@@ -456,7 +492,8 @@
                     branches VARCHAR(1023) NULL,
                     active_branch VARCHAR(50) NULL,
                     show_all_branches BOOLEAN DEFAULT 0 NOT NULL,
-                    foldernames VARCHAR(1023)
+                    foldernames VARCHAR(1023) NULL,
+                    switching_commit VARCHAR(50) NULL,
                 )",
                 "CREATE TABLE IF NOT EXISTS languages(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
@@ -475,5 +512,7 @@
 
 
 
+        use AuthConnection;
         use WriteError;
+        use SendErrors;
     }

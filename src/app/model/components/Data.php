@@ -4,8 +4,7 @@
     class Data {
         public string $repository;
         public array $branches;
-        public string $active_branch;
-        public array $lists;
+        public bool $switching_commit_exists;
 
 
 
@@ -14,7 +13,6 @@
         public function __construct() {
             $this->repository = '';
             $this->branches = [];
-            $this->active_branch = '';
-            $this->lists = [];
+            $this->switching_commit_exists = false;
         }
     }

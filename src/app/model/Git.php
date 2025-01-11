@@ -7,6 +7,7 @@
     use project\model\traits\WriteError;
     use project\model\traits\SendErrors;
     use project\model\traits\SettingsConnection;
+    use project\model\traits\AuthConnection;
     
     use project\control\parent\User;
 
@@ -18,13 +19,18 @@
         private GitErrors $errors;
         private string $error_field;
         private string $error_message;
+
         private string $git_clone_folder;
+        private string $git_safe_directory;
 
         private array $branches;
 
         public string $REPOSITORY;
         public string $ACTIVE_BRANCH;
         public string|array $BRANCHES;
+        public string $EMAIL;
+        public string $LOGIN;
+        public string $SWITCHING_COMMIT;
 
 
 
@@ -49,6 +55,7 @@
          * Функции для установки настроек
          */
 
+        // model\Auth::reg()
         public function initUserSettings($user_id): void {
             $this->createSettingsConnection();
             $query = "INSERT INTO git(USER_ID) VALUES ($user_id)";
@@ -56,6 +63,9 @@
             $this->closeSettingsConnection();
         }
 
+
+
+        // control\Randomizer::setRepository()
         public function setRepository(): void {
             if($this->getCookie()) {
                 if($this->validateRepository()) {
@@ -79,17 +89,56 @@
             }
         }
 
+        public function commit(): void {
+            
+        }
+
+        // control\Randomizer::initRepository()
+        public function initRepository(): void {
+            if($this->getCookie()) {
+                $this->createAuthConnection();
+                $query = "SELECT email,login FROM users WHERE ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->EMAIL = $value['email'];
+                    $this->LOGIN = $value['login'];
+                }
+                $this->closeAuthConnection();
+
+                `cd {$this->git_clone_folder}; \
+                mkdir {$this->LOGIN}; \
+                cd {$this->LOGIN}; \
+                git init; \
+                git config --add user.name "{$this->LOGIN}"; \
+                git config --add user.email {$this->EMAIL}; \
+                echo "*\n!NW.txt\n!TNW.txt\n!SNW.txt" > .gitignore; \
+                touch NW.txt; \
+                touch TNW.txt; \
+                git add .; \
+                git commit -m "switching commit"; \
+                git branch -M main`;
+                $switchingCommit = `cd {$this->git_clone_folder}{$this->LOGIN};git log --oneline --pretty="%H"`;
+
+                $this->createSettingsConnection();
+                $query = "UPDATE git SET switching_commit='$switchingCommit' WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"prepared":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
+        // control\Randomizer::createNewBranch()
         public function createNewBranch(): void {
             
         }
 
+        // control\Randomizer::syncWithGithub()
         public function syncWithGithub(): void {
-            if($this->getCookie()) {
-                if($this->isRepository() === false) {
-                    $this->cloneRepository();
-                }
-                $this->defineBranches();
-            }
+            
         }
 
 
@@ -100,22 +149,25 @@
          * Функции для получения настроек
          */
 
-        public function getSettings(int $user_id): void {
-            $this->createSettingsConnection();
-            $query = "SELECT * FROM git WHERE USER_ID=$user_id";
-            $result = $this->mysql->query($query);
-            if($result->num_rows) {
-                foreach($result as $value) {
-                    $this->REPOSITORY = $value['repository'] ?? '';
-                    $this->BRANCHES = $value['branches'] ?? '';
+        // control\Randomizer::view()
+        public function getSettings(): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT * FROM git WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $this->REPOSITORY = $value['repository'] ?? '';
+                        $this->BRANCHES = $value['branches'] ?? '';
+                        $this->SWITCHING_COMMIT = $value['switching_commit'] ?? '';
+                    }
+                    $this->BRANCHES = ($this->BRANCHES) ? explode(',', $this->BRANCHES) : [];
                 }
-                // if($this->BRANCHES) 
-                //     $this->BRANCHES = explode(',', $this->BRANCHES);
-                // else 
-                //     $this->BRANCHES = [];
-                $this->BRANCHES = ($this->BRANCHES) ? explode(',', $this->BRANCHES) : [];
+                $this->closeSettingsConnection();
             }
-            $this->closeSettingsConnection();
+            else {
+
+            }
         }
 
 
@@ -126,6 +178,7 @@
          * Проверка данных пользователя
          */
 
+        // model\Git::setRepository()
         private function validateRepository(): bool {
             $result = preg_match(rGit::repo->value, $_POST['repo']);
             if($result === 1) {
@@ -140,6 +193,7 @@
             }
         }
 
+        // 
         private function validateBranch(): bool {
             $result = preg_match(rGit::branch->value, $this->Branch);
             if($result === 1) return true;
@@ -159,69 +213,13 @@
 
 
 
-        /**
-         * Git функционал
-         */
-
-        private function cloneRepository(): void {
-            $this->createSettingsConnection();
-            $query = "SELECT * FROM git WHERE USER_ID={$this->_id}";
-            $result = $this->mysql->query($query);
-            foreach($result as $value) {
-                $this->REPOSITORY = $value['repository'];
-                $this->BRANCHES = $value['branches'] ?? '';
-                $this->ACTIVE_BRANCH = $value['active_branch'] ?? '';
-            }
-            $this->closeSettingsConnection();
-
-            `cd {$this->git_clone_folder}; \
-            git clone --progress {$this->REPOSITORY} user{$this->_id}; \
-            chown :web -R user{$this->_id}; \
-            chmod 775 -R user{$this->_id};`;
-        }
-
-        private function deleteRepository(): void {
-            `cd {$this->git_clone_folder}; \
-            rm -Rf user{$this->_id}`;
-        }
-
-        private function isRepository(): bool {
-            $dir = $this->git_clone_folder . "user{$this->_id}";
-            return is_dir($dir);
-        }
-
-        private function defineBranches(): void {
-            $stdout = `cd {$this->git_clone_folder}/user{$this->_id}; \
-                git remote show origin | grep "tracked"`;
-            preg_match_all(rGit::branches_selection->value, $stdout, $matches, PREG_PATTERN_ORDER);
-            foreach($matches[0] as $branch) {
-                $this->branches[] = ltrim($branch);
-            }
-            
-            $keyOfMain = array_search('main', $this->branches, true);
-            if($keyOfMain !== false) 
-                unset($this->branches[$keyOfMain]);
-            $this->branches = array_values($this->branches);
-            
-            $BRANCHES = '';
-            foreach($this->branches as $branch) {
-                $BRANCHES .= $branch . ',';
-            }
-            $BRANCHES = rtrim($BRANCHES, ',');
-
-            $this->createSettingsConnection();
-            $query = "UPDATE git SET branches='$BRANCHES' WHERE USER_ID={$this->_id}";
-            $this->mysql->query($query);
-            $this->closeSettingsConnection();
-            $Branches = json_encode($this->branches);
-            echo "{\"branches\":$Branches}";
-        }
-
-
-
-
-
+        // model\Git::initUserSettings()
         use SettingsConnection;
+        use AuthConnection;
+
+        // model\Git::setRepository()
         use WriteError;
-        use sendErrors;
+
+        // model\Git::setRepository()
+        use SendErrors;
     }

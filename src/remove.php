@@ -9,5 +9,9 @@
     $mysql->query($query);
     $query = "DROP USER IF EXISTS 'Settings'@'localhost'";
     $mysql->query($query);
+    $query = 'DROP DATABASE IF EXISTS Lists';
+    $mysql->query($query);
+    $query = "DROP USER IF EXISTS 'Lists'@'localhost'";
+    $mysql->query($query);
 
     $mysql->close();

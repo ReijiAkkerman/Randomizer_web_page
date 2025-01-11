@@ -161,13 +161,19 @@
                         <div class="git-repo">
                             <p>Репозиторий</p>
                             <form class="git-repo__form">
-                                <input class="git-repo__input" type="text" name="repo" data-checked="<?php if($data->branches) echo 'on' ?>" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
+                                <input class="git-repo__input" type="text" name="repo" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
                             </form>
+                            <div class="git-repo__div" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>
+                                <button class="git-repo__button git-repo__button_init-repository">Инициализировать репозиторий</button>
+                                <button id="commit" class="git-repo__button" style="display:none;">Коммит и пуш</button>
+                            </div>
+                            <p class="git-repo_ssh-key" style="display:none;"></p>
                         </div>
                         <div class="git-branches">
                             <p>Ветка</p>
-                            <p class="git-branches_no-info">Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные.</p>
-                            <div class="git-branches-block git-branches_display">
+                            <p class="git-branches_no-repo-info" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные.</p>
+                            <p class="git-branches_no-branches-info" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>В репозитории пока нет веток!</p>
+                            <div class="git-branches-block" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <template class="git-branches__template">
                                     <button class="git-branches__button git-branches__button_change-branch"></button>
                                 </template>
@@ -177,13 +183,13 @@
                                 <?php } ?>
                                 <?php } ?>
                             </div>
-                            <div class="git-branches__div git-branches_display">
+                            <div class="git-branches__div" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <button class="git-branches__button git-branches_delete-branch">Удалить ветку</button>
                             </div>
-                            <input class="git-branches__input git-branches_display" type="checkbox" id="combine-branches">
-                            <label class="git-branches__label git-branches_display" for="combine-branches">Отображать списки со всех веток</label>
-                            <p class="git-branches_error git-branches_display"></p>
-                            <form class="git-branches__form git-branches_display">
+                            <input class="git-branches__input" type="checkbox" id="combine-branches">
+                            <label class="git-branches__label" for="combine-branches" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>Отображать списки со всех веток</label>
+                            <p class="git-branches_error" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>></p>
+                            <form class="git-branches__form" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <input class="git-branches__input" type="text" name="new_branch" placeholder="Новая ветка">
                                 <button class="git-branches__button git-branches__button_create-branch">Создать ветку</button>
                             </form>

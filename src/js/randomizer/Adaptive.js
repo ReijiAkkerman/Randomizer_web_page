@@ -9,6 +9,12 @@ class Adaptive {
 
 
 
+    static current_mode = 'words';
+
+
+
+
+
     static selectors = new Map([
         ['Навигационная панель', '.dashboard'],
         ['Слова', '.words'],
@@ -34,9 +40,10 @@ class Adaptive {
             Adaptive.resizeWindow(Adaptive.#mobile);
         }
         else {
+            if(Adaptive.current_mode === 'dashboard')
+                Adaptive.current_mode = 'words';
             Adaptive.resizeWindow(Adaptive.#desktop);
         }
-        Adaptive.#delay = 250;
     }
 
     static resizeWindow(method) {
@@ -49,17 +56,63 @@ class Adaptive {
 
 
     static #mobile() {
-        Adaptive.#hideDashboard();
-        Adaptive.#hideSettings();
-        Adaptive.#hideGuide();
-        Adaptive.#showWords();
+        switch(Adaptive.current_mode) {
+            case 'words':
+                Adaptive.#hideDashboard();
+                Adaptive.#hideGuide();
+                Adaptive.#hideSettings();
+                Adaptive.#showWords();
+                break;
+            case 'settings':
+                Adaptive.#hideWords();
+                Adaptive.#hideGuide();
+                Adaptive.#hideDashboard();
+                Adaptive.#showSettings();
+                break;
+            case 'guide':
+                Adaptive.#hideWords();
+                Adaptive.#hideSettings();
+                Adaptive.#hideDashboard();
+                Adaptive.#showGuide();
+                break;
+            case 'dashboard':
+                Adaptive.#hideWords();
+                Adaptive.#hideSettings();
+                Adaptive.#hideGuide();
+                Adaptive.#showDashboard();
+                break;
+        }
+
+        // Adaptive.#hideDashboard();
+        // Adaptive.#hideSettings();
+        // Adaptive.#hideGuide();
+        // Adaptive.#showWords();
     }
 
     static #desktop() {
-        Adaptive.#hideSettings();
-        Adaptive.#hideGuide();
         Adaptive.#showDashboard();
-        Adaptive.#showWords();
+        switch(Adaptive.current_mode) {
+            case 'words':
+                Adaptive.#hideGuide();
+                Adaptive.#hideSettings();
+                Adaptive.#showWords();
+                break;
+            case 'settings':
+                Adaptive.#hideWords();
+                Adaptive.#hideGuide();
+                Adaptive.#showSettings();
+                break;
+            case 'guide':
+                Adaptive.#hideWords();
+                Adaptive.#hideSettings();
+                Adaptive.#showGuide();
+                break;
+        }
+
+        // Adaptive.#hideSettings();
+        // Adaptive.#hideGuide();
+        // Adaptive.#showDashboard();
+        // Adaptive.#showWords();
     }
 
     static #tablet() {
@@ -101,7 +154,33 @@ class Adaptive {
     static #hideGuide() {
         Adaptive.guide.style.display = 'none';
     }
+
+
+
+
+
+    /**
+     * Методы для сохранения открытого режима неизменным после ресайза
+     */    
+
+    static remember_words_window() {
+        Adaptive.current_mode = 'words';
+    }
+
+    static remember_settings_window() {
+        Adaptive.current_mode = 'settings';
+    }
+
+    static remember_guide_window() {
+        Adaptive.current_mode = 'guide';
+    }
+
+    static remember_dashboard_window() {
+        Adaptive.current_mode = 'dashboard';
+    }
 }
+
+export {Adaptive};
 
 window.addEventListener('resize', Adaptive.defineDevice);
 

@@ -339,6 +339,28 @@
                                 border-color: borders.$active;
                             }
                         }
+
+                        &__button {
+                            font-size: 20px;
+                            @include borders.hover;
+                            border-radius: 10px;
+                            color: text.$inactive;
+                            padding: 5px 20px;
+                            white-space: nowrap;
+    
+                            &:hover {
+                                color: text.$active;
+                            }
+                        }
+
+                        &_pgp-key {
+                            @include borders.inactive;
+                            border-left: borders.$inactive 5px solid;
+                            text-align: left !important;
+                            word-break: break-all;
+                            padding: 5px 5px 5px 10px;
+                            margin-top: 10px;
+                        }
                     }
     
                     &-branches {
@@ -398,7 +420,12 @@
                             line-height: 12px;
                         }
 
-                        &_no-info {
+                        &_no-repo-info {
+                            text-align: start !important;
+                            color: text.$inactive;
+                        }
+
+                        &_no-branches-info {
                             text-align: start !important;
                             color: text.$inactive;
                         }
@@ -425,8 +452,8 @@
                                 font-size: 20px;
                                 @include borders.hover;
                                 border-radius: 10px;
-                                padding: 5px 20px;
                                 color: text.$inactive;
+                                padding: 5px 20px;
                                 white-space: nowrap;
     
                                 > svg {
