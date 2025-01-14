@@ -5,6 +5,7 @@
   border: none;
   background-color: rgba(0, 0, 0, 0);
   font-family: jura;
+  user-select: none;
 }
 
 button {

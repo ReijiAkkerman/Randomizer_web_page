@@ -66,9 +66,10 @@
             $git->initRepository();
         }
 
-        public function createNewBranch(): void {
+        public function createNewBranch(array $args): void {
+            $branch = $args[0];
             $git = new Git();
-            $git->createNewBranch();
+            $git->createNewBranch($branch);
         }
 
         public function syncWithGithub(): void {

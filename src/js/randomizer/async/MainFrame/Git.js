@@ -17,7 +17,14 @@ class Git {
         ['Элементы для скрытия после инициализации репозитория', [
             '.git-repo__div',
             '.git-branches_no-repo-info',
-        ]]
+        ]],
+
+        // createNewBranch
+        ['Поле для ввода наименования новой ветки', '.git-branches__input[name="new_branch"]'],
+        ['Область для вывода ошибок о новой ветке', '.git-branches_error'],
+        ['Шаблон кнопки новой ветки', '.git-branches__template'],
+        ['Область для вставки кнопок новых веток', '.git-branches-block'],
+        ['Кнопка создания новой ветки', '.git-branches__button_create-branch'],
     ]);
 
 
@@ -30,6 +37,13 @@ class Git {
 
     // initRepository()
     static init_repository__button = document.querySelector(Git.selectors.get('Кнопка инициализации репозитория'));
+
+    // createNewBranch()
+    static new_branch__input = document.querySelector(Git.selectors.get('Поле для ввода наименования новой ветки'));
+    static new_branch_error = document.querySelector(Git.selectors.get('Область для вывода ошибок о новой ветке'));
+    static new_branch__template = document.querySelector(Git.selectors.get('Шаблон кнопки новой ветки'));
+    static new_branch_insertion_area = document.querySelector(Git.selectors.get('Область для вставки кнопок новых веток'));
+    static create_new_branch__button = document.querySelector(Git.selectors.get('Кнопка создания новой ветки'));
     
     
     
@@ -71,6 +85,34 @@ class Git {
         };
     }
 
+    static createNewBranch(event) {
+        event.preventDefault();
+        let xhr = new XMLHttpRequest();
+        let new_branch = Git.new_branch__input.value;
+        xhr.open('POST', `/randomizer/createNewBranch/${new_branch}`);
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null)
+                alert('Произошла ошибка!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                let clone = Git.new_branch__template.content.cloneNode(true);
+                let button = clone.querySelector('button');
+                button.textContent = new_branch;
+                Git.new_branch_insertion_area.append(button);
+                Git.new_branch__input.value = '';
+            }
+            else if(xhr.response.hasOwnProperty('fields'))
+                Git.new_branch_error.textContent = xhr.response.new_branch;
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+        };
+    }
+
+    static clearNewBranchError() {
+        Git.new_branch_error.textContent = '';
+    }
+
     static commit() {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', '/randomizer/commit');
@@ -110,4 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Git.repo.addEventListener('input', Git.setRepository);
     Git.init_repository__button.addEventListener('click', Git.initRepository);
+    Git.create_new_branch__button.addEventListener('click', Git.createNewBranch);
+    Git.new_branch__input.addEventListener('input', Git.clearNewBranchError);
 });

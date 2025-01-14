@@ -23,8 +23,6 @@
         private string $git_clone_folder;
         private string $git_safe_directory;
 
-        private array $branches;
-
         public string $REPOSITORY;
         public string $ACTIVE_BRANCH;
         public string|array $BRANCHES;
@@ -132,8 +130,43 @@
         }
 
         // control\Randomizer::createNewBranch()
-        public function createNewBranch(): void {
-            
+        public function createNewBranch(string $_branch): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT * FROM git WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->BRANCHES = $value['branches'] ?? '';
+                }
+                if($this->BRANCHES) {
+                    $severalBranches = preg_match('/,/', $this->BRANCHES);
+                    $branches = explode(',', $this->BRANCHES);
+                    if($severalBranches === 1) 
+                        $branchExists = in_array($_branch, $branches);
+                    else if($severalBranches === 0) 
+                        $branchExists = ($_branch === $branches) ? true : false;
+                }
+                else 
+                    $branchExists = false;
+                if($branchExists) {
+                    $this->error_field = 'new_branch';
+                    $this->error_message = 'Указанная ветка уже существует!';
+                    $this->writeError();
+                    $this->sendErrors();
+                }
+                else {
+                    if($this->BRANCHES)
+                        $query = "UPDATE git SET branches='{$this->BRANCHES},$_branch' WHERE USER_ID={$this->_id}";
+                    else
+                        $query = "UPDATE git SET branches='$_branch' WHERE USER_ID={$this->_id}";
+                    $this->mysql->query($query);
+                    echo '{"updated":true}';
+                }
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
         }
 
         // control\Randomizer::syncWithGithub()

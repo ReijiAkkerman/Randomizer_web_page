@@ -145,7 +145,7 @@
                         <div class="languages-add-create">
                             <p class="languages-add-create__p_add-language" style="display:none;">Добавить новый язык</p>
                             <p class="languages-add-create__p_edit-language" style="display:none;">Изменить параметры языка</p>
-                            <div>
+                            <form class="languages-add-create__form">
                                 <div class="languages-add-create__div">
                                     <input class="languages-add-create__input languages-add-create__input_language-name" type="text" placeholder="Наименование языка">
                                     <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" placeholder="Папка языка">
@@ -154,7 +154,7 @@
                                 <input class="languages-add-create__input" type="checkbox" id="present-kanji">
                                 <label class="languages-add-create__label" for="present-kanji">В языке есть иероглифы</label>
                                 <button class="languages-add-create__button">Добавить</button>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="git" style="display:none;">
@@ -172,7 +172,7 @@
                         <div class="git-branches">
                             <p>Ветка</p>
                             <p class="git-branches_no-repo-info" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные.</p>
-                            <p class="git-branches_no-branches-info" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>В репозитории пока нет веток!</p>
+                            <p class="git-branches_no-branches-info" <?php if($data->branches) echo 'style="display:none;"' ?>>В репозитории пока нет веток!</p>
                             <div class="git-branches-block" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <template class="git-branches__template">
                                     <button class="git-branches__button git-branches__button_change-branch"></button>
@@ -184,10 +184,10 @@
                                 <?php } ?>
                             </div>
                             <div class="git-branches__div" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
-                                <button class="git-branches__button git-branches_delete-branch">Удалить ветку</button>
+                                <button class="git-branches__button git-branches_delete-branch" style="display:none;">Удалить ветку</button>
                             </div>
                             <input class="git-branches__input" type="checkbox" id="combine-branches">
-                            <label class="git-branches__label" for="combine-branches" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>Отображать списки со всех веток</label>
+                            <label class="git-branches__label" for="combine-branches" <?php if(!$data->switching_commit_exists || (!$data->branches || sizeof($data->branches) < 2)) echo 'style="display:none;"' ?>>Отображать списки со всех веток</label>
                             <p class="git-branches_error" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>></p>
                             <form class="git-branches__form" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <input class="git-branches__input" type="text" name="new_branch" placeholder="Новая ветка">
