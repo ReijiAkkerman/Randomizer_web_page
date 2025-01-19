@@ -1,12 +1,8 @@
 <?php
     namespace project\model\components;
 
-    class GitErrors {
-        public array $fields;
-        public string $new_branch;
-        public string $alert;
+    use project\model\components\Errors;
 
-        public function __construct() {
-            $this->fields = [];
-        }
+    class GitErrors extends Errors {
+        public string $new_branch;
     }

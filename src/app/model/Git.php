@@ -155,12 +155,16 @@
                     $this->sendErrors();
                 }
                 else {
-                    if($this->BRANCHES)
+                    if($this->BRANCHES) {
                         $query = "UPDATE git SET branches='{$this->BRANCHES},$_branch' WHERE USER_ID={$this->_id}";
-                    else
+                        $branches_number = substr_count($this->BRANCHES, ',') + 2;
+                        echo "{\"updated\":true,\"branches_number\":$branches_number}";
+                    }
+                    else {
                         $query = "UPDATE git SET branches='$_branch' WHERE USER_ID={$this->_id}";
+                        echo '{"updated":true}';
+                    }
                     $this->mysql->query($query);
-                    echo '{"updated":true}';
                 }
             }
             else {

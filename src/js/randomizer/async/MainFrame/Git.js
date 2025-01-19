@@ -1,3 +1,5 @@
+import {Settings} from '/src/js/randomizer/async/MainFrame/Settings.js';
+
 class Git {
     static selectors = new Map([
         // setRepository()
@@ -10,7 +12,6 @@ class Git {
             '.git-branches_no-branches-info',
             '.git-branches-block',
             '.git-branches__div',
-            '.git-branches__label',
             '.git-branches_error',
             '.git-branches__form',
         ]],
@@ -25,6 +26,7 @@ class Git {
         ['Шаблон кнопки новой ветки', '.git-branches__template'],
         ['Область для вставки кнопок новых веток', '.git-branches-block'],
         ['Кнопка создания новой ветки', '.git-branches__button_create-branch'],
+        ['Отметка о выводе списков со всех веток', '.git-branches__label'],
     ]);
 
 
@@ -44,6 +46,7 @@ class Git {
     static new_branch__template = document.querySelector(Git.selectors.get('Шаблон кнопки новой ветки'));
     static new_branch_insertion_area = document.querySelector(Git.selectors.get('Область для вставки кнопок новых веток'));
     static create_new_branch__button = document.querySelector(Git.selectors.get('Кнопка создания новой ветки'));
+    static all_branches_output_mark = document.querySelector(Git.selectors.get('Отметка о выводе списков со всех веток'));
     
     
     
@@ -101,6 +104,10 @@ class Git {
                 button.textContent = new_branch;
                 Git.new_branch_insertion_area.append(button);
                 Git.new_branch__input.value = '';
+                if(xhr.response.hasOwnProperty('branches_number')) {
+                    if(xhr.response.branches_number > 1)
+                        Git.all_branches_output_mark.style.display = '';
+                }
             }
             else if(xhr.response.hasOwnProperty('fields'))
                 Git.new_branch_error.textContent = xhr.response.new_branch;

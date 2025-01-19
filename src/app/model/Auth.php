@@ -20,7 +20,7 @@
      * отправляемых пользователю
      * 
      * $SNAKE_NOTATION_WITH_ALL_CAPITAL_LETTERS для переменных
-     * данные которой записываются в БД
+     * данные которых записываются в БД
      * причем независимо от регистра колонки которой они предназначены
      * 
      * $_snake_notation для аргументов функций
@@ -481,10 +481,10 @@
                 "USE Settings",
                 "CREATE TABLE IF NOT EXISTS all_languages(
                     ID SMALLINT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-                    name VARCHAR(50) NOT NULL,
-                    mark VARCHAR(3) NOT NULL,
+                    name VARCHAR(50) NOT NULL UNIQUE,
+                    mark VARCHAR(3) NOT NULL UNIQUE,
                     kanji BOOLEAN DEFAULT 0 NOT NULL,
-                    foldername VARCHAR(50) NULL
+                    foldername VARCHAR(50) NULL UNIQUE
                 )",
                 "CREATE TABLE IF NOT EXISTS git(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
@@ -493,7 +493,7 @@
                     active_branch VARCHAR(50) NULL,
                     show_all_branches BOOLEAN DEFAULT 0 NOT NULL,
                     foldernames VARCHAR(1023) NULL,
-                    switching_commit VARCHAR(50) NULL,
+                    switching_commit VARCHAR(50) NULL
                 )",
                 "CREATE TABLE IF NOT EXISTS languages(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
@@ -502,6 +502,7 @@
                 )",
                 "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.git TO 'Settings'@'localhost'",
                 "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.languages TO 'Settings'@'localhost'",
+                "GRANT SELECT,INSERT,UPDATE ON Settings.all_languages TO 'Settings'@'localhost'",
             ];
             foreach($queries as $query) {
                 $this->mysql->query($query);

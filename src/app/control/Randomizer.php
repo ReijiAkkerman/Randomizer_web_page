@@ -5,6 +5,7 @@
     use project\control\parent\Page;
 
     use project\model\Git;
+    use project\model\Languages;
     use project\model\components\Data;
 
     class Randomizer extends Page {
@@ -80,5 +81,16 @@
         public function commit(): void {
             $git = new Git();
             $git->commit();
+        }
+
+
+
+
+
+        // Методы для работы с настройками языков
+
+        public function addNewLanguage(): void {
+            $languages = new Languages;
+            $languages->addNewLanguage();
         }
     }

@@ -21,6 +21,8 @@ class Languages {
         ['Блок всех языков', '.languages-add-select_all-languages'],
         ['Заголовок добавления языка', '.languages-add-create__p_add-language'],
         ['Заголовок изменения языка', '.languages-add-create__p_edit-language'],
+        ['Кнопка добавления языка', '.languages-add-create__button_add'],
+        ['Кнопка изменения языка', '.languages-add-create__button_change'],
 
         /** Параметры языка */
         ['Поле наименования языка', '.languages-add-create__input_language-name'],
@@ -70,6 +72,8 @@ class Languages {
     static #language_foldername_field = document.querySelector(Languages.selectors.get('Поле наименования папки языка'));
     static #language_shorthand_mark = document.querySelector(Languages.selectors.get('Поле сокращенного наименования языка'));
     static #language_kanji_mark = document.querySelector(Languages.selectors.get('Метка наличия в языке иероглифов'));
+    static #change_language_button = document.querySelector(Languages.selectors.get('Кнопка изменения языка'));;
+    static #add_language_button = document.querySelector(Languages.selectors.get('Кнопка добавления языка'));
 
 
 
@@ -134,9 +138,10 @@ class Languages {
             Languages.#enable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
-            Languages.#complete_fields(this);
+            Languages.complete_fields(this);
             Languages.enable_additional_section();
-            Languages.#write_language_data(this);
+            Languages.write_language_data(this);
+            Languages.#show_add_button();
         };
         if(Languages.#active_language === false) {
             enable_set();
@@ -164,7 +169,7 @@ class Languages {
     static select_learning_language() {
         const enable_set = () => {
             Languages.#change_learning_language_button_set_active_color(this);
-            Languages.#write_language_data(this);
+            Languages.write_language_data(this);
         };
         if(Languages.#active_language === false) {
             enable_set();
@@ -192,9 +197,10 @@ class Languages {
             Languages.#add_learning_language_button_set_active_color();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
-            Languages.#complete_fields(this);
+            Languages.complete_fields(this);
             Languages.enable_additional_section();
-            Languages.#write_language_data(this);
+            Languages.write_language_data(this);
+            Languages.#show_add_button();
         };
         if(Languages.#active_language === false) {
             enable_set();
@@ -222,8 +228,9 @@ class Languages {
             Languages.#editing_learning_language_button_set_active_color();
             Languages.enable_all_languages_block();
             Languages.#enable_changing_language_title();
-            Languages.#complete_fields(Languages.#active_language);
+            Languages.complete_fields(Languages.#active_language);
             Languages.enable_additional_section();
+            Languages.#show_change_button();
         }
     }
 
@@ -299,9 +306,19 @@ class Languages {
         Languages.#changing_language_title.style.display = 'none';
     }
 
+    static #show_add_button() {
+        Languages.#change_language_button.style.display = 'none';
+        Languages.#add_language_button.style.display = '';
+    }
+
+    static #show_change_button() {
+        Languages.#add_language_button.style.display = 'none';
+        Languages.#change_language_button.style.display = '';
+    }
+
     // Методы заполнения полей
 
-    static #complete_fields(obj) {
+    static complete_fields(obj) {
         Languages.#complete_language_name(obj);
         Languages.#complete_language_foldername(obj);
         Languages.#complete_language_shorthand_mark(obj);
@@ -367,7 +384,7 @@ class Languages {
      * Вспомогательные функции
      */
 
-    static #write_language_data(obj) {
+    static write_language_data(obj) {
         Languages.#active_language = {};
         Languages.#active_language.name = obj.dataset.language;
         Languages.#active_language.foldername = obj.dataset.folder;

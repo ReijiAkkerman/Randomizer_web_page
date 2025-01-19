@@ -102,9 +102,12 @@
                             <p>Изучаемые языки</p>
                             <div>
                                 <div class="languages-additional-languages-list">
+                                    <template class="languages-additional-languages-list__template">
+                                        <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="">
+                                    </template>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="Английский" data-mark="en" data-folder="english" data-kanji="" id="Английский">Английский</button>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="Японский" data-mark="jp" data-folder="japanese" data-kanji="true" id="Японский">Японский</button>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="Наименование языка" data-mark="Метка" data-folder="Папка языка" data-kanji="" id="new">
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="" data-mark="" data-folder="" data-kanji="" id="new">
                                         <svg viewBox="0 0 32 32">
                                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
                                         </svg>
@@ -147,13 +150,14 @@
                             <p class="languages-add-create__p_edit-language" style="display:none;">Изменить параметры языка</p>
                             <form class="languages-add-create__form">
                                 <div class="languages-add-create__div">
-                                    <input class="languages-add-create__input languages-add-create__input_language-name" type="text" placeholder="Наименование языка">
-                                    <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" placeholder="Папка языка">
-                                    <input class="languages-add-create__input languages-add-create__input_shorthand" type="text" placeholder="Метка">
+                                    <input class="languages-add-create__input languages-add-create__input_language-name" type="text" name="name" placeholder="Наименование языка">
+                                    <input class="languages-add-create__input languages-add-create__input_language-folder" type="text" name="foldername" placeholder="Папка языка">
+                                    <input class="languages-add-create__input languages-add-create__input_shorthand" type="text" name="mark" placeholder="Метка">
                                 </div>
-                                <input class="languages-add-create__input" type="checkbox" id="present-kanji">
+                                <input class="languages-add-create__input" type="checkbox" name="kanji" id="present-kanji">
                                 <label class="languages-add-create__label" for="present-kanji">В языке есть иероглифы</label>
-                                <button class="languages-add-create__button">Добавить</button>
+                                <button class="languages-add-create__button languages-add-create__button_add">Добавить</button>
+                                <button class="languages-add-create__button languages-add-create__button_change" style="display:none;">Изменить</button>
                             </form>
                         </div>
                     </div>
@@ -171,8 +175,8 @@
                         </div>
                         <div class="git-branches">
                             <p>Ветка</p>
-                            <p class="git-branches_no-repo-info" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные.</p>
-                            <p class="git-branches_no-branches-info" <?php if($data->branches) echo 'style="display:none;"' ?>>В репозитории пока нет веток!</p>
+                            <p class="git-branches_no-repo-info" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>Информация о репозитории отсутствует!<br><br>Для получения информации синхронизируйте данные или инициализируйте новый репозиторий.</p>
+                            <p class="git-branches_no-branches-info" <?php if($data->branches || !$data->switching_commit_exists) echo 'style="display:none;"' ?>>В репозитории пока нет веток!</p>
                             <div class="git-branches-block" <?php if(!$data->switching_commit_exists) echo 'style="display:none;"' ?>>
                                 <template class="git-branches__template">
                                     <button class="git-branches__button git-branches__button_change-branch"></button>
@@ -488,6 +492,8 @@
 
 
 
+        <script type="module" src="/src/js/randomizer/async/MainFrame/Settings.js"></script>
         <script type="module" src="/src/js/randomizer/async/MainFrame/Git.js"></script>
+        <script type="module" src="/src/js/randomizer/async/MainFrame/Languages.js"></script>
     </body>
 </html>
