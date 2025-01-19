@@ -7,7 +7,7 @@ class Settings {
 
 
 
-    static __write_language_data = Languages.select_learning_language;
+    static __select_studied_language_for_editing = Languages.select_learning_language;
 }
 
 export {Settings};

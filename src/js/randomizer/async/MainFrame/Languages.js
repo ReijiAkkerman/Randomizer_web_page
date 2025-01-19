@@ -60,13 +60,13 @@ class Languages {
                 case 'studied':
                     let clone = Languages.studied_language_button__template.content.cloneNode(true);
                     let button = clone.querySelector('button');
-                    button.textContent = button.dataset.language = Languages.#name.value;
+                    button.id = 
+                    button.textContent = 
+                    button.dataset.language = Languages.#name.value;
                     button.dataset.folder = Languages.#foldername.value;
                     button.dataset.mark = Languages.#mark.value;
                     button.dataset.kanji = (Languages.#kanji.checked) ? 'true' : '';
-
-                    button.addEventListener('click', Settings.select_learning_language);
-                    
+                    button.addEventListener('click', Settings.__select_studied_language_for_editing);
                     Languages.add_new_studied__button.before(button);
                     Languages.clear_new_language_fields();
                     break;
