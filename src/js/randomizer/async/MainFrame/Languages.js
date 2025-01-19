@@ -56,6 +56,12 @@ class Languages {
         xhr.onloadend = () => {
             switch(Settings.where_to_add_new_language) {
                 case 'main':
+                    Languages.select_main__button.textContent = 
+                    Languages.select_main__button.dataset.language = Languages.#name.value;
+                    Languages.select_main__button.dataset.folder = Languages.#foldername.value;
+                    Languages.select_main__button.dataset.mark = Languages.#mark.value;
+                    Languages.select_main__button.dataset.kanji = (Languages.#kanji.checked) ? 'true' : '';
+                    Languages.clear_new_language_fields();
                     break;
                 case 'studied':
                     let clone = Languages.studied_language_button__template.content.cloneNode(true);

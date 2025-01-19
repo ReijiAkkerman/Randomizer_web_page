@@ -138,7 +138,7 @@ class Languages {
             Languages.#enable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
-            Languages.complete_fields(this);
+            // Languages.complete_fields(this);
             Languages.enable_additional_section();
             Languages.write_language_data(this);
             Languages.#show_add_button();
