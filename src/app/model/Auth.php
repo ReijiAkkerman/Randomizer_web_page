@@ -24,6 +24,8 @@
      * причем независимо от регистра колонки которой они предназначены
      * 
      * $_snake_notation для аргументов функций
+     * 
+     * $snake_notation для возвращаемых значений
      */
 
     // class::method() указывает какая функция вызывает описанный ниже метод
@@ -36,6 +38,7 @@
     use project\model\traits\WriteError;
     use project\model\traits\SendErrors;
     use project\model\traits\AuthConnection;
+    use project\model\traits\SettingsConnection;
 
     use project\model\Git;
 
@@ -175,6 +178,15 @@
                         $this->CREATED = $value['created'];
                     }
                     $this->closeAuthConnection();
+                    $this->createSettingsConnection();
+                    $query = "SELECT * FROM all_languages WHERE name='Русский'";
+                    $result = $this->mysql->query($query);
+                    foreach($result as $value) {
+                        $LANGUAGE_ID = $value['ID'];
+                    }
+                    $query = "INSERT INTO languages(USER_ID,main) VALUES ({$this->ID},'$LANGUAGE_ID')";
+                    $this->mysql->query($query);
+                    $this->closeSettingsConnection();
                     $git = new Git();
                     $git->initUserSettings($this->ID);
                     $lists = new Lists();
@@ -423,7 +435,6 @@
          * 
          * conf - "confirmation" выбрано такое сокращение в целях безопасности,
          * защита от дурака чтобы думали что это конфигурация
-         * 
          */
 
         // model\Auth::reg()
@@ -484,7 +495,7 @@
                     name VARCHAR(50) NOT NULL UNIQUE,
                     mark VARCHAR(3) NOT NULL UNIQUE,
                     kanji BOOLEAN DEFAULT 0 NOT NULL,
-                    foldername VARCHAR(50) NULL UNIQUE
+                    foldername VARCHAR(50) NOT NULL UNIQUE
                 )",
                 "CREATE TABLE IF NOT EXISTS git(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
@@ -500,9 +511,19 @@
                     main SMALLINT NULL,
                     studied VARCHAR(255) NULL
                 )",
-                "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.git TO 'Settings'@'localhost'",
-                "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON Settings.languages TO 'Settings'@'localhost'",
+                "CREATE TABLE IF NOT EXISTS changed_languages(
+                    USER_ID INT UNSIGNED NOT NULL,
+                    LANG_ID SMALLINT UNSIGNED NOT NULL,
+                    name VARCHAR(50) NULL,
+                    foldername VARCHAR(50) NULL,
+                    mark VARCHAR(3) NULL,
+                    kanji TINYINT(1) NULL
+                )",
+                "GRANT SELECT,INSERT,UPDATE,DELETE ON Settings.git TO 'Settings'@'localhost'",
+                "GRANT SELECT,INSERT,UPDATE,DELETE ON Settings.languages TO 'Settings'@'localhost'",
                 "GRANT SELECT,INSERT,UPDATE ON Settings.all_languages TO 'Settings'@'localhost'",
+                "GRANT SELECT,INSERT,UPDATE,DELETE ON Settings.changed_languages TO 'Settings'@'localhost'",
+                "INSERT INTO all_languages(name,foldername,mark,kanji) VALUES ('Русский','russian','ru',0);",
             ];
             foreach($queries as $query) {
                 $this->mysql->query($query);
@@ -514,6 +535,7 @@
 
 
         use AuthConnection;
+        use SettingsConnection;
         use WriteError;
         use SendErrors;
     }

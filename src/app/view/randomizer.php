@@ -96,7 +96,7 @@
                     <div class="languages">
                         <div class="languages-main-language">
                             <p>Основной язык</p>
-                            <button class="languages-main-language__button" data-language_type="main" data-language="Наименование языка" data-mark="na" data-folder="folder" data-kanji="" id="main">Наименование языка</button>
+                            <button class="languages-main-language__button" data-language_type="main" data-language="<?= $data->main_language->name ?>" data-mark="<?= $data->main_language->mark ?>" data-folder="<?= $data->main_language->foldername ?>" data-kanji="<?php if($data->main_language->kanji) echo 'true' ?>" id="main"><?= $data->main_language->name ?> язык</button>
                         </div>
                         <div class="languages-additional-languages">
                             <p>Изучаемые языки</p>
@@ -105,8 +105,9 @@
                                     <template class="languages-additional-languages-list__template">
                                         <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="">
                                     </template>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="Английский" data-mark="en" data-folder="english" data-kanji="" id="Английский">Английский</button>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="Японский" data-mark="jp" data-folder="japanese" data-kanji="true" id="Японский">Японский</button>
+                                    <?php foreach($data->studied_languages as $language) { ?>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>"><?= $language->name ?></button>
+                                    <?php } ?>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="" data-mark="" data-folder="" data-kanji="" id="new">
                                         <svg viewBox="0 0 32 32">
                                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
@@ -114,7 +115,7 @@
                                     </button>
                                 </div>
                                 <div class="languages-additional-languages-actions">
-                                    <button class="languages-additional-languages-actions__button languages-additional-languages-actions__button_edit-language">
+                                    <button class="languages-additional-languages-actions__button languages-additional-languages-actions__button_edit-language" <?php if(!$data->studied_languages) echo 'style="display:none;"' ?>>
                                         <svg viewBox="0 0 1024 1024">
                                             <path d="M574.4 590.4l-3.2 7.2 1.6 8L608 740.8l8 33.6 28-20L760 672l5.6-4 2.4-6.4 220-556.8 8.8-22.4-22.4-8.8-140-55.2-21.6-8-8.8 20.8-229.6 559.2z m244-528l140 55.2-13.6-30.4-220 556.8 8-10.4-116 82.4 36 13.6-33.6-135.2-0.8 15.2 229.6-560-29.6 12.8z"/>
                                             <path d="M872 301.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM718.4 645.6l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 10.4-17.6 8zM900.8 224l-107.2-40c-7.2-2.4-10.4-10.4-8-17.6l8-20.8c2.4-7.2 10.4-10.4 17.6-8l107.2 40c7.2 2.4 10.4 10.4 8 17.6l-8 20.8c-2.4 7.2-10.4 11.2-17.6 8z"/>
@@ -122,7 +123,7 @@
                                             <path d="M366.4 490.4H201.6c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h165.6c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-26.4 25.6zM409.6 584h-208c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h208c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6zM441.6 676.8h-240c-13.6 0-25.6-11.2-25.6-25.6 0-13.6 11.2-25.6 25.6-25.6h240c13.6 0 25.6 11.2 25.6 25.6-0.8 14.4-12 25.6-25.6 25.6z"/>
                                         </svg>
                                     </button>
-                                    <button class="languages-additional-languages-actions__button languages-additional-languages-actions__button_delete-language">
+                                    <button class="languages-additional-languages-actions__button languages-additional-languages-actions__button_delete-language" <?php if(!$data->studied_languages) echo 'style="display:none;"' ?>>
                                         <svg viewBox="0 0 1024 1024">
                                             <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                                         </svg>
@@ -132,22 +133,25 @@
                         </div>
                     </div>
                     <div class="languages-add" style="display:none;">
-                        <div class="languages-add-select languages-add-select_recent-languages" style="display:none;">
-                            <button class="languages-add-select__button">Английский</button>
-                            <button class="languages-add-select__button">Японский</button>
-                            <button class="languages-add-select__button">Китайский</button>
+                        <div class="languages-add-select languages-add-select_recent-languages" <?php if(!(sizeof($data->studied_languages) > 0)) echo 'style="display:none;"' ?>>
+                            <template class="languages-add-select__template_recent-languages">
+                                <button class="languages-add-select__button" data-language="" data-folder="" data-mark="" data-kanji=""></button>
+                            </template>
+                            <?php foreach($data->studied_languages as $language) { ?>
+                            <button class="languages-add-select__button" data-mark="<?= $language->mark ?>"><?= $language->name ?></button>
+                            <?php } ?>
                         </div>
-                        <div class="languages-add-select languages-add-select_all-languages" style="display:none;">
-                            <button class="languages-add-select__button">Английский</button>
-                            <button class="languages-add-select__button">Японский</button>
-                            <button class="languages-add-select__button">Китайский</button>
-                            <button class="languages-add-select__button">Английский</button>
-                            <button class="languages-add-select__button">Японский</button>
-                            <button class="languages-add-select__button">Китайский</button>
+                        <div class="languages-add-select languages-add-select_all-languages" <?php if(!((sizeof($data->all_languages) > 1) && $data->show_all_languages)) echo 'style="display:none;"' ?>>
+                        <?php foreach($data->all_languages as $language) { ?>
+                            <?php if(($language->name !== $data->main_language->name) && (!in_array($language->name, $data->studied_languages_list))) { ?>
+                            <button class="languages-add-select__button" data-mark="<?= $language->mark ?>"><?= $language->name ?></button>
+                            <?php } ?>
+                        <?php } ?>
                         </div>
                         <div class="languages-add-create">
                             <p class="languages-add-create__p_add-language" style="display:none;">Добавить новый язык</p>
                             <p class="languages-add-create__p_edit-language" style="display:none;">Изменить параметры языка</p>
+                            <p class="languages-add-create_errors"></p>
                             <form class="languages-add-create__form">
                                 <div class="languages-add-create__div">
                                     <input class="languages-add-create__input languages-add-create__input_language-name" type="text" name="name" placeholder="Наименование языка">
@@ -168,7 +172,7 @@
                                 <input class="git-repo__input" type="text" name="repo" placeholder="Репозиторий со списками слов" <?php if($data->repository) echo "value=\"{$data->repository}\"" ?>>
                             </form>
                             <div class="git-repo__div" <?php if($data->switching_commit_exists) echo 'style="display:none;"' ?>>
-                                <button class="git-repo__button git-repo__button_init-repository">Инициализировать репозиторий</button>
+                                <button class="git-repo__button git-repo__button_init-repository">Инициализировать</button>
                                 <button id="commit" class="git-repo__button" style="display:none;">Коммит и пуш</button>
                             </div>
                             <p class="git-repo_ssh-key" style="display:none;"></p>
@@ -492,7 +496,6 @@
 
 
 
-        <script type="module" src="/src/js/randomizer/async/MainFrame/Settings.js"></script>
         <script type="module" src="/src/js/randomizer/async/MainFrame/Git.js"></script>
         <script type="module" src="/src/js/randomizer/async/MainFrame/Languages.js"></script>
     </body>

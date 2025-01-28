@@ -33,6 +33,10 @@ class Languages {
 
 
 
+
+
+    static clear_errors_function = null;
+
     /** Работа */
 
     static #active_language = false;
@@ -154,6 +158,8 @@ class Languages {
             Languages.#deactivate_active_language_button();
             Languages.#active_language = false;
         }
+        if(Languages.clear_errors_function !== null)
+            Languages.clear_errors_function();
     }
 
     static #main_language_button_set_active_color() {
@@ -195,6 +201,7 @@ class Languages {
     static add_learning_language() {
         const enable_set = () => {
             Languages.#add_learning_language_button_set_active_color();
+            Languages.#disable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
             Languages.complete_fields(this);
@@ -275,19 +282,23 @@ class Languages {
      */
 
     static #enable_learning_languages_block() {
-        Languages.#learning_languages_block.style.display = '';
+        if(Languages.#learning_languages_block !== null)
+            Languages.#learning_languages_block.style.display = '';
     }
 
     static #disable_learning_languages_block() {
-        Languages.#learning_languages_block.style.display = 'none';
+        if(Languages.#learning_languages_block !== null)
+            Languages.#learning_languages_block.style.display = 'none';
     }
 
     static enable_all_languages_block() {
-        Languages.#all_languages_block.style.display = '';
+        if(Languages.#all_languages_block !== null)
+            Languages.#all_languages_block.style.display = '';
     }
 
     static disable_all_languages_block() {
-        Languages.#all_languages_block.style.display = 'none';
+        if(Languages.#all_languages_block !== null)
+            Languages.#all_languages_block.style.display = 'none';
     }
 
     static enable_adding_language_title() {

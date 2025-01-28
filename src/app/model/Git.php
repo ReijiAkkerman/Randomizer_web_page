@@ -40,8 +40,6 @@
             $this->error_message = '';
             $this->git_clone_folder = '/var/www/test/git/';
 
-            $this->branches = [];
-
             $this->REPOSITORY = '';
         }
 

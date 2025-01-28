@@ -103,6 +103,7 @@ svg {
   display: flex;
   position: relative;
   justify-content: start;
+  align-items: start;
   gap: 20px;
 }
 .randomizer main > .settings .settings-content .languages-additional-languages-list {
@@ -154,6 +155,9 @@ svg {
 .randomizer main > .settings .settings-content .languages-add-create__label::before {
   display: inline-block;
   position: absolute;
+}
+.randomizer main > .settings .settings-content .languages-add-create_errors {
+  text-align: start !important;
 }
 .randomizer main > .settings .settings-content .git-repo__div {
   display: flex;
@@ -328,6 +332,7 @@ svg {
   }
   .randomizer main > .settings .settings-content .languages-additional-languages > div {
     justify-content: space-between;
+    align-items: start;
   }
   .randomizer main > .settings .settings-content .languages-additional-languages-actions {
     flex-direction: column;

@@ -8,6 +8,7 @@
     use project\model\traits\WriteError;
     use project\model\traits\SendErrors;
     use project\model\traits\SettingsConnection;
+    use project\model\components\Language;
 
     class Languages extends User {
         private string $Name;
@@ -19,6 +20,9 @@
         private LanguagesErrors $errors;
         private string $error_field;
         private string $error_message;
+
+        private string $language_id;
+        private string $languages_ids;
 
 
 
@@ -32,62 +36,147 @@
 
 
 
-        public function addNewLanguage(): void {
+        public function createNew(): void {
             if($this->getCookie()) {
-                $functionsNeedTrue = [
+                $this->createSettingsConnection();
+                $query = "SELECT * FROM all_languages";
+                $result = $this->mysql->query($query);
+                $validateFunctions = [
                     'validateName',
                     'validateFoldername',
                     'validateMark',
                 ];
-                $this->checkErrors($functionsNeedTrue);
-                $kanji = $_POST['kanji'] ?? '';
-                $this->Kanji = (bool)$kanji;
-                $KANJI = (int)$this->Kanji;
-
-                $this->createSettingsConnection();
-                $query = "SELECT * FROM all_languages WHERE name='{$this->Name}' OR foldername='{$this->Foldername}' OR mark='{$this->Mark}'";
-                $result = $this->mysql->query($query);
-                if($result->num_rows) {
-                    $functionsNeedTrue = [
-                        'checkName',
-                        'checkFoldername',
-                        'checkMark',
-                    ];
-                    $this->checkErrors($functionsNeedTrue, $result);
-                }
-                else {
-                    $query = "INSERT INTO all_languages(
-                        name,
-                        foldername,
-                        mark,
-                        kanji
-                    ) VALUES (
-                        '{$this->Name}',
-                        '{$this->Foldername}',
-                        '{$this->Mark}',
-                        {$KANJI}
-                    )";
-                    $this->mysql->query($query);
-                }
+                $checkFunctions = [
+                    'checkName',
+                    'checkFoldername',
+                    'checkMark',
+                ];
+                $this->checkErrors($validateFunctions);
+                $this->checkErrors($checkFunctions, $result);
+                $this->Kanji = ($_POST['kanji']) ? true : false;
+                $query = "INSERT INTO all_languages(
+                    name,
+                    foldername,
+                    mark,
+                    kanji
+                ) VALUES (
+                    '{$this->Name}',
+                    '{$this->Foldername}',
+                    '{$this->Mark}',
+                    {$this->Kanji}
+                )";
+                $this->mysql->query($query);
                 $this->closeSettingsConnection();
                 echo '{"updated":true}';
             }
             else {
                 $this->deleteCookie();
-                echo '{"redirect":true}';
+                echo '{"redirect"}:true';
             }
         }
 
-        public function addNewLanguageToStudied(): void {
-
+        public function addStudied($_language_mark): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->language_id = $value['ID'];
+                }
+                $query = "SELECT studied FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->languages_ids = ($value['studied']) ? $value['studied'] : '';
+                }
+                if($this->languages_ids) {
+                    $LANGUAGES_IDS = $this->languages_ids . ',' . $this->language_id;
+                }
+                else {
+                    $LANGUAGES_IDS = $this->language_id;
+                }
+                $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '"redirect":true';
+            }
         }
 
-        public function changeMainLanguage(): void {
 
+
+
+
+        public function getMain(): Language {
+            if($this->getCookie()) {
+                $language = new Language();
+                $this->createSettingsConnection();
+                $query = "SELECT main FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $languageId = $value['main'];
+                }
+                $query = "SELECT * FROM all_languages WHERE ID=$languageId";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $language->name = $value['name'];
+                    $language->foldername = $value['foldername'];
+                    $language->mark = $value['mark'];
+                    $language->kanji = (bool)$value['kanji'];
+                }
+                $this->closeSettingsConnection();
+                return $language;
+            }
         }
 
-        public function changeStudiedLanguage(): void {
+        public function getStudied(): array {
+            if($this->getCookie()) {
+                $studied_languages = [];
+                $language = new Language();
+                $this->createSettingsConnection();
+                $query = "SELECT * FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $languageIds = $value['studied'] ?? '';
+                }
+                if($languageIds) {
+                    $languageIds = explode(',', $languageIds);
+                    foreach($languageIds as $languageId) {
+                        $query = "SELECT * FROM all_languages WHERE ID=$languageId";
+                        $result = $this->mysql->query($query);
+                        foreach($result as $value) {
+                            $language->name = $value['name'];
+                            $language->foldername = $value['foldername'];
+                            $language->mark = $value['mark'];
+                            $language->kanji = (bool)$value['kanji'];
+                        }
+                        $studied_languages[] = clone $language;
+                    }
+                }
+                $this->closeSettingsConnection();
+                return $studied_languages;
+            }
+        }
 
+        public function getAll(): array {
+            if($this->getCookie()) {
+                $all_languages = [];
+                $language = new Language();
+                $this->createSettingsConnection();
+                $query = "SELECT * FROM all_languages";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $language->name = $value['name'];
+                    $language->foldername = $value['foldername'];
+                    $language->mark = $value['mark'];
+                    $language->kanji = $value['kanji'];
+                    $all_languages[] = clone $language;
+                }
+                $this->closeSettingsConnection();
+                return $all_languages;
+            }
         }
 
 

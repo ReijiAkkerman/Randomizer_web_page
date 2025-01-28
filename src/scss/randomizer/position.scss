@@ -92,6 +92,7 @@
                             display: flex;
                             position: relative;
                             justify-content: start;
+                            align-items: start;
                             gap: 20px;
                         }
     
@@ -153,6 +154,10 @@
                                     display: inline-block;
                                     position: absolute;
                                 }
+                            }
+
+                            &_errors {
+                                text-align: start !important;
                             }
                         }
                     }
@@ -386,6 +391,7 @@
                         &-additional-languages {
                             > div {
                                 justify-content: space-between;
+                                align-items: start;
                             }
 
                             &-actions {

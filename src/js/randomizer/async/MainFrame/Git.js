@@ -1,5 +1,3 @@
-import {Settings} from '/src/js/randomizer/async/MainFrame/Settings.js';
-
 class Git {
     static selectors = new Map([
         // setRepository()

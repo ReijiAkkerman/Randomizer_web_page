@@ -30,12 +30,27 @@
             if($this->isAccessGranted() === true) {
                 $data = new Data();
                 $git = new Git();
+                $languages = new Languages();
 
                 $git->getSettings();
 
                 $data->repository = $git->REPOSITORY;
                 $data->branches = $git->BRANCHES;
                 $data->switching_commit_exists = ($git->SWITCHING_COMMIT) ? true : false;
+                $data->main_language = $languages->getMain();
+                $data->studied_languages = $languages->getStudied();
+                $data->all_languages = $languages->getAll();
+
+                foreach($data->studied_languages as $language) {
+                    $data->studied_languages_list[] = $language->name;
+                }
+                if($data->studied_languages_list)
+                    foreach($data->studied_languages as $language) {
+                        if(!in_array($language->name, $data->studied_languages_list))
+                            $data->show_all_languages = true;
+                    }
+                else 
+                    $data->show_all_languages = true;
                 
                 require_once __DIR__ . '/../view/randomizer.php';
             }
@@ -89,8 +104,14 @@
 
         // Методы для работы с настройками языков
 
-        public function addNewLanguage(): void {
-            $languages = new Languages;
-            $languages->addNewLanguage();
+        public function createNewLanguage(): void {
+            $languages = new Languages();
+            $languages->createNew();
+        }
+
+        public function addStudiedLanguage(array $args): void {
+            $languageMark = $args[0];
+            $languages = new Languages();
+            $languages->addStudied($languageMark);
         }
     }
