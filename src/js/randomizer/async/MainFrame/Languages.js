@@ -20,7 +20,14 @@ class Languages {
 
         // #add_studied_for_selection()
         ['Шаблон для кнопки выбора изучаемого языка', '.languages-add-select__template_recent-languages'],
-        ['Область кнопок изучаемых языков', '.languages-add-select_recent-languages'],
+        ['Область кнопок изучаемых языков для выбора', '.languages-add-select_recent-languages'],
+
+        // #set_studied_language_for_exchanging()
+        ['Кнопки изучаемых языков для переключения', '.languages-additional-languages-list__button_studied-language'],
+
+        // #exchange_from_all()
+        ['Кнопки всех языков', '.languages-add-select_all-languages .languages-add-select__button'],
+        ['Область кнопок изучаемых языков для переключения', '.languages-additional-languages-list'],
     ]);
 
 
@@ -50,14 +57,22 @@ class Languages {
 
     // #add_studied_for_selection()
     static studied_language_for_selection__template = document.querySelector(Languages.selectors.get('Шаблон для кнопки выбора изучаемого языка'));
-    static studied_languages_for_selection__area = document.querySelector(Languages.selectors.get('Область кнопок изучаемых языков'));
+    static studied_languages_for_selection__area = document.querySelector(Languages.selectors.get('Область кнопок изучаемых языков для выбора'));
+
+    // set_studied_language_for_exchanging()
+    static studied_languages_for_switching__buttons = document.querySelectorAll(Languages.selectors.get('Кнопки изучаемых языков для переключения'));
+
+    // exchange_form_all()
+    static all_languages__buttons = document.querySelectorAll(Languages.selectors.get('Кнопки всех языков'));
+    static studied_languages_for_switching__area = document.querySelector(Languages.selectors.get('Область кнопок изучаемых языков для переключения'));
 
 
 
 
 
     static language = {};
-    static language_adding_type;
+    static interact_with;
+    static studied_language_for_exchanging = false;
     static uncorrected_errors_left = 0;
 
     // Наличие ошибок в поле: 1 - имеется, 2 - не имеется
@@ -69,8 +84,16 @@ class Languages {
 
 
 
-    static add_to_studied() {
-        Languages.language_adding_type = 'studied';
+    static set_interaction_to_studied() {
+        Languages.interact_with = 'studied';
+    }
+
+    static set_interaction_to_main() {
+        Languages.interact_with = 'main';
+    }
+
+    static set_studied_language_for_exchanging() {
+        Languages.studied_language_for_exchanging = this.dataset.mark;
     }
 
     static add_new(event) {
@@ -84,19 +107,18 @@ class Languages {
             Languages.reset_errors();
         };
         xhr.onloadend = () => {
-            if(xhr.response === null) alert('Произошла ошибка!');
+            // alert(xhr.response);
+            // return;
+            if(xhr.response === null) alert('Произошла ошибка в add_new!');
             else if(xhr.response.hasOwnProperty('updated')) {
                 Languages.language.name = Languages.#name.value;
                 Languages.language.foldername = Languages.#foldername.value;
                 Languages.language.mark = Languages.#mark.value;
                 Languages.language.kanji = (Languages.#kanji.checked) ? 'true' : '';
                 Languages.#clear_fields();
-                switch(Languages.language_adding_type) {
+                switch(Languages.interact_with) {
                     case 'studied':
                         Languages.add_studied(Languages.language.mark);
-                        Languages.#add_studied_for_switching();
-                        Languages.#add_studied_for_selection();
-                        Languages.#show_actions();
                         break;
                 }
             }
@@ -142,25 +164,76 @@ class Languages {
         };
     }
 
-    /**
-     * Дописать сохранение на сервере добавленные пользователю изучаемые языки
-     */
-
     static add_studied(_language_mark) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', `/randomizer/addStudiedLanguage/${_language_mark}`);
         xhr.send();
         xhr.responseType = 'json';
         xhr.onloadend = () => {
-            if(xhr.response === null) alert('Произошла ошибка!');
-            else if(xhr.response.hasOwnProperty('updated'));
+            if(xhr.response === null) alert('Произошла ошибка add_studied!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                Languages.#add_studied_for_switching();
+                Languages.#add_studied_for_selection();
+                Languages.#show_actions();
+            }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
         }
     }
 
-    static exchange_studied() {
+    static exchange_from_all() {
+        Languages.language.name = this.dataset.language;
+        Languages.language.foldername = this.dataset.folder;
+        Languages.language.mark = this.dataset.mark;
+        Languages.language.kanji = this.dataset.kanji;
+        switch(Languages.interact_with) {
+            case 'studied':
+                if(Languages.studied_language_for_exchanging) {
+                    Languages.exchange_studied(
+                        Languages.studied_language_for_exchanging,
+                        this.dataset.mark
+                    );
+                    let studied_language_for_exchanging = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                    this.textContent = 
+                    this.dataset.language = studied_language_for_exchanging.dataset.language;
+                    this.dataset.folder = studied_language_for_exchanging.dataset.folder;
+                    this.dataset.mark = studied_language_for_exchanging.dataset.mark;
+                    this.dataset.kanji = studied_language_for_exchanging.dataset.kanji;
+                    studied_language_for_exchanging.textContent = 
+                    studied_language_for_exchanging.dataset.language = Languages.language.name;
+                    studied_language_for_exchanging.dataset.folder = Languages.language.foldername;
+                    studied_language_for_exchanging.dataset.mark = Languages.language.mark;
+                    studied_language_for_exchanging.dataset.kanji = Languages.language.kanji;
+                }
+                else {
+                    Languages.add_studied(this.dataset.mark);
+                    Languages.#remove_studied_for_selection(this);
+                    FrontendLanguages.disable_all_languages_block(true);
+                }
+                break;
+            case 'main':
+                break;
+        }
+    }
 
+    static exchange_studied(_what_exchange, _exchange_on) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/exchangeStudiedLanguage/${_what_exchange}/${_exchange_on}`);
+        xhr.send();
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
+    }
+
+    static exchange_main(_language_mark) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/exchangeMainLanguage/${_language_mark}`);
+        xhr.send();
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
     }
 
 
@@ -197,6 +270,10 @@ class Languages {
         button.dataset.mark = Languages.language.mark;
         button.dataset.kanji = Languages.language.kanji;
         Languages.studied_languages_for_selection__area.append(button);
+    }
+
+    static #remove_studied_for_selection(button) {
+        button.remove();
     }
 
     static #show_actions() {
@@ -261,9 +338,16 @@ export {Languages};
 
 document.addEventListener('DOMContentLoaded', function() {
     Languages.create_new_language__button.addEventListener('click', Languages.add_new);
-    Languages.add_studied_language__button.addEventListener('click', Languages.add_to_studied);
+    Languages.add_studied_language__button.addEventListener('click', Languages.set_interaction_to_studied);
     Languages.name_field.addEventListener('input', Languages.default_colors_for_name);
     Languages.foldername_field.addEventListener('input', Languages.default_colors_for_foldername);
     Languages.mark_field.addEventListener('input', Languages.default_colors_for_mark);
     FrontendLanguages.clear_errors_function = Languages.reset_errors;
+    for(const button of Languages.studied_languages_for_switching__buttons) {
+        button.addEventListener('click', Languages.set_studied_language_for_exchanging);
+        button.addEventListener('click', Languages.set_interaction_to_studied);
+    }
+    for(const button of Languages.all_languages__buttons) {
+        button.addEventListener('click', Languages.exchange_from_all);
+    }
 });

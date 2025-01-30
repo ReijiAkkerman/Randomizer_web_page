@@ -144,7 +144,7 @@
                         <div class="languages-add-select languages-add-select_all-languages" <?php if(!((sizeof($data->all_languages) > 1) && $data->show_all_languages)) echo 'style="display:none;"' ?>>
                         <?php foreach($data->all_languages as $language) { ?>
                             <?php if(($language->name !== $data->main_language->name) && (!in_array($language->name, $data->studied_languages_list))) { ?>
-                            <button class="languages-add-select__button" data-mark="<?= $language->mark ?>"><?= $language->name ?></button>
+                            <button class="languages-add-select__button" data-language="<?= $language->name ?>" data-folder="<?= $language->foldername ?>" data-mark="<?= $language->mark ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>"><?= $language->name ?></button>
                             <?php } ?>
                         <?php } ?>
                         </div>

@@ -139,7 +139,7 @@ class Languages {
     static choose_main_language() {
         const enable_set = () => {
             Languages.#main_language_button_set_active_color();
-            Languages.#enable_learning_languages_block();
+            Languages.enable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
             // Languages.complete_fields(this);
@@ -201,7 +201,7 @@ class Languages {
     static add_learning_language() {
         const enable_set = () => {
             Languages.#add_learning_language_button_set_active_color();
-            Languages.#disable_learning_languages_block();
+            Languages.disable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.enable_adding_language_title();
             Languages.complete_fields(this);
@@ -233,6 +233,7 @@ class Languages {
     static edit_learning_language() {
         if(Languages.#active_language && Languages.#active_language.type === 'learning') {
             Languages.#editing_learning_language_button_set_active_color();
+            Languages.disable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.#enable_changing_language_title();
             Languages.complete_fields(Languages.#active_language);
@@ -266,7 +267,7 @@ class Languages {
                     break;
             }
             Languages.#clear_fields();
-            Languages.#disable_learning_languages_block();
+            Languages.disable_learning_languages_block();
             Languages.disable_all_languages_block();
             Languages.disable_adding_language_title();
             Languages.#disable_changing_language_title();
@@ -281,24 +282,44 @@ class Languages {
      * Содержимое дополнительного раздела
      */
 
-    static #enable_learning_languages_block() {
-        if(Languages.#learning_languages_block !== null)
-            Languages.#learning_languages_block.style.display = '';
+    static enable_learning_languages_block() {
+        if(Languages.#learning_languages_block !== null) {
+            let buttons = Languages.#learning_languages_block.querySelectorAll('button');
+            if(buttons.length > 0)
+                Languages.#learning_languages_block.style.display = '';
+        }
     }
 
-    static #disable_learning_languages_block() {
-        if(Languages.#learning_languages_block !== null)
-            Languages.#learning_languages_block.style.display = 'none';
+    static disable_learning_languages_block(_check = false) {
+        if(Languages.#learning_languages_block !== null) {
+            if(_check) {
+                let buttons = Languages.#learning_languages_block.querySelectorAll('button');
+                if(buttons.length === 0) 
+                    Languages.#learning_languages_block.style.display = 'none';
+            }
+            else
+                Languages.#learning_languages_block.style.display = 'none';
+        }
     }
 
     static enable_all_languages_block() {
-        if(Languages.#all_languages_block !== null)
-            Languages.#all_languages_block.style.display = '';
+        if(Languages.#all_languages_block !== null) {
+            let buttons = Languages.#all_languages_block.querySelectorAll('button');
+            if(buttons.length > 0)
+                Languages.#all_languages_block.style.display = '';
+        }
     }
 
-    static disable_all_languages_block() {
-        if(Languages.#all_languages_block !== null)
-            Languages.#all_languages_block.style.display = 'none';
+    static disable_all_languages_block(_check = false) {
+        if(Languages.#all_languages_block !== null) {
+            if(_check) {
+                let buttons = Languages.#all_languages_block.querySelectorAll('button');
+                if(buttons.length === 0)
+                    Languages.#all_languages_block.style.display = 'none';
+            }
+            else 
+                Languages.#all_languages_block.style.display = 'none';
+        }
     }
 
     static enable_adding_language_title() {
@@ -404,6 +425,26 @@ class Languages {
         Languages.#active_language.type = obj.dataset.language_type;
         Languages.#active_language.id = obj.id;
     }
+
+    // решает проблему бордеров кнопок языков для выбора
+
+    static define_good_borders_for_studied_languages() {
+        let step = 3;
+        let buttons = Languages.#learning_languages_block.querySelectorAll('button');
+        let buttons_for_changing = buttons.length % step;
+        for(let i = 0; i < buttons_for_changing; i++) {
+            buttons[buttons.length - 1 - i].style.borderBottom = 'none';
+        }
+    }
+
+    static define_good_borders_for_all_languages() {
+        let step = 3;
+        let buttons = Languages.#all_languages_block.querySelectorAll('button');
+        let buttons_for_changing = buttons.length % step;
+        for(let i = 0; i < buttons_for_changing; i++) {
+            buttons[buttons.length - 1 - i].style.borderBottom = 'none';
+        }
+    }
 }
 
 export {Languages};
@@ -419,3 +460,6 @@ document.addEventListener('DOMContentLoaded', function() {
     Languages.add_learning_language_button.addEventListener('click', Languages.add_learning_language);
     Languages.edit_learning_language_button.addEventListener('click', Languages.edit_learning_language);
 });
+
+Languages.define_good_borders_for_studied_languages();
+Languages.define_good_borders_for_all_languages();

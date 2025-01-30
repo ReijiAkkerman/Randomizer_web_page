@@ -53,7 +53,8 @@
                 ];
                 $this->checkErrors($validateFunctions);
                 $this->checkErrors($checkFunctions, $result);
-                $this->Kanji = ($_POST['kanji']) ? true : false;
+                $this->Kanji = ($_POST['kanji'] ?? '') ? true : false;
+                $KANJI = ($this->Kanji) ? 1 : 0;
                 $query = "INSERT INTO all_languages(
                     name,
                     foldername,
@@ -63,7 +64,7 @@
                     '{$this->Name}',
                     '{$this->Foldername}',
                     '{$this->Mark}',
-                    {$this->Kanji}
+                    $KANJI
                 )";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
@@ -71,7 +72,7 @@
             }
             else {
                 $this->deleteCookie();
-                echo '{"redirect"}:true';
+                echo '{"redirect":true}';
             }
         }
 
@@ -86,7 +87,7 @@
                 $query = "SELECT studied FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
-                    $this->languages_ids = ($value['studied']) ? $value['studied'] : '';
+                    $this->languages_ids = $value['studied'] ?? '';
                 }
                 if($this->languages_ids) {
                     $LANGUAGES_IDS = $this->languages_ids . ',' . $this->language_id;
@@ -101,7 +102,44 @@
             }
             else {
                 $this->deleteCookie();
-                echo '"redirect":true';
+                echo '{"redirect":true}';
+            }
+        }
+
+        public function exchangeStudied($_what_exchange, $_exchange_on): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT ID FROM all_languages WHERE mark='$_what_exchange'";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $whatExchangeId = $value['ID'];
+                }
+                $query = "SELECT ID FROM all_languages WHERE mark='$_exchange_on'";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $exchangeOnId = $value['ID'];
+                }
+                $query = "SELECT studied FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->languages_ids = $value['studied'];
+                }
+                $languagesIds__array = explode(',', $this->languages_ids);
+                $languageId__array = [(string)$whatExchangeId];
+                $languagesIds = array_diff($languagesIds__array, $languageId__array);
+                $LANGUAGES_IDS = '';
+                foreach($languagesIds as $id) {
+                    $LANGUAGES_IDS .= $id . ',';
+                }
+                $LANGUAGES_IDS .= $exchangeOnId;
+                $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
             }
         }
 
@@ -139,20 +177,22 @@
                 $query = "SELECT * FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
-                    $languageIds = $value['studied'] ?? '';
+                    $languagesIds = $value['studied'] ?? '';
                 }
-                if($languageIds) {
-                    $languageIds = explode(',', $languageIds);
-                    foreach($languageIds as $languageId) {
-                        $query = "SELECT * FROM all_languages WHERE ID=$languageId";
-                        $result = $this->mysql->query($query);
-                        foreach($result as $value) {
+                if($languagesIds) {
+                    $languagesIds__array = explode(',', $languagesIds);
+                    $query = "SELECT * FROM all_languages ORDER BY BINARY name";
+                    $result = $this->mysql->query($query);
+                    $studied_languages = [];
+                    foreach($result as $value) {
+                        if(in_array($value['ID'], $languagesIds__array)) {
+                            $language = new Language();
                             $language->name = $value['name'];
                             $language->foldername = $value['foldername'];
                             $language->mark = $value['mark'];
                             $language->kanji = (bool)$value['kanji'];
+                            $studied_languages[] = clone $language;
                         }
-                        $studied_languages[] = clone $language;
                     }
                 }
                 $this->closeSettingsConnection();
@@ -165,7 +205,7 @@
                 $all_languages = [];
                 $language = new Language();
                 $this->createSettingsConnection();
-                $query = "SELECT * FROM all_languages";
+                $query = "SELECT * FROM all_languages ORDER BY BINARY name";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
                     $language->name = $value['name'];

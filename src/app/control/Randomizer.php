@@ -114,4 +114,11 @@
             $languages = new Languages();
             $languages->addStudied($languageMark);
         }
+
+        public function exchangeStudiedLanguage(array $args): void {
+            $whatExchange = $args[0];
+            $exchangeOn = $args[1];
+            $languages = new Languages();
+            $languages->exchangeStudied($whatExchange, $exchangeOn);
+        }
     }

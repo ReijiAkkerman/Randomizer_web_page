@@ -207,11 +207,8 @@ svg {
   border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
 }
-.randomizer main > .settings .settings-content .languages-add-select__button:nth-child(3n) {
+.randomizer main > .settings .settings-content .languages-add-select__button:nth-of-type(3n) {
   border-right: none;
-}
-.randomizer main > .settings .settings-content .languages-add-select__button:nth-last-child(-n+3) {
-  border-bottom: none;
 }
 .randomizer main > .settings .settings-content .languages-add-select__button:hover {
   color: #000;
