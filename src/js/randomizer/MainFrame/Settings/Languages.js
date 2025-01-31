@@ -39,7 +39,7 @@ class Languages {
 
     /** Работа */
 
-    static #active_language = false;
+    static active_language = false;
 
 
 
@@ -95,8 +95,8 @@ class Languages {
     static switch_off() {
         Languages.#disable_main_section();
         Languages.disable_additional_section();
-        Languages.#deactivate_active_language_button();
-        Languages.#active_language = false;
+        Languages.deactivate_active_language_button();
+        Languages.active_language = false;
         Languages.#main_section_button_unset_active_color();
     }
 
@@ -147,16 +147,16 @@ class Languages {
             Languages.write_language_data(this);
             Languages.#show_add_button();
         };
-        if(Languages.#active_language === false) {
+        if(Languages.active_language === false) {
             enable_set();
         }
-        else if(Languages.#active_language.id !== this.id) {
-            Languages.#deactivate_active_language_button();
+        else if(Languages.active_language.id !== this.id) {
+            Languages.deactivate_active_language_button();
             enable_set();
         }
         else {
-            Languages.#deactivate_active_language_button();
-            Languages.#active_language = false;
+            Languages.deactivate_active_language_button();
+            Languages.active_language = false;
         }
         if(Languages.clear_errors_function !== null)
             Languages.clear_errors_function();
@@ -177,16 +177,16 @@ class Languages {
             Languages.#change_learning_language_button_set_active_color(this);
             Languages.write_language_data(this);
         };
-        if(Languages.#active_language === false) {
+        if(Languages.active_language === false) {
             enable_set();
         }
-        else if(Languages.#active_language.id !== this.id) {
-            Languages.#deactivate_active_language_button();
+        else if(Languages.active_language.id !== this.id) {
+            Languages.deactivate_active_language_button();
             enable_set();
         }
         else {
-            Languages.#deactivate_active_language_button();
-            Languages.#active_language = false;
+            Languages.deactivate_active_language_button();
+            Languages.active_language = false;
         }
     }
 
@@ -203,22 +203,23 @@ class Languages {
             Languages.#add_learning_language_button_set_active_color();
             Languages.disable_learning_languages_block();
             Languages.enable_all_languages_block();
+            Languages.#disable_changing_language_title();
             Languages.enable_adding_language_title();
             Languages.complete_fields(this);
             Languages.enable_additional_section();
             Languages.write_language_data(this);
             Languages.#show_add_button();
         };
-        if(Languages.#active_language === false) {
+        if(Languages.active_language === false) {
             enable_set();
         }
-        else if(Languages.#active_language.id !== this.id) {
-            Languages.#deactivate_active_language_button();
+        else if(Languages.active_language.id !== this.id) {
+            Languages.deactivate_active_language_button();
             enable_set();
         }
         else {
-            Languages.#deactivate_active_language_button();
-            Languages.#active_language = false;
+            Languages.deactivate_active_language_button();
+            Languages.active_language = false;
         }
     }
 
@@ -231,12 +232,12 @@ class Languages {
     }
 
     static edit_learning_language() {
-        if(Languages.#active_language && Languages.#active_language.type === 'learning') {
+        if(Languages.active_language && Languages.active_language.type === 'learning') {
             Languages.#editing_learning_language_button_set_active_color();
             Languages.disable_learning_languages_block();
             Languages.enable_all_languages_block();
             Languages.#enable_changing_language_title();
-            Languages.complete_fields(Languages.#active_language);
+            Languages.complete_fields(Languages.active_language);
             Languages.enable_additional_section();
             Languages.#show_change_button();
         }
@@ -247,14 +248,14 @@ class Languages {
         Languages.#svg_of_changing_learning_language_button.style.fill = UserInterface.text_color;
     }
 
-    static #editing_learning_language_button_unset_active_color() {
+    static editing_learning_language_button_unset_active_color() {
         Languages.edit_learning_language_button.style.borderColor = '';
         Languages.#svg_of_changing_learning_language_button.style.fill = '';
     }
 
-    static #deactivate_active_language_button() {
-        if(Languages.#active_language) {
-            let button = document.querySelector(`#${Languages.#active_language.id}`);
+    static deactivate_active_language_button() {
+        if(Languages.active_language) {
+            let button = document.querySelector(`#${Languages.active_language.id}`);
             switch(button.dataset.language_type) {
                 case 'main':
                     Languages.#main_language_button_unset_active_color();
@@ -272,7 +273,7 @@ class Languages {
             Languages.disable_adding_language_title();
             Languages.#disable_changing_language_title();
             Languages.disable_additional_section();
-            Languages.#editing_learning_language_button_unset_active_color();
+            Languages.editing_learning_language_button_unset_active_color();
         }
     }
 
@@ -358,28 +359,28 @@ class Languages {
     }
 
     static #complete_language_name(obj) {
-        if(Languages.#active_language === obj)
+        if(Languages.active_language === obj)
             Languages.#language_name_field.value = obj.name;
         else
             Languages.#language_name_field.value = obj.dataset.language;
     }
 
     static #complete_language_foldername(obj) {
-        if(Languages.#active_language === obj)
+        if(Languages.active_language === obj)
             Languages.#language_foldername_field.value = obj.foldername;
         else
             Languages.#language_foldername_field.value = obj.dataset.folder;
     }
 
     static #complete_language_shorthand_mark(obj) {
-        if(Languages.#active_language === obj)
+        if(Languages.active_language === obj)
             Languages.#language_shorthand_mark.value = obj.shortnand;
         else
             Languages.#language_shorthand_mark.value = obj.dataset.mark;
     }
 
     static #complete_language_kanji_mark(obj) {
-        if(Languages.#active_language === obj)
+        if(Languages.active_language === obj)
             Languages.#language_kanji_mark.checked = !!obj.kanji;
         else
             Languages.#language_kanji_mark.checked = !!obj.dataset.kanji;
@@ -417,33 +418,49 @@ class Languages {
      */
 
     static write_language_data(obj) {
-        Languages.#active_language = {};
-        Languages.#active_language.name = obj.dataset.language;
-        Languages.#active_language.foldername = obj.dataset.folder;
-        Languages.#active_language.shortnand = obj.dataset.mark;
-        Languages.#active_language.kanji = obj.dataset.kanji;
-        Languages.#active_language.type = obj.dataset.language_type;
-        Languages.#active_language.id = obj.id;
+        Languages.active_language = {};
+        Languages.active_language.name = obj.dataset.language;
+        Languages.active_language.foldername = obj.dataset.folder;
+        Languages.active_language.shortnand = obj.dataset.mark;
+        Languages.active_language.kanji = obj.dataset.kanji;
+        Languages.active_language.type = obj.dataset.language_type;
+        Languages.active_language.id = obj.id;
     }
 
     // решает проблему бордеров кнопок языков для выбора
 
-    static define_good_borders_for_studied_languages() {
+    static define_good_borders_for_studied_languages(now_added = false) {
         let step = 3;
         let buttons = Languages.#learning_languages_block.querySelectorAll('button');
         let buttons_for_changing = buttons.length % step;
-        for(let i = 0; i < buttons_for_changing; i++) {
-            buttons[buttons.length - 1 - i].style.borderBottom = 'none';
-        }
+        if(buttons_for_changing)
+            for(let i = 0; i < buttons_for_changing; i++) 
+                buttons[buttons.length - 1 - i].style.borderBottom = 'none';
+        else 
+            if(buttons.length)
+                for(let i = 1; i <= step; i++) 
+                    buttons[buttons.length - i].style.borderBottom = 'none';
+        if(now_added) 
+            if((buttons.length > 3) && (buttons.length % step === 1)) 
+                for(let i = 0; i < step; i++) 
+                    buttons[buttons.length - 2 - i].style.borderBottom = '';
     }
 
-    static define_good_borders_for_all_languages() {
+    static define_good_borders_for_all_languages(now_added = false) {
         let step = 3;
         let buttons = Languages.#all_languages_block.querySelectorAll('button');
         let buttons_for_changing = buttons.length % step;
-        for(let i = 0; i < buttons_for_changing; i++) {
-            buttons[buttons.length - 1 - i].style.borderBottom = 'none';
-        }
+        if(buttons_for_changing)
+            for(let i = 0; i < buttons_for_changing; i++) 
+                buttons[buttons.length - 1 - i].style.borderBottom = 'none';
+        else 
+            if(buttons.length)
+                for(let i = 1; i <= step; i++) 
+                    buttons[buttons.length - i].style.borderBottom = 'none';
+        if(now_added) 
+            if((buttons.length > 3) && (buttons.length % step === 1)) 
+                for(let i = 0; i < step; i++) 
+                    buttons[buttons.length - 2 - i].style.borderBottom = '';
     }
 }
 

@@ -121,4 +121,10 @@
             $languages = new Languages();
             $languages->exchangeStudied($whatExchange, $exchangeOn);
         }
+
+        public function removeStudiedLanguage(array $args): void {
+            $languageForRemoving = $args[0];
+            $languages = new Languages();
+            $languages->removeStudied($languageForRemoving);
+        }
     }

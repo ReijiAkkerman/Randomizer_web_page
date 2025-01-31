@@ -143,6 +143,43 @@
             }
         }
 
+        public function removeStudied($_language_mark): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->language_id = $value['ID'];
+                }
+                $query = "SELECT studied FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->languages_ids = $value['studied'];
+                }
+                $languagesIds__array = explode(',', $this->languages_ids);
+                $languageId__array = [$this->language_id];
+                $languagesIds__array = array_diff($languagesIds__array, $languageId__array);
+                if($languagesIds__array) {
+                    $LANGUAGES_IDS = '';
+                    foreach($languagesIds__array as $id) {
+                        $LANGUAGES_IDS .= $id . ',';
+                    }
+                    rtrim($LANGUAGES_IDS, ',');
+                }
+                else {
+                    $LANGUAGES_IDS = NULL;
+                }
+                $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
 
 
 

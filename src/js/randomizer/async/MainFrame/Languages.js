@@ -6,6 +6,7 @@ class Languages {
         ['Форма с данными для нового языка', '.languages-add-create__form'],
         ['Кнопка создания нового языка', '.languages-add-create__button_add'],
         ['Шаблон для кнопки переключения изучаемого языка', '.languages-additional-languages-list__template'],
+        ['Кнопка замены основного языка', '#main'],
         ['Кнопка добавления нового изучаемого языка', '#new'],
         ['Место для вывода ошибок при создании нового языка', '.languages-add-create_errors'],
         ['Имя нового языка', '.languages-add-create__input_language-name'],
@@ -16,6 +17,7 @@ class Languages {
         // #show_actions()
         // #hide_actions()
         ['Кнопка редактирования изучаемого языка', '.languages-additional-languages-actions__button_edit-language'],
+        // delete_studied()
         ['Кнопка удаления изучаемого языка', '.languages-additional-languages-actions__button_delete-language'],
 
         // #add_studied_for_selection()
@@ -28,6 +30,10 @@ class Languages {
         // #exchange_from_all()
         ['Кнопки всех языков', '.languages-add-select_all-languages .languages-add-select__button'],
         ['Область кнопок изучаемых языков для переключения', '.languages-additional-languages-list'],
+
+        // remove_studied()
+        ['Шаблон кнопки выбора языка из числа всех', '.languages-add-select__template_all-languages'],
+        ['Область отображения всех языков', '.languages-add-select_all-languages'],
     ]);
 
 
@@ -43,6 +49,7 @@ class Languages {
     static new_language__form = document.querySelector(Languages.selectors.get('Форма с данными для нового языка'));
     static create_new_language__button = document.querySelector(Languages.selectors.get('Кнопка создания нового языка'));
     static studied_language_for_switching__template = document.querySelector(Languages.selectors.get('Шаблон для кнопки переключения изучаемого языка'));
+    static substitute_main_language__button = document.querySelector(Languages.selectors.get('Кнопка замены основного языка'));
     static add_studied_language__button = document.querySelector(Languages.selectors.get('Кнопка добавления нового изучаемого языка'));
     static #errors = document.querySelector(Languages.selectors.get('Место для вывода ошибок при создании нового языка'));
     static #name = document.querySelector(Languages.selectors.get('Имя нового языка'));
@@ -53,7 +60,8 @@ class Languages {
     // #show_actions()
     // #hide_actions()
     static edit_studied_language__button = document.querySelector(Languages.selectors.get('Кнопка редактирования изучаемого языка'));
-    static delete_studied_language__button = document.querySelector(Languages.selectors.get('Кнопка удаления изучаемого языка'));
+    // delete_studied()
+    static remove_studied_language__button = document.querySelector(Languages.selectors.get('Кнопка удаления изучаемого языка'));
 
     // #add_studied_for_selection()
     static studied_language_for_selection__template = document.querySelector(Languages.selectors.get('Шаблон для кнопки выбора изучаемого языка'));
@@ -65,6 +73,10 @@ class Languages {
     // exchange_form_all()
     static all_languages__buttons = document.querySelectorAll(Languages.selectors.get('Кнопки всех языков'));
     static studied_languages_for_switching__area = document.querySelector(Languages.selectors.get('Область кнопок изучаемых языков для переключения'));
+
+    // remove_studied()
+    static all_languages__area = document.querySelector(Languages.selectors.get('Область отображения всех языков'));
+    static language_selected_from_all__template = document.querySelector(Languages.selectors.get('Шаблон кнопки выбора языка из числа всех'));
 
 
 
@@ -94,6 +106,10 @@ class Languages {
 
     static set_studied_language_for_exchanging() {
         Languages.studied_language_for_exchanging = this.dataset.mark;
+    }
+
+    static reset_studied_language_for_exchanging() {
+        Languages.studied_language_for_exchanging = false;
     }
 
     static add_new(event) {
@@ -170,11 +186,13 @@ class Languages {
         xhr.send();
         xhr.responseType = 'json';
         xhr.onloadend = () => {
-            if(xhr.response === null) alert('Произошла ошибка add_studied!');
+            if(xhr.response === null) alert('Произошла ошибка в add_studied!');
             else if(xhr.response.hasOwnProperty('updated')) {
                 Languages.#add_studied_for_switching();
                 Languages.#add_studied_for_selection();
                 Languages.#show_actions();
+                FrontendLanguages.define_good_borders_for_all_languages();
+                FrontendLanguages.define_good_borders_for_studied_languages(true);
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -193,22 +211,13 @@ class Languages {
                         Languages.studied_language_for_exchanging,
                         this.dataset.mark
                     );
-                    let studied_language_for_exchanging = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
-                    this.textContent = 
-                    this.dataset.language = studied_language_for_exchanging.dataset.language;
-                    this.dataset.folder = studied_language_for_exchanging.dataset.folder;
-                    this.dataset.mark = studied_language_for_exchanging.dataset.mark;
-                    this.dataset.kanji = studied_language_for_exchanging.dataset.kanji;
-                    studied_language_for_exchanging.textContent = 
-                    studied_language_for_exchanging.dataset.language = Languages.language.name;
-                    studied_language_for_exchanging.dataset.folder = Languages.language.foldername;
-                    studied_language_for_exchanging.dataset.mark = Languages.language.mark;
-                    studied_language_for_exchanging.dataset.kanji = Languages.language.kanji;
                 }
                 else {
                     Languages.add_studied(this.dataset.mark);
                     Languages.#remove_studied_for_selection(this);
                     FrontendLanguages.disable_all_languages_block(true);
+                    FrontendLanguages.define_good_borders_for_studied_languages();
+                    FrontendLanguages.define_good_borders_for_all_languages();
                 }
                 break;
             case 'main':
@@ -216,14 +225,66 @@ class Languages {
         }
     }
 
-    static exchange_studied(_what_exchange, _exchange_on) {
+    static exchange_studied(_what_exchange, _exchange_on, selected_button) {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', `/randomizer/exchangeStudiedLanguage/${_what_exchange}/${_exchange_on}`);
         xhr.send();
-        xhr.responseType = 'text';
+        xhr.responseType = 'json';
         xhr.onloadend = () => {
-            alert(xhr.response);
+            if(xhr.response === null) alert('Произошла ошибка в exchange_studied!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                let studied_language_for_exchanging = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                    selected_button.textContent = 
+                    selected_button.dataset.language = studied_language_for_exchanging.dataset.language;
+                    selected_button.dataset.folder = studied_language_for_exchanging.dataset.folder;
+                    selected_button.dataset.mark = studied_language_for_exchanging.dataset.mark;
+                    selected_button.dataset.kanji = studied_language_for_exchanging.dataset.kanji;
+                    studied_language_for_exchanging.textContent = 
+                    studied_language_for_exchanging.dataset.language = Languages.language.name;
+                    studied_language_for_exchanging.dataset.folder = Languages.language.foldername;
+                    studied_language_for_exchanging.dataset.mark = Languages.language.mark;
+                    studied_language_for_exchanging.dataset.kanji = Languages.language.kanji;
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
         };
+    }
+
+    static remove_studied() {
+        if(Languages.studied_language_for_exchanging) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', `/randomizer/removeStudiedLanguage/${Languages.studied_language_for_exchanging}`);
+            xhr.send();
+            xhr.responseType = 'json';
+            xhr.onloadend = () => {
+                if(xhr.response === null) alert('Произошла ошибка в delete_studied!');
+                else if(xhr.response.hasOwnProperty('updated')) {
+                    let removing_studied_language_for_switching = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                    let removing_studied_language_for_selection = Languages.studied_languages_for_selection__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                    let clone = Languages.language_selected_from_all__template.content.cloneNode(true);
+                    let language_button_for_adding = clone.querySelector('button');
+                    language_button_for_adding.addEventListener('click', Languages.exchange_from_all);
+                    language_button_for_adding.textContent = 
+                    language_button_for_adding.dataset.language = removing_studied_language_for_switching.dataset.language;
+                    language_button_for_adding.dataset.folder = removing_studied_language_for_switching.dataset.folder;
+                    language_button_for_adding.dataset.mark = removing_studied_language_for_switching.dataset.mark;
+                    language_button_for_adding.dataset.kanji = removing_studied_language_for_switching.dataset.kanji;
+                    Languages.all_languages__area.append(language_button_for_adding);
+                    removing_studied_language_for_switching.remove();
+                    removing_studied_language_for_selection.remove();
+                    FrontendLanguages.define_good_borders_for_studied_languages();
+                    FrontendLanguages.define_good_borders_for_all_languages(true);
+                    FrontendLanguages.active_language = false;
+                    FrontendLanguages.disable_additional_section();
+                    FrontendLanguages.editing_learning_language_button_unset_active_color();
+                    let studied_languages = document.querySelectorAll(Languages.selectors.get('Кнопки изучаемых языков для переключения'));
+                    if(studied_languages.length === 0)
+                        Languages.#hide_actions();
+                }
+                else if(xhr.response.hasOwnProperty('redirect'))
+                    location.href = '/auth/view';
+            };
+        }
     }
 
     static exchange_main(_language_mark) {
@@ -251,6 +312,8 @@ class Languages {
         let clone = Languages.studied_language_for_switching__template.content.cloneNode(true);
         let button = clone.querySelector('button');
         button.addEventListener('click', FrontendLanguages.select_learning_language);
+        button.addEventListener('click', Languages.set_studied_language_for_exchanging);
+        button.addEventListener('click', Languages.set_interaction_to_studied);
         button.id = 
         button.textContent = 
         button.dataset.language = Languages.language.name;
@@ -278,12 +341,12 @@ class Languages {
 
     static #show_actions() {
         Languages.edit_studied_language__button.style.display = '';
-        Languages.delete_studied_language__button.style.display = '';
+        Languages.remove_studied_language__button.style.display = '';
     }
 
     static #hide_actions() {
         Languages.edit_studied_language__button.style.display = 'none';
-        Languages.delete_studied_language__button.style.display = 'none';
+        Languages.remove_studied_language__button.style.display = 'none';
     }
 
 
@@ -339,6 +402,9 @@ export {Languages};
 document.addEventListener('DOMContentLoaded', function() {
     Languages.create_new_language__button.addEventListener('click', Languages.add_new);
     Languages.add_studied_language__button.addEventListener('click', Languages.set_interaction_to_studied);
+    Languages.add_studied_language__button.addEventListener('click', Languages.reset_studied_language_for_exchanging);
+    Languages.substitute_main_language__button.addEventListener('click', Languages.reset_studied_language_for_exchanging);
+    Languages.remove_studied_language__button.addEventListener('click', Languages.remove_studied);
     Languages.name_field.addEventListener('input', Languages.default_colors_for_name);
     Languages.foldername_field.addEventListener('input', Languages.default_colors_for_foldername);
     Languages.mark_field.addEventListener('input', Languages.default_colors_for_mark);
