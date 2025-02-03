@@ -115,6 +115,12 @@
             $languages->addStudied($languageMark);
         }
 
+        public function addMainLanguage(array $args): void {
+            $languageMark = $args[0];
+            $languages = new Languages();
+            $languages->addMain($languageMark);
+        }
+
         public function exchangeStudiedLanguage(array $args): void {
             $whatExchange = $args[0];
             $exchangeOn = $args[1];

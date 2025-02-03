@@ -106,6 +106,25 @@
             }
         }
 
+        public function addMain($_language_mark): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $this->language_id = $value['ID'];
+                }
+                $query = "UPDATE languages SET main={$this->language_id} WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
         public function exchangeStudied($_what_exchange, $_exchange_on): void {
             if($this->getCookie()) {
                 $this->createSettingsConnection();

@@ -70,7 +70,7 @@
                     </div>
                     <div class="theme-grid-container setups-switcher">
                         <div class="setups-switcher theme-flex">
-                            <button class="setups-switcher__button setups-switcher__button_languages" style="color:#000;">Languages</button>
+                            <button class="setups-switcher__button setups-switcher__button_languages" style="color:#000;">Языки</button>
                             <button class="setups-switcher__button setups-switcher__button_git">Git</button>
                         </div>
                     </div>

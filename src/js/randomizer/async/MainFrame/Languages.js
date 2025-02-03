@@ -136,6 +136,9 @@ class Languages {
                     case 'studied':
                         Languages.add_studied(Languages.language.mark);
                         break;
+                    case 'main':
+                        Languages.add_main(Languages.language.mark);
+                        break;
                 }
             }
             else if(xhr.response.hasOwnProperty('fields')) {
@@ -197,6 +200,26 @@ class Languages {
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
         }
+    }
+
+    static add_main(_language_mark) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/addMainLanguage/${_language_mark}`);
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в add_main!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                Languages.substitute_main_language__button.dataset.language = [Languages.language.name, Languages.language.name = Languages.substitute_main_language__button.dataset.language][0];
+                Languages.substitute_main_language__button.textContent = Languages.substitute_main_language__button.dataset.language + ' язык';
+                Languages.substitute_main_language__button.dataset.folder = [Languages.language.foldername, Languages.language.foldername = Languages.substitute_main_language__button.dataset.folder][0];
+                Languages.substitute_main_language__button.dataset.mark = [Languages.language.mark, Languages.language.mark = Languages.substitute_main_language__button.dataset.mark][0];
+                Languages.substitute_main_language__button.dataset.kanji = [Languages.language.kanji, Languages.language.kanji = Languages.substitute_main_language__button.dataset.kanji][0];
+                Languages.#add_all_for_selection(Languages.language);
+                FrontendLanguages.define_good_borders_for_all_languages();
+            }
+            else if(xhr.response.hasOwnProperty('redirect'));
+        };
     }
 
     static exchange_from_all() {
@@ -261,15 +284,7 @@ class Languages {
                 else if(xhr.response.hasOwnProperty('updated')) {
                     let removing_studied_language_for_switching = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
                     let removing_studied_language_for_selection = Languages.studied_languages_for_selection__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
-                    let clone = Languages.language_selected_from_all__template.content.cloneNode(true);
-                    let language_button_for_adding = clone.querySelector('button');
-                    language_button_for_adding.addEventListener('click', Languages.exchange_from_all);
-                    language_button_for_adding.textContent = 
-                    language_button_for_adding.dataset.language = removing_studied_language_for_switching.dataset.language;
-                    language_button_for_adding.dataset.folder = removing_studied_language_for_switching.dataset.folder;
-                    language_button_for_adding.dataset.mark = removing_studied_language_for_switching.dataset.mark;
-                    language_button_for_adding.dataset.kanji = removing_studied_language_for_switching.dataset.kanji;
-                    Languages.all_languages__area.append(language_button_for_adding);
+                    Languages.#add_all_for_selection(removing_studied_language_for_switching);
                     removing_studied_language_for_switching.remove();
                     removing_studied_language_for_selection.remove();
                     FrontendLanguages.define_good_borders_for_studied_languages();
@@ -333,6 +348,27 @@ class Languages {
         button.dataset.mark = Languages.language.mark;
         button.dataset.kanji = Languages.language.kanji;
         Languages.studied_languages_for_selection__area.append(button);
+    }
+
+    static #add_all_for_selection(language) {
+        let clone = Languages.language_selected_from_all__template.content.cloneNode(true);
+        let language_button_for_adding = clone.querySelector('button');
+        language_button_for_adding.addEventListener('click', Languages.exchange_from_all);
+        if(language.hasOwnProperty('dataset')) {
+            language_button_for_adding.textContent = 
+            language_button_for_adding.dataset.language = language.dataset.language;
+            language_button_for_adding.dataset.folder = language.dataset.folder;
+            language_button_for_adding.dataset.mark = language.dataset.mark;
+            language_button_for_adding.dataset.kanji = (language.dataset.kanji) ? 'true' : '';
+        }
+        else {
+            language_button_for_adding.textContent = 
+            language_button_for_adding.dataset.language = language.name;
+            language_button_for_adding.dataset.folder = language.foldername;
+            language_button_for_adding.dataset.mark = language.mark;
+            language_button_for_adding.dataset.kanji = language.kanji;
+        }
+        Languages.all_languages__area.append(language_button_for_adding);
     }
 
     static #remove_studied_for_selection(button) {
@@ -416,4 +452,5 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of Languages.all_languages__buttons) {
         button.addEventListener('click', Languages.exchange_from_all);
     }
+    Languages.substitute_main_language__button.addEventListener('click', Languages.set_interaction_to_main);
 });
