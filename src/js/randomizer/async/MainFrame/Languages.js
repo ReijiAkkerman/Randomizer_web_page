@@ -232,7 +232,8 @@ class Languages {
                 if(Languages.studied_language_for_exchanging) {
                     Languages.exchange_studied(
                         Languages.studied_language_for_exchanging,
-                        this.dataset.mark
+                        this.dataset.mark,
+                        this
                     );
                 }
                 else {
@@ -267,6 +268,11 @@ class Languages {
                     studied_language_for_exchanging.dataset.folder = Languages.language.foldername;
                     studied_language_for_exchanging.dataset.mark = Languages.language.mark;
                     studied_language_for_exchanging.dataset.kanji = Languages.language.kanji;
+                    // FrontendLanguages.active_language = false;
+                    // FrontendLanguages.disable_additional_section();
+                    // FrontendLanguages.editing_learning_language_button_unset_active_color();
+                    FrontendLanguages.deactivate_active_language_button();
+                    Languages.active_language = false;
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -292,6 +298,8 @@ class Languages {
                     FrontendLanguages.active_language = false;
                     FrontendLanguages.disable_additional_section();
                     FrontendLanguages.editing_learning_language_button_unset_active_color();
+                    // FrontendLanguages.deactivate_active_language_button();
+                    // FrontendLanguages.active_language = false;
                     let studied_languages = document.querySelectorAll(Languages.selectors.get('Кнопки изучаемых языков для переключения'));
                     if(studied_languages.length === 0)
                         Languages.#hide_actions();
@@ -354,7 +362,7 @@ class Languages {
         let clone = Languages.language_selected_from_all__template.content.cloneNode(true);
         let language_button_for_adding = clone.querySelector('button');
         language_button_for_adding.addEventListener('click', Languages.exchange_from_all);
-        if(language.hasOwnProperty('dataset')) {
+        if(language.dataset) {
             language_button_for_adding.textContent = 
             language_button_for_adding.dataset.language = language.dataset.language;
             language_button_for_adding.dataset.folder = language.dataset.folder;
