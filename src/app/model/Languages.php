@@ -106,7 +106,7 @@
             }
         }
 
-        public function addMain($_language_mark): void {
+        public function setMain($_language_mark): void {
             if($this->getCookie()) {
                 $this->createSettingsConnection();
                 $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";

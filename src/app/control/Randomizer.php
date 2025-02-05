@@ -118,7 +118,7 @@
         public function addMainLanguage(array $args): void {
             $languageMark = $args[0];
             $languages = new Languages();
-            $languages->addMain($languageMark);
+            $languages->setMain($languageMark);
         }
 
         public function exchangeStudiedLanguage(array $args): void {
@@ -132,5 +132,11 @@
             $languageForRemoving = $args[0];
             $languages = new Languages();
             $languages->removeStudied($languageForRemoving);
+        }
+
+        public function exchangeMainLanguage(array $args): void {
+            $languageMark = $args[0];
+            $languages = new Languages();
+            $languages->setMain($languageMark);
         }
     }

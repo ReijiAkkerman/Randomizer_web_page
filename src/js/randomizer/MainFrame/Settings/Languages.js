@@ -429,24 +429,24 @@ class Languages {
 
     // решает проблему бордеров кнопок языков для выбора
 
-    static define_good_borders_for_studied_languages(now_added = false) {
+    static define_good_borders_for_studied_languages() {
         let step = 3;
         let buttons = Languages.#learning_languages_block.querySelectorAll('button');
-        let buttons_for_changing = buttons.length % step;
-        if(buttons_for_changing)
-            for(let i = 0; i < buttons_for_changing; i++) 
-                buttons[buttons.length - 1 - i].style.borderBottom = 'none';
-        else 
-            if(buttons.length)
-                for(let i = 1; i <= step; i++) 
-                    buttons[buttons.length - i].style.borderBottom = 'none';
-        if(now_added) 
-            if((buttons.length > 3) && (buttons.length % step === 1)) 
-                for(let i = 0; i < step; i++) 
-                    buttons[buttons.length - 2 - i].style.borderBottom = '';
+        if(buttons.length) {
+            let amount_buttons_for_border_deletion = buttons.length % step;
+            let amount_buttons_for_border_adding = buttons.length - amount_buttons_for_border_deletion;
+            for(let i = 0; i < amount_buttons_for_border_adding; i++)
+                buttons[i].style.borderBottom = '';
+            if(amount_buttons_for_border_deletion) 
+                for(let i = amount_buttons_for_border_adding; i < buttons.length; i++)
+                    buttons[i].style.borderBottom = 'none';
+            else 
+                for(let i = buttons.length - 1; i >= buttons.length - step; i--)
+                    buttons[i].style.borderBottom = 'none';
+        }
     }
 
-    static define_good_borders_for_all_languages(now_added = false) {
+    static define_good_borders_for_all_languages() {
         let step = 3;
         let buttons = Languages.#all_languages_block.querySelectorAll('button');
         if(buttons.length) {

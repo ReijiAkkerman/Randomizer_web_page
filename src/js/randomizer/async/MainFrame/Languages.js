@@ -34,6 +34,9 @@ class Languages {
         // remove_studied()
         ['Шаблон кнопки выбора языка из числа всех', '.languages-add-select__template_all-languages'],
         ['Область отображения всех языков', '.languages-add-select_all-languages'],
+
+        // exchange_from_studied()
+        ['Кнопки изучамых языков для выбора', '.languages-add-select_recent-languages .languages-add-select__button'],
     ]);
 
 
@@ -77,6 +80,9 @@ class Languages {
     // remove_studied()
     static all_languages__area = document.querySelector(Languages.selectors.get('Область отображения всех языков'));
     static language_selected_from_all__template = document.querySelector(Languages.selectors.get('Шаблон кнопки выбора языка из числа всех'));
+
+    // exchange_from_studied()
+    static studied_languages_for_selection__buttons = document.querySelectorAll(Languages.selectors.get('Кнопки изучамых языков для выбора'));
 
 
 
@@ -195,7 +201,7 @@ class Languages {
                 Languages.#add_studied_for_selection();
                 Languages.#show_actions();
                 FrontendLanguages.define_good_borders_for_all_languages();
-                FrontendLanguages.define_good_borders_for_studied_languages(true);
+                FrontendLanguages.define_good_borders_for_studied_languages();
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -245,8 +251,72 @@ class Languages {
                 }
                 break;
             case 'main':
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', `/randomizer/exchangeMainLanguage/${this.dataset.mark}`);
+                xhr.send();
+                xhr.responseType = 'json';
+                xhr.onloadend = () => {
+                    if(xhr.response === null) alert('Произошла ошибка в exchange_main!');
+                    else if(xhr.response.hasOwnProperty('updated')) {
+                        this.textContent = 
+                        this.dataset.language = Languages.substitute_main_language__button.dataset.language;
+                        this.dataset.folder = Languages.substitute_main_language__button.dataset.folder;
+                        this.dataset.mark = Languages.substitute_main_language__button.dataset.mark;
+                        this.dataset.kanji = Languages.substitute_main_language__button.dataset.kanji;
+                        Languages.substitute_main_language__button.textContent = 
+                        Languages.substitute_main_language__button.dataset.language = Languages.language.name;
+                        Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
+                        Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
+                        Languages.substitute_main_language__button.dataset.kanji = Languages.language.kanji;
+                    }
+                    else if(xhr.response.hasOwnProperty('redirect')) location.href = '/auth/view';
+                };
                 break;
         }
+    }
+
+    static exchange_from_studied() {
+        Languages.language.name = this.dataset.language;
+        Languages.language.foldername = this.dataset.folder;
+        Languages.language.mark = this.dataset.mark;
+        Languages.language.kanji = this.dataset.kanji;
+        let xhr_for_exchanging_studied = new XMLHttpRequest();
+        xhr_for_exchanging_studied.open('POST', `/randomizer/exchangeStudiedLanguage/${this.dataset.mark}/${Languages.substitute_main_language__button.dataset.mark}`)
+        xhr_for_exchanging_studied.send();
+        xhr_for_exchanging_studied.responseType = 'json';
+        xhr_for_exchanging_studied.onloadend = () => {
+            // alert(xhr.response);
+            if(xhr_for_exchanging_studied.response === null) alert('Произошла ошибка в exchange_from_studied на первой отправке!');
+            else if(xhr_for_exchanging_studied.response.hasOwnProperty('updated'));
+            else if(xhr_for_exchanging_studied.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+        };
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/exchangeMainLanguage/${this.dataset.mark}`);
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в exchange_from_studied!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                let language_button_for_switching = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${this.dataset.mark}"]`);
+                language_button_for_switching.textContent = 
+                this.textContent = 
+                language_button_for_switching.dataset.language = 
+                this.dataset.language = Languages.substitute_main_language__button.dataset.language;
+                language_button_for_switching.dataset.folder = 
+                this.dataset.folder = Languages.substitute_main_language__button.dataset.folder;
+                language_button_for_switching.dataset.mark = 
+                this.dataset.mark = Languages.substitute_main_language__button.dataset.mark;
+                language_button_for_switching.dataset.kanji = 
+                this.dataset.kanji = Languages.substitute_main_language__button.dataset.kanji;
+                Languages.substitute_main_language__button.textContent = 
+                Languages.substitute_main_language__button.dataset.language = Languages.language.name;
+                Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
+                Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
+                Languages.substitute_main_language__button.dataset.kanji = Languages.language.kanji;
+            }
+            else if(xhr.response.hasOwnProperty('redirect')) location.href = '/auth/view';
+        };
     }
 
     static exchange_studied(_what_exchange, _exchange_on, selected_button) {
@@ -257,22 +327,25 @@ class Languages {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в exchange_studied!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                let studied_language_for_exchanging = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
-                    selected_button.textContent = 
-                    selected_button.dataset.language = studied_language_for_exchanging.dataset.language;
-                    selected_button.dataset.folder = studied_language_for_exchanging.dataset.folder;
-                    selected_button.dataset.mark = studied_language_for_exchanging.dataset.mark;
-                    selected_button.dataset.kanji = studied_language_for_exchanging.dataset.kanji;
-                    studied_language_for_exchanging.textContent = 
-                    studied_language_for_exchanging.dataset.language = Languages.language.name;
-                    studied_language_for_exchanging.dataset.folder = Languages.language.foldername;
-                    studied_language_for_exchanging.dataset.mark = Languages.language.mark;
-                    studied_language_for_exchanging.dataset.kanji = Languages.language.kanji;
-                    // FrontendLanguages.active_language = false;
-                    // FrontendLanguages.disable_additional_section();
-                    // FrontendLanguages.editing_learning_language_button_unset_active_color();
-                    FrontendLanguages.deactivate_active_language_button();
-                    Languages.active_language = false;
+                let studied_language_for_switching = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                let studied_language_for_selection = Languages.studied_languages_for_selection__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                selected_button.textContent = 
+                selected_button.dataset.language = studied_language_for_switching.dataset.language;
+                selected_button.dataset.folder = studied_language_for_switching.dataset.folder;
+                selected_button.dataset.mark = studied_language_for_switching.dataset.mark;
+                selected_button.dataset.kanji = studied_language_for_switching.dataset.kanji;
+                studied_language_for_selection.textContent = 
+                studied_language_for_selection.dataset.language = 
+                studied_language_for_switching.textContent = 
+                studied_language_for_switching.dataset.language = Languages.language.name;
+                studied_language_for_selection.dataset.folder = 
+                studied_language_for_switching.dataset.folder = Languages.language.foldername;
+                studied_language_for_selection.dataset.mark = 
+                studied_language_for_switching.dataset.mark = Languages.language.mark;
+                studied_language_for_selection.dataset.kanji = 
+                studied_language_for_switching.dataset.kanji = Languages.language.kanji;
+                FrontendLanguages.deactivate_active_language_button();
+                Languages.active_language = false;
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -294,12 +367,10 @@ class Languages {
                     removing_studied_language_for_switching.remove();
                     removing_studied_language_for_selection.remove();
                     FrontendLanguages.define_good_borders_for_studied_languages();
-                    FrontendLanguages.define_good_borders_for_all_languages(true);
+                    FrontendLanguages.define_good_borders_for_all_languages();
                     FrontendLanguages.active_language = false;
                     FrontendLanguages.disable_additional_section();
                     FrontendLanguages.editing_learning_language_button_unset_active_color();
-                    // FrontendLanguages.deactivate_active_language_button();
-                    // FrontendLanguages.active_language = false;
                     let studied_languages = document.querySelectorAll(Languages.selectors.get('Кнопки изучаемых языков для переключения'));
                     if(studied_languages.length === 0)
                         Languages.#hide_actions();
@@ -310,15 +381,17 @@ class Languages {
         }
     }
 
-    static exchange_main(_language_mark) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', `/randomizer/exchangeMainLanguage/${_language_mark}`);
-        xhr.send();
-        xhr.responseType = 'text';
-        xhr.onloadend = () => {
-            alert(xhr.response);
-        };
-    }
+    // static exchange_main(_language_mark) {
+    //     let xhr = new XMLHttpRequest();
+    //     xhr.open('POST', `/randomizer/exchangeMainLanguage/${_language_mark}`);
+    //     xhr.send();
+    //     xhr.responseType = 'json';
+    //     xhr.onloadend = () => {
+    //         if(xhr.response === null) alert('Произошла ошибка в exchange_main!');
+    //         else if(xhr.response.hasOwnProperty('updated'));
+    //         else if(xhr.response.hasOwnProperty('redirect')) location.href = '/auth/view';
+    //     };
+    // }
 
 
 
@@ -461,4 +534,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', Languages.exchange_from_all);
     }
     Languages.substitute_main_language__button.addEventListener('click', Languages.set_interaction_to_main);
+    for(const button of Languages.studied_languages_for_selection__buttons) {
+        button.addEventListener('click', Languages.exchange_from_studied);
+    }
 });
