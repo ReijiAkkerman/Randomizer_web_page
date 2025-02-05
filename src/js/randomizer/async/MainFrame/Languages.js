@@ -263,7 +263,7 @@ class Languages {
                         this.dataset.folder = Languages.substitute_main_language__button.dataset.folder;
                         this.dataset.mark = Languages.substitute_main_language__button.dataset.mark;
                         this.dataset.kanji = Languages.substitute_main_language__button.dataset.kanji;
-                        Languages.substitute_main_language__button.textContent = 
+                        Languages.substitute_main_language__button.textContent = Languages.language.name + ' язык';
                         Languages.substitute_main_language__button.dataset.language = Languages.language.name;
                         Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
                         Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
@@ -309,7 +309,7 @@ class Languages {
                 this.dataset.mark = Languages.substitute_main_language__button.dataset.mark;
                 language_button_for_switching.dataset.kanji = 
                 this.dataset.kanji = Languages.substitute_main_language__button.dataset.kanji;
-                Languages.substitute_main_language__button.textContent = 
+                Languages.substitute_main_language__button.textContent = Languages.language.name + ' язык';
                 Languages.substitute_main_language__button.dataset.language = Languages.language.name;
                 Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
                 Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
