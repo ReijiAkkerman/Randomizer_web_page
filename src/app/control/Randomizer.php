@@ -139,4 +139,8 @@
             $languages = new Languages();
             $languages->setMain($languageMark);
         }
+
+        public function changeLanguageParams(): void {
+            
+        }
     }

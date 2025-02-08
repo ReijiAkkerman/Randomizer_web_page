@@ -199,6 +199,10 @@
             }
         }
 
+        public function changeParamsOfStudied(): void {
+            
+        }
+
 
 
 
