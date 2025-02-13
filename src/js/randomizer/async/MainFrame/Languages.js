@@ -348,7 +348,7 @@ class Languages {
         language.name = Languages.#name.value;
         language.foldername = Languages.#foldername.value;
         language.mark = Languages.#mark.value;
-        language.kanji = (Languages.#kanji.chacked) ? 'true' : '';
+        language.kanji = (Languages.#kanji.checked) ? 'true' : '';
         event.preventDefault();
         let data = new FormData(Languages.new_language__form);
         let xhr = new XMLHttpRequest();

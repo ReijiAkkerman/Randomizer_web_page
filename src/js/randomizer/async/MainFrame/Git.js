@@ -118,6 +118,10 @@ class Git {
         Git.new_branch_error.textContent = '';
     }
 
+    static syncRepository() {
+        
+    }
+
     static commit() {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', '/randomizer/commit');

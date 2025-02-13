@@ -21,7 +21,7 @@ class Swipes {
         [0, Swipes.dashboard],
         [1, Words.main_section],
         [2, Settings.main_section],
-        [3, Guide.main_section],
+        // [3, Guide.main_section],
     ]);
 
     static #startX;

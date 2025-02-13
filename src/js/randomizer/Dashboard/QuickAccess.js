@@ -3,6 +3,7 @@ import {Words} from '/src/js/randomizer/MainFrame/Words.js';
 import {Settings} from '/src/js/randomizer/MainFrame/Settings.js';
 import {Guide} from '/src/js/randomizer/MainFrame/Guide.js';
 import {CircularQueue} from '/src/js/randomizer/DataStructures/CircularQueue.js';
+import {WordsTypes} from '/src/js/randomizer/DataStructures/WordsTypes.js';
 
 class QuickAccess {
     static selectors = new Map([
@@ -68,6 +69,42 @@ class QuickAccess {
      */
 
     switch_learning_mode() {
+        WordsTypes.setActiveSectionIndex(this);
+        switch(WordsTypes.getShownSectionType()) {
+            case 'source':
+                QuickAccess.#source_mode_button_set_active_color();
+                Words.transcription_disable();
+                Words.translation_disable();
+                Words.source_enable();
+                break;
+            case 'translation':
+                QuickAccess.#translation_mode_button_set_active_color();
+                Words.source_disable();
+                Words.transcription_disable();
+                Words.translation_enable();
+                break;
+            case 'transcription':
+                QuickAccess.#transcription_mode_button_set_active_color();
+                Words.source_disable();
+                Words.translation_disable();
+                Words.transcription_enable();
+                break;
+        }
+        switch(WordsTypes.getDisabledSectionType()) {
+            case 'source':
+                QuickAccess.#source_mode_button_unset_active_color();
+                break;
+            case 'translation':
+                QuickAccess.#translation_mode_button_unset_active_color()
+                break;
+            case 'transcription':
+                QuickAccess.#transcription_mode_button_unset_active_color();
+                break;
+        }
+    }
+
+    // не используется
+    switch_learning_mode1() {
         if(this.id === QuickAccess.learning_mode_queue.lastDeQueuedElement) {
             QuickAccess.learning_mode_queue.enQueue(this.id);
             switch(this.id) {
