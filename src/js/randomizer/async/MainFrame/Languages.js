@@ -37,6 +37,9 @@ class Languages {
 
         // exchange_from_studied()
         ['Кнопки изучамых языков для выбора', '.languages-add-select_recent-languages .languages-add-select__button'],
+
+        // change_for_user()
+        ['Кнопка изменения языка', '.languages-add-create__button_change'],
     ]);
 
 
@@ -83,6 +86,9 @@ class Languages {
 
     // exchange_from_studied()
     static studied_languages_for_selection__buttons = document.querySelectorAll(Languages.selectors.get('Кнопки изучамых языков для выбора'));
+
+    // change_for_user()
+    static change_language__button = document.querySelector(Languages.selectors.get('Кнопка изменения языка'));
 
 
 
@@ -337,6 +343,31 @@ class Languages {
         }
     }
 
+    static change_for_user(event) {
+        let language = {};
+        language.name = Languages.#name.value;
+        language.foldername = Languages.#foldername.value;
+        language.mark = Languages.#mark.value;
+        language.kanji = (Languages.#kanji.chacked) ? 'true' : '';
+        event.preventDefault();
+        let data = new FormData(Languages.new_language__form);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/changeLanguageParams/${Languages.studied_language_for_exchanging}`);
+        xhr.send(data);
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в change_for_user!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                Languages.#update_studied_for_selection(Languages.studied_language_for_exchanging, language);
+                Languages.#update_studied_for_switching(Languages.studied_language_for_exchanging, language);
+                Languages.#clear_fields();
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
+        };
+    }
+
 
 
 
@@ -555,4 +586,5 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of Languages.studied_languages_for_selection__buttons) {
         button.addEventListener('click', Languages.exchange_from_studied);
     }
+    Languages.change_language__button.addEventListener('click', Languages.change_for_user);
 });

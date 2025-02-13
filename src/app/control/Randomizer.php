@@ -140,7 +140,9 @@
             $languages->setMain($languageMark);
         }
 
-        public function changeLanguageParams(): void {
-            
+        public function changeLanguageParams(array $args): void {
+            $languageMark = $args[0];
+            $languages = new Languages();
+            $languages->changeForUser($languageMark);
         }
     }

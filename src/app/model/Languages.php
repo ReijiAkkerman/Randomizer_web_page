@@ -199,8 +199,99 @@
             }
         }
 
-        public function changeParamsOfStudied(): void {
-            
+        public function changeForUser($_language_mark): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                // Проверка данных на правильность заполнения
+                $functionsNeedTrue = [
+                    'validateName',
+                    'validateFoldername',
+                    'validateMark',
+                ];
+                $this->checkErrors($functionsNeedTrue);
+                $this->Kanji = ($_POST['kanji'] ?? '') ? true : false;
+                // Сравнение полученных данных с данными из БД
+                $query = "SELECT * FROM all_languages WHERE mark='$_language_mark'";
+                $result = $this->mysql->query($query);
+                $language_differ = false;
+                foreach($result as $row) {
+                    foreach($row as $key => $value) {
+                        switch($key) {
+                            case 'ID':
+                                $this->language_id = $LANG_ID = $value;
+                                break;
+                            case 'name':
+                                if($this->Name === $value) $NAME = 'NULL';
+                                else {
+                                    $NAME = "'{$this->Name}'";
+                                    $language_differ = true;
+                                }
+                                break;
+                            case 'foldername':
+                                if($this->Foldername === $value) $FOLDERNAME = 'NULL';
+                                else {
+                                    $FOLDERNAME = "'{$this->Foldername}'";
+                                    $language_differ = true;
+                                }
+                                break;
+                            case 'mark':
+                                if($this->Mark === $value) $MARK = 'NULL';
+                                else {
+                                    $MARK = "'{$this->Mark}'";
+                                    $language_differ = true;
+                                }
+                                break;
+                            case 'kanji':
+                                if($this->Kanji === (bool)$value) $KANJI = 'NULL';
+                                else {
+                                    $KANJI = (int)$this->Kanji;
+                                    $language_differ = true;
+                                }
+                                break;
+                        }
+                    }
+                }
+                if($language_differ) {
+                    // Проверка наличия записи об изменении параметров интересующего 
+                    // языка для конкретного пользователя и обновление информации
+                    $query = "SELECT * FROM changed_languages WHERE USER_ID={$this->_id} && LANG_ID={$this->language_id}";
+                    $result = $this->mysql->query($query);
+                    if($result->num_rows) 
+                        $query = "UPDATE changed_languages SET 
+                            name=$NAME,
+                            foldername=$FOLDERNAME,
+                            mark=$MARK,
+                            kanji=$KANJI
+                        WHERE 
+                            LANG_ID=$LANG_ID &&
+                            USER_ID={$this->_id}";
+                    else 
+                        $query = "INSERT INTO changed_languages (
+                            USER_ID,
+                            LANG_ID,
+                            name,
+                            foldername,
+                            mark,
+                            kanji
+                        ) VALUES (
+                            {$this->_id},
+                            $LANG_ID,
+                            $NAME,
+                            $FOLDERNAME,
+                            $MARK,
+                            $KANJI
+                        )";
+                }
+                else 
+                    $query = "DELETE FROM changed_languages WHERE USER_ID={$this->_id} && LANG_ID={$this->language_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
         }
 
 
@@ -216,7 +307,22 @@
                 foreach($result as $value) {
                     $languageId = $value['main'];
                 }
-                $query = "SELECT * FROM all_languages WHERE ID=$languageId";
+                // $query = "SELECT * FROM all_languages WHERE ID=$languageId";
+                $query = "SELECT 
+                    all_languages.ID as ID, 
+                    COALESCE(changed_languages.name,all_languages.name) AS name, 
+                    COALESCE(changed_languages.foldername,all_languages.foldername) AS foldername, 
+                    COALESCE(changed_languages.mark,all_languages.mark) AS mark, 
+                    COALESCE(changed_languages.kanji,all_languages.kanji) AS kanji 
+                FROM 
+                    all_languages
+                LEFT JOIN 
+                    changed_languages 
+                ON 
+                    changed_languages.LANG_ID=all_languages.ID AND
+                    changed_languages.USER_ID={$this->_id}
+                WHERE 
+                    ID=$languageId";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
                     $language->name = $value['name'];
@@ -241,7 +347,22 @@
                 }
                 if($languagesIds) {
                     $languagesIds__array = explode(',', $languagesIds);
-                    $query = "SELECT * FROM all_languages ORDER BY BINARY name";
+                    // $query = "SELECT * FROM all_languages ORDER BY BINARY name";
+                    $query = "SELECT 
+                        all_languages.ID as ID, 
+                        COALESCE(changed_languages.name,all_languages.name) AS name, 
+                        COALESCE(changed_languages.foldername,all_languages.foldername) AS foldername, 
+                        COALESCE(changed_languages.mark,all_languages.mark) AS mark, 
+                        COALESCE(changed_languages.kanji,all_languages.kanji) AS kanji 
+                    FROM 
+                        all_languages
+                    LEFT JOIN 
+                        changed_languages 
+                    ON 
+                        changed_languages.LANG_ID=all_languages.ID AND
+                        changed_languages.USER_ID={$this->_id}
+                    ORDER BY BINARY 
+                        all_languages.name";
                     $result = $this->mysql->query($query);
                     $studied_languages = [];
                     foreach($result as $value) {
@@ -265,7 +386,22 @@
                 $all_languages = [];
                 $language = new Language();
                 $this->createSettingsConnection();
-                $query = "SELECT * FROM all_languages ORDER BY BINARY name";
+                // $query = "SELECT * FROM all_languages ORDER BY BINARY name";
+                $query = "SELECT 
+                    all_languages.ID as ID, 
+                    COALESCE(changed_languages.name,all_languages.name) AS name, 
+                    COALESCE(changed_languages.foldername,all_languages.foldername) AS foldername, 
+                    COALESCE(changed_languages.mark,all_languages.mark) AS mark, 
+                    COALESCE(changed_languages.kanji,all_languages.kanji) AS kanji 
+                FROM 
+                    all_languages
+                LEFT JOIN 
+                    changed_languages 
+                ON 
+                    changed_languages.LANG_ID=all_languages.ID AND
+                    changed_languages.USER_ID={$this->_id}
+                ORDER BY BINARY 
+                    all_languages.name";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
                     $language->name = $value['name'];
