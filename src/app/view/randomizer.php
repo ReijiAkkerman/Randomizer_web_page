@@ -276,6 +276,8 @@
                 </div>
             </div>
             <div class="lists">
+                <p class="lists_absense-info">Списки слов отсутствуют!</p>
+                <p class="lists_absense-info"><br>Чтобы увидеть здесь свои списки - создайте их, или синхронизируйте данные с удаленным репозиторием!</p>
                 <div class="lists-combining" style="display:none;">
                     <p class="lists_title">Списки для объединения</p>
                     <div class="lists_select-list">
@@ -295,7 +297,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="lists-combined">
+                <div class="lists-combined" style="display:none;">
                     <div class="lists_header">
                         <p class="lists_title">Объединенные списки</p>
                         <button class="lists_delete-lists">
@@ -321,7 +323,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="lists-temporary-split">
+                <div class="lists-temporary-split" style="display:none;">
                     <div class="lists_header">
                         <p class="lists_title">Разделенные списки</p>
                         <button class="lists_delete-lists">
@@ -347,7 +349,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="lists-hard-word">
+                <div class="lists-hard-word" style="display:none;">
                     <div class="lists_header">
                         <p class="lists_title">Трудные слова</p>
                         <button class="lists_delete-lists">
@@ -373,7 +375,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="lists-word">
+                <div class="lists-word" style="display:none;">
                     <p class="lists_title">Списки слов</p>
                     <div class="lists_select-list">
                         <p>Список слов</p>

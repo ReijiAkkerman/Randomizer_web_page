@@ -561,6 +561,9 @@ svg {
 .randomizer > .dashboard .lists_delete-lists:hover > svg {
   fill: #000;
 }
+.randomizer > .dashboard .lists_absense-info {
+  text-align: center;
+}
 .randomizer > .dashboard .filters-form {
   gap: 10px;
 }
