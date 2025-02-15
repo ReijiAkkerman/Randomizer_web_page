@@ -366,9 +366,6 @@ svg {
   .randomizer > .dashboard .lists_delete-list {
     visibility: visible !important;
   }
-  .randomizer > .dashboard .other-languages__button:last-of-type {
-    display: none;
-  }
   .randomizer > .dashboard .other-utilities {
     display: none !important;
   }

@@ -1,5 +1,6 @@
 import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
 import {Adaptive} from "/src/js/randomizer/Adaptive.js";
+import {WordsTypes} from '/src/js/randomizer/DataStructures/WordsTypes.js';
 
 class Words {
     static selectors = new Map([
@@ -13,6 +14,7 @@ class Words {
 
 
     static #reversed_mode_enabled = false;
+    static words__area = document.querySelector(Words.selectors.get('Область слов'));
 
 
 
@@ -43,15 +45,48 @@ class Words {
     static reverse_mode_by_keyup(event) {
         if(event.code === 'Space') {
             event.preventDefault();
-            Words.#reverse_mode();
+            Words.reverse_mode();
         }
     }
 
     static reverse_mode_by_click() {
-        Words.#reverse_mode();
+        Words.reverse_mode();
     }
 
-    static #reverse_mode() {
+    static reverse_mode() {
+        WordsTypes.switchActiveSectionIndex();
+        Words.switch_mode();
+    }
+
+    static switch_to_next_mode() {
+        WordsTypes.incrementActiveSectionIndex();
+        Words.switch_mode();
+        QuickAccess.set_active_colors_for_modes(true);
+        QuickAccess.unset_active_colors_for_modes();
+    }
+
+    static switch_mode() {
+        switch(WordsTypes.getShownSectionType()) {
+            case 'source':
+                Words.translation_disable();
+                Words.transcription_disable();
+                Words.source_enable();
+                break;
+            case 'translation':
+                Words.source_disable();
+                Words.transcription_disable();
+                Words.translation_enable();
+                break;
+            case 'transcription':
+                Words.source_disable();
+                Words.translation_disable();
+                Words.transcription_enable();
+                break;
+        }
+    }
+
+    // не используется
+    static reverse_mode1() {
         if(Words.#reversed_mode_enabled) {
             switch(QuickAccess.learning_mode_queue.peek()) {
                 case 'source':
@@ -159,8 +194,7 @@ class Words {
 export {Words};
 
 document.addEventListener('DOMContentLoaded', function() {
-    let element = document.querySelector(Words.selectors.get('Область слов'));
-    element.addEventListener('click', Words.reverse_mode_by_click);
+    Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
 });
 
 document.addEventListener('keyup', Words.reverse_mode_by_keyup);

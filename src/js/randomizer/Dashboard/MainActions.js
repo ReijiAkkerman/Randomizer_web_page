@@ -1,5 +1,6 @@
 import {UserInterface} from '/src/js/randomizer/UserInterface.js';
 import {Stack} from '/src/js/randomizer/DataStructures/Stack.js';
+import {Lists} from '/src/js/randomizer/async/MainFrame/Lists.js';
 
 class MainActions {
     static selectors = new Map([
@@ -18,7 +19,7 @@ class MainActions {
         // Закрытие основного действия
         ['Закрытие основного действия Кнопка', '.actions-main__button_close-editing'],
     ]);
-    static #stack = new Stack(1);
+    static stack = new Stack(1);
 
     // Разделение списка
 
@@ -52,14 +53,14 @@ class MainActions {
 
     activate() {
         const activateCloseButton = () => {
-            MainActions.#stack.push(this.dataset.action_type);
+            MainActions.stack.push(this.dataset.action_type);
             MainActions.#close_main_action_show_button();
         };
         const deactivateCloseButton = () => {
             MainActions.#close_main_action();
             MainActions.#close_main_action_hide_button();
         };
-        if(MainActions.#stack.peek() !== this.dataset.action_type)
+        if(MainActions.stack.peek() !== this.dataset.action_type)
             MainActions.#close_main_action();
         else return;
         switch(this.dataset.action_type) {
@@ -199,7 +200,7 @@ class MainActions {
     // Закрытие основного действия 
 
     static #close_main_action() {
-        switch(MainActions.#stack.peek()) {
+        switch(MainActions.stack.peek()) {
             case 'split-list':
                 MainActions.#split_list_deactivate();
                 break;
@@ -208,9 +209,10 @@ class MainActions {
                 break;
             case 'create-new-list':
                 MainActions.#create_new_list_deactivate();
+                Lists.new_list_creation_access();
                 break;
         }
-        MainActions.#stack.pop();
+        MainActions.stack.pop();
     }
 
     static #close_main_action_show_button() {
@@ -221,6 +223,8 @@ class MainActions {
         MainActions.#close_main_action_button.style.display = 'none';
     }
 }
+
+export {MainActions};
 
 var main_actions = new MainActions();
 

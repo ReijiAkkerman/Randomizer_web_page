@@ -372,6 +372,10 @@ class Languages {
 
 
 
+    static update_studied_for_getting_lists() {
+
+    }
+
     static #update_studied_for_switching(_language_mark, _language_data) {
         let language_button = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${_language_mark}"]`);
         let language = Languages.#write_language_params(language_button, false);
@@ -436,6 +440,10 @@ class Languages {
         Languages.#kanji.checked = false;
     }
 
+    static add_studied_for_getting_lists() {
+
+    }
+
     static #add_studied_for_switching() {
         let clone = Languages.studied_language_for_switching__template.content.cloneNode(true);
         let button = clone.querySelector('button');
@@ -482,6 +490,10 @@ class Languages {
             language_button_for_adding.dataset.kanji = language.kanji;
         }
         Languages.all_languages__area.append(language_button_for_adding);
+    }
+
+    static remove_studied_for_getting_lists() {
+        
     }
 
     static #remove_studied_for_selection(button) {

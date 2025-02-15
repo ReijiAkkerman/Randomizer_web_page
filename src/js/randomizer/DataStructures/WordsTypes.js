@@ -42,6 +42,15 @@ class WordsTypes {
         else setDefaultParams();
     }
 
+    static resetSections() {
+        if(WordsTypes.sections.length === 3) 
+            WordsTypes.disabled_section__index = 2;
+        else 
+            WordsTypes.disabled_section__index = false;
+        WordsTypes.shown_section__index = 0;
+        WordsTypes.hidden_section__index = 1;
+    }
+
     static getShownSectionType() {
         return WordsTypes.sections[WordsTypes.shown_section__index];
     }
@@ -64,6 +73,18 @@ class WordsTypes {
             WordsTypes.switchActiveSectionIndex();
     }
 
+    static incrementActiveSectionIndex() {
+        if(WordsTypes.sections.length === 3) {
+            WordsTypes.disabled_section__index = ++WordsTypes.disabled_section__index % 3;
+            WordsTypes.hidden_section__index = ++WordsTypes.hidden_section__index % 3;
+            WordsTypes.shown_section__index = ++WordsTypes.shown_section__index % 3;
+        }
+        else {
+            WordsTypes.hidden_section__index = ++WordsTypes.hidden_section__index % 2;
+            WordsTypes.shown_section__index = ++WordsTypes.shown_section__index % 2;
+        }
+    }
+
     static switchActiveSectionIndex() {
         [WordsTypes.shown_section__index, WordsTypes.hidden_section__index] = 
         [WordsTypes.hidden_section__index, WordsTypes.shown_section__index];
@@ -74,6 +95,4 @@ export {WordsTypes};
 
 document.addEventListener('DOMContentLoaded', function() {
     WordsTypes.defineSections();
-    // for(const button of WordsTypes.switcher__buttons) 
-        // button.addEventListener('click', WordsTypes.setActiveSectionIndex);
 });

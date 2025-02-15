@@ -70,88 +70,48 @@ class QuickAccess {
 
     switch_learning_mode() {
         WordsTypes.setActiveSectionIndex(this);
+        Words.switch_mode();
+        QuickAccess.set_active_colors_for_modes();
+        QuickAccess.unset_active_colors_for_modes();
+    }
+
+    static set_active_colors_for_modes(for_hidden_too = false) {
         switch(WordsTypes.getShownSectionType()) {
             case 'source':
                 QuickAccess.#source_mode_button_set_active_color();
-                Words.transcription_disable();
-                Words.translation_disable();
-                Words.source_enable();
                 break;
             case 'translation':
                 QuickAccess.#translation_mode_button_set_active_color();
-                Words.source_disable();
-                Words.transcription_disable();
-                Words.translation_enable();
                 break;
             case 'transcription':
                 QuickAccess.#transcription_mode_button_set_active_color();
-                Words.source_disable();
-                Words.translation_disable();
-                Words.transcription_enable();
                 break;
         }
+        if(for_hidden_too === true) {
+            switch(WordsTypes.getHiddenSectionType()) {
+                case 'source':
+                QuickAccess.#source_mode_button_set_active_color();
+                break;
+            case 'translation':
+                QuickAccess.#translation_mode_button_set_active_color();
+                break;
+            case 'transcription':
+                QuickAccess.#transcription_mode_button_set_active_color();
+                break;
+            }
+        }
+    }
+
+    static unset_active_colors_for_modes() {
         switch(WordsTypes.getDisabledSectionType()) {
             case 'source':
                 QuickAccess.#source_mode_button_unset_active_color();
                 break;
             case 'translation':
-                QuickAccess.#translation_mode_button_unset_active_color()
+                QuickAccess.#translation_mode_button_unset_active_color();
                 break;
             case 'transcription':
                 QuickAccess.#transcription_mode_button_unset_active_color();
-                break;
-        }
-    }
-
-    // не используется
-    switch_learning_mode1() {
-        if(this.id === QuickAccess.learning_mode_queue.lastDeQueuedElement) {
-            QuickAccess.learning_mode_queue.enQueue(this.id);
-            switch(this.id) {
-                case 'source':
-                    QuickAccess.#source_mode_button_set_active_color();
-                    Words.source_enable();
-                    break;
-                case 'transcription':
-                    QuickAccess.#transcription_mode_button_set_active_color();
-                    Words.transcription_enable();
-                    break;
-                case 'translation':
-                    QuickAccess.#translation_mode_button_set_active_color();
-                    Words.translation_enable();
-                    break;
-            }
-            switch(QuickAccess.learning_mode_queue.peek()) {
-                case 'source':
-                    QuickAccess.#source_mode_button_unset_active_color();
-                    Words.source_disable();
-                    break;
-                case 'transcription':
-                    QuickAccess.#transcription_mode_button_unset_active_color();
-                    Words.transcription_disable();
-                    break;
-                case 'translation':
-                    QuickAccess.#translation_mode_button_unset_active_color()
-                    Words.translation_disable();
-                    break;
-            }
-            QuickAccess.learning_mode_queue.deQueue();
-        }
-        switch(this.id) {
-            case 'source':
-                Words.source_enable();
-                Words.transcription_disable();
-                Words.translation_disable();
-                break;
-            case 'transcription':
-                Words.transcription_enable();
-                Words.source_disable();
-                Words.translation_disable();
-                break;
-            case 'translation':
-                Words.translation_enable();
-                Words.source_disable();
-                Words.transcription_disable();
                 break;
         }
     }

@@ -448,14 +448,6 @@
             }
 
             .other {
-                &-languages {
-                    &__button {
-                        &:last-of-type {
-                            display: none;
-                        }
-                    }
-                }
-
                 &-utilities {
                     display: none !important;
                 }

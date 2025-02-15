@@ -10,34 +10,34 @@
     <body class="randomizer">
         <main>
             <section class="words">
+                <template class="words__template_number">
+                    <p></p>
+                </template>
+                <template class="words__template_word">
+                    <pre data-id="">Сюда писать </pre>
+                </template>
                 <div class="source scrollable">
                     <div class="counter">
                         <p>1</p>
-                        <p>2</p>
                     </div>
                     <div class="words_section" data-type="source">
-                        <pre data-id="">source1</pre>
-                        <pre data-id="">source2</pre>
+                        <pre data-id="1">Сюда писать исходное значение</pre>
                     </div>
                 </div>
                 <div class="translation" style="display:none;">
                     <div class="counter">
-                        <p>1</p>
-                        <p>2</p>
+                        <!-- <p>1</p> -->
                     </div>
                     <div class="words_section" data-type="translation">
-                        <pre data-id="">перевод</pre>
-                        <pre data-id="">перевод</pre>
+                        <!-- <pre data-id="1">Сюда писать перевод</pre> -->
                     </div>
                 </div>
                 <div class="transcription" style="display:none;">
                     <div class="counter">
-                        <p>1</p>
-                        <p>2</p>
+                        <!-- <p>1</p> -->
                     </div>
                     <div class="words_section" data-type="transcription">
-                        <pre data-id="">sounding</pre>
-                        <pre data-id="">sounding</pre>
+                        <!-- <pre data-id="1">Сюда писать чтение</pre> -->
                     </div>
                 </div>
             </section>
@@ -403,12 +403,15 @@
                 </form>
             </div>
             <div class="other">
-                <div class="other-languages">
-                    <button class="other-languages__button">en</button>
-                    <button class="other-languages__button">jp</button>
-                    <button class="other-languages__button">cn</button>
+                <div class="other-languages" <?php if(!$data->studied_languages) echo 'style="display:none;"' ?>>
+                    <?php
+                    $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
+                    for($i = 0; $i < $max; $i++) {
+                    ?>
+                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>"><?= $data->studied_languages[$i]->mark ?></button>
+                    <?php } ?>
                 </div>
-                <div class="other-modes">
+                <div class="other-modes" <?php if(!$data->studied_languages || !$data->studied_languages[0]->kanji) echo 'style="display:none;"' ?>>
                     <button class="other-modes__button other-modes__button_source" data-type_index="0" id="source">
                         <svg viewBox="0 0 64 64" enable-background="new 0 0 64 64" style="fill:#00f;">
                             <path d="M56,0H8C5.789,0,4,1.789,4,4v56c0,2.211,1.789,4,4,4h48c2.211,0,4-1.789,4-4V4C60,1.789,58.211,0,56,0z M58,60c0,1.104-0.896,2-2,2H8c-1.104,0-2-0.896-2-2V4c0-1.104,0.896-2,2-2h48c1.104,0,2,0.896,2,2V60z"/>
@@ -459,7 +462,7 @@
                             <path d="M186.04,154.802c6.499-13.987,7.173-29.663,1.888-44.135c-5.294-14.48-15.891-26.04-29.842-32.521 c-7.792-3.64-16.062-5.465-24.575-5.429c-6.651,0.027-13.231,1.213-19.559,3.524c-14.498,5.285-26.057,15.883-32.556,29.86 c-6.499,13.96-7.173,29.626-1.897,44.134c5.304,14.49,15.911,26.049,29.861,32.53c7.784,3.622,16.053,5.455,24.565,5.42 c6.661-0.036,13.241-1.222,19.578-3.524C167.965,179.377,179.515,168.77,186.04,154.802z M149.376,173.372 c-5.042,1.843-10.282,2.769-15.505,2.787c-6.634,0.036-13.25-1.403-19.442-4.288c-11.065-5.151-19.442-14.302-23.64-25.762 c-4.17-11.478-3.65-23.882,1.501-34.939c5.151-11.074,14.31-19.469,25.77-23.639c5.051-1.852,10.292-2.778,15.506-2.796 c6.634-0.028,13.24,1.411,19.433,4.297c11.056,5.15,19.451,14.301,23.64,25.761c4.18,11.47,3.648,23.865-1.493,34.939 C169.978,160.797,160.837,169.184,149.376,173.372z"/>
                         </svg>
                     </button>
-                    <button class="other-utilities__button other-utilities__button_guide" id="guide">
+                    <button class="other-utilities__button other-utilities__button_guide" id="guide" style="display:none;">
                         <svg viewBox="0 0 64 64">
                             <path d="M32,11c1.654,0,3-1.346,3-3s-1.346-3-3-3s-3,1.346-3,3S30.346,11,32,11z M32,7c0.551,0,1,0.448,1,1s-0.449,1-1,1   s-1-0.448-1-1S31.449,7,32,7z"/>
                             <path d="M37,25h-2V13h-8v6h2v6h-2v6h10V25z M35,29h-6v-2h2V17h-2v-2h4v12h2V29z"/>
@@ -503,5 +506,6 @@
 
         <script type="module" src="/src/js/randomizer/async/MainFrame/Git.js"></script>
         <script type="module" src="/src/js/randomizer/async/MainFrame/Languages.js"></script>
+        <script type="module" src="/src/js/randomizer/async/MainFrame/Lists.js"></script>
     </body>
 </html>

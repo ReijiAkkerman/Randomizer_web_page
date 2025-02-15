@@ -20,6 +20,8 @@ class Adaptive {
         ['Слова', '.words'],
         ['Настройки', '.settings'],
         ['Руководство', '.guide'],
+
+        ['Панель языков для быстрого доступа', '.other-languages'],
     ]);
 
 
@@ -31,6 +33,8 @@ class Adaptive {
     static settings = document.querySelector(Adaptive.selectors.get('Настройки'));
     static guide = document.querySelector(Adaptive.selectors.get('Руководство'));
 
+    static quick_access_languages__bar = document.querySelector(Adaptive.selectors.get('Панель языков для быстрого доступа'));
+
 
 
 
@@ -38,11 +42,13 @@ class Adaptive {
     static defineDevice() {
         if(window.innerWidth <= 1050) {
             Adaptive.resizeWindow(Adaptive.#mobile);
+            Adaptive.set_quick_access_languages_for_mobile();
         }
         else {
             if(Adaptive.current_mode === 'dashboard')
                 Adaptive.current_mode = 'words';
             Adaptive.resizeWindow(Adaptive.#desktop);
+            Adaptive.set_quick_access_languages_for_desktop();
         }
     }
 
@@ -177,6 +183,22 @@ class Adaptive {
 
     static remember_dashboard_window() {
         Adaptive.current_mode = 'dashboard';
+    }
+
+
+
+
+
+    static set_quick_access_languages_for_mobile() {
+        if(Adaptive.quick_access_languages__bar.children.length > 2) {
+            for(let i = 2; i < Adaptive.quick_access_languages__bar.children.length; i++) 
+                Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
+        }
+    }
+
+    static set_quick_access_languages_for_desktop() {
+        for(let i = 3; i < Adaptive.quick_access_languages__bar.children.length; i++) 
+            Adaptive.quick_access_languages__bar.children[i].style.display = '';
     }
 }
 
