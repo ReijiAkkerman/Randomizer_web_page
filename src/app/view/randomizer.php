@@ -11,14 +11,14 @@
         <main>
             <section class="words">
                 <template class="words__template_number">
-                    <p></p>
+                    <p data-id=""></p>
                 </template>
                 <template class="words__template_word">
                     <pre data-id="">Сюда писать </pre>
                 </template>
                 <div class="source scrollable">
                     <div class="counter">
-                        <p>1</p>
+                        <p data-id="1">1</p>
                     </div>
                     <div class="words_section" data-type="source">
                         <pre data-id="1">Сюда писать исходное значение</pre>
