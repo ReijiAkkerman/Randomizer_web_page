@@ -24,14 +24,26 @@ class WordsTypes {
 
 
 
-    static defineSections() {
+    static defineSections(onstart = false, _language = false) {
         let setDefaultParams = () => {
             WordsTypes.sections = ['source', 'translation'];
             WordsTypes.shown_section__index = 0;
             WordsTypes.hidden_section__index = 1;
         };
-        if(WordsTypes.studied_languages.length) {
-            if(WordsTypes.studied_languages[0].dataset.kanji) {
+        if(onstart === true) {
+            if(WordsTypes.studied_languages.length) {
+                if(WordsTypes.studied_languages[0].dataset.kanji) {
+                    WordsTypes.sections = ['source', 'transcription', 'translation'];
+                    WordsTypes.shown_section__index = 0;
+                    WordsTypes.hidden_section__index = 1;
+                    WordsTypes.disabled_section__index = 2;
+                }
+                else setDefaultParams();
+            }
+            else setDefaultParams();
+        }
+        else {
+            if(_language.dataset.kanji) {
                 WordsTypes.sections = ['source', 'transcription', 'translation'];
                 WordsTypes.shown_section__index = 0;
                 WordsTypes.hidden_section__index = 1;
@@ -39,7 +51,6 @@ class WordsTypes {
             }
             else setDefaultParams();
         }
-        else setDefaultParams();
     }
 
     static resetSections() {
@@ -94,5 +105,5 @@ class WordsTypes {
 export {WordsTypes};
 
 document.addEventListener('DOMContentLoaded', function() {
-    WordsTypes.defineSections();
+    WordsTypes.defineSections(true);
 });

@@ -1,4 +1,6 @@
 import {Languages as FrontendLanguages} from '/src/js/randomizer/MainFrame/Settings/Languages.js';
+import {Lists} from '/src/js/randomizer/async/MainFrame/Lists.js';
+import {UserInterface} from '/src/js/randomizer/UserInterface.js';
 
 class Languages {
     static selectors = new Map([
@@ -40,6 +42,9 @@ class Languages {
 
         // change_for_user()
         ['Кнопка изменения языка', '.languages-add-create__button_change'],
+        // set_active_color_for_active_language
+        // unset_active_color_for_active_language
+        ['Область кнопок для быстрого переключения между изучаемыми языками', '.other-languages'],
     ]);
 
 
@@ -89,6 +94,9 @@ class Languages {
 
     // change_for_user()
     static change_language__button = document.querySelector(Languages.selectors.get('Кнопка изменения языка'));
+    // set_active_color_for_active_language
+    // unset_active_color_for_active_language
+    static quick_access_language_switcher__area = document.querySelector(Languages.selectors.get('Область кнопок для быстрого переключения между изучаемыми языками'));
 
 
 
@@ -572,6 +580,28 @@ class Languages {
         Languages.default_colors_for_foldername();
         Languages.default_colors_for_mark();
         Languages.#errors.textContent = '';
+    }
+
+
+
+
+
+    /**
+     * Функции внешнего вида
+     */
+
+    static set_active_color_for_active_language(_language_mark) {
+        let language_button_from_settings = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        let language_button_from_quick_access = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        language_button_from_settings.style.color = UserInterface.text_color;
+        language_button_from_quick_access.style.color = UserInterface.text_color;
+    }
+
+    static unset_active_color_for_active_language(_language_mark) {
+        let language_button_from_settings = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        let language_button_from_quick_access = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        language_button_from_settings.style.color = '';
+        language_button_from_quick_access.style.color = '';
     }
 }
 

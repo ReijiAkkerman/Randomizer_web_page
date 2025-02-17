@@ -105,9 +105,12 @@
                                     <template class="languages-additional-languages-list__template">
                                         <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="">
                                     </template>
+                                    <?php $counter = 0 ?>
                                     <?php foreach($data->studied_languages as $language) { ?>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>"><?= $language->name ?></button>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($counter === 0) echo 'style="color:#000;"' ?>><?= $language->name ?></button>
+                                    <?php $counter++ ?>
                                     <?php } ?>
+                                    <?php unset($counter) ?>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="" data-mark="" data-folder="" data-kanji="" id="new">
                                         <svg viewBox="0 0 32 32">
                                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
@@ -278,6 +281,16 @@
             <div class="lists">
                 <p class="lists_absense-info">Списки слов отсутствуют!</p>
                 <p class="lists_absense-info"><br>Чтобы увидеть здесь свои списки - создайте их, или синхронизируйте данные с удаленным репозиторием!</p>
+                <template class="lists_select-list__template">
+                    <div class="lists_select-list" data-type="" data-id="">
+                        <p></p>
+                        <button class="lists_delete-list">
+                            <svg viewBox="0 0 1024 1024">
+                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </template>
                 <div class="lists-combining" style="display:none;">
                     <p class="lists_title">Списки для объединения</p>
                     <div class="lists_select-list">
@@ -408,7 +421,7 @@
                     $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
                     for($i = 0; $i < $max; $i++) {
                     ?>
-                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>"><?= $data->studied_languages[$i]->mark ?></button>
+                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($i === 0) echo 'style="color:#000;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
                     <?php } ?>
                 </div>
                 <div class="other-modes" <?php if(!$data->studied_languages || !$data->studied_languages[0]->kanji) echo 'style="display:none;"' ?>>

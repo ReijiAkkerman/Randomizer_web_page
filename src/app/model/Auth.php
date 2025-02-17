@@ -190,7 +190,7 @@
                     $git = new Git();
                     $git->initUserSettings($this->ID);
                     $lists = new Lists();
-                    $lists->createListsTable($this->ID);
+                    $lists->createListsTable($this->Login);
                     $this->setCookie();
                     echo '{"redirect":true}';
                 }

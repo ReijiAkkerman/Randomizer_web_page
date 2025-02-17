@@ -13,10 +13,10 @@
 
 
         // model\Auth::reg()
-        public function createListsTable(int $user_id): void {
+        public function createListsTable(string $username): void {
             $this->createListsConnection();
             $queries = [ 
-                "CREATE TABLE IF NOT EXISTS user{$user_id}(
+                "CREATE TABLE IF NOT EXISTS $username(
                     ID SERIAL,
                     name VARCHAR(255) NULL,
                     date DATETIME NOT NULL,
