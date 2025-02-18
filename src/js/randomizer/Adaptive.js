@@ -190,14 +190,16 @@ class Adaptive {
 
 
     static set_quick_access_languages_for_mobile() {
-        if(Adaptive.quick_access_languages__bar.children.length > 2) {
-            for(let i = 2; i < Adaptive.quick_access_languages__bar.children.length; i++) 
-                Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
-        }
+        for(let i = 0; i < 3; i++) 
+            Adaptive.quick_access_languages__bar.children[i].style.display = '';
+        for(let i = 3; i < Adaptive.quick_access_languages__bar.children.length; i++) 
+            Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
     }
 
     static set_quick_access_languages_for_desktop() {
-        for(let i = 3; i < Adaptive.quick_access_languages__bar.children.length; i++) 
+        for(let i = 0; i < 4; i++) 
+            Adaptive.quick_access_languages__bar.children[i].style.display = '';
+        for(let i = 4; i < Adaptive.quick_access_languages__bar.children.length; i++) 
             Adaptive.quick_access_languages__bar.children[i].style.display = '';
     }
 }

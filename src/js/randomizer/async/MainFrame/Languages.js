@@ -1,6 +1,7 @@
 import {Languages as FrontendLanguages} from '/src/js/randomizer/MainFrame/Settings/Languages.js';
 import {Lists} from '/src/js/randomizer/async/MainFrame/Lists.js';
 import {UserInterface} from '/src/js/randomizer/UserInterface.js';
+import {Adaptive} from '/src/js/randomizer/Adaptive.js';
 
 class Languages {
     static selectors = new Map([
@@ -45,6 +46,8 @@ class Languages {
         // set_active_color_for_active_language
         // unset_active_color_for_active_language
         ['Область кнопок для быстрого переключения между изучаемыми языками', '.other-languages'],
+        // add_studied_in_quick_access
+        ['Шаблон кнопки изучаемого языка для панели быстрого доступа', '.other-languages__template'],
     ]);
 
 
@@ -97,6 +100,8 @@ class Languages {
     // set_active_color_for_active_language
     // unset_active_color_for_active_language
     static quick_access_language_switcher__area = document.querySelector(Languages.selectors.get('Область кнопок для быстрого переключения между изучаемыми языками'));
+    // add_studied_in_quick_access
+    static quick_access_studied_language__template = document.querySelector(Languages.selectors.get('Шаблон кнопки изучаемого языка для панели быстрого доступа'));
 
 
 
@@ -213,6 +218,7 @@ class Languages {
             else if(xhr.response.hasOwnProperty('updated')) {
                 Languages.#add_studied_for_switching();
                 Languages.#add_studied_for_selection();
+                Languages.add_studied_in_quick_access();
                 Languages.#show_actions();
                 FrontendLanguages.define_good_borders_for_all_languages();
                 FrontendLanguages.define_good_borders_for_studied_languages();
@@ -312,6 +318,7 @@ class Languages {
             else if(xhr.response.hasOwnProperty('updated')) {
                 let language = Languages.#update_studied_for_switching(Languages.studied_language_for_exchanging, Languages.language);
                 Languages.#update_studied_for_selection(Languages.studied_language_for_exchanging, Languages.language);
+                Languages.update_studied_in_quick_access(Languages.studied_language_for_exchanging, Languages.language);
                 Languages.#update_all_for_selection(selected_language.dataset.mark, language);
                 FrontendLanguages.deactivate_active_language_button();
                 FrontendLanguages.active_language = false;
@@ -332,9 +339,14 @@ class Languages {
                 else if(xhr.response.hasOwnProperty('updated')) {
                     let removing_studied_language_for_switching = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
                     let removing_studied_language_for_selection = Languages.studied_languages_for_selection__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
+                    let removing_studied_language_from_quick_access = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${Languages.studied_language_for_exchanging}"]`);
                     Languages.#add_all_for_selection(removing_studied_language_for_switching);
                     removing_studied_language_for_switching.remove();
                     removing_studied_language_for_selection.remove();
+                    removing_studied_language_from_quick_access.remove();
+                    Lists.unset_active_language_mark();
+                    if(Languages.quick_access_language_switcher__area.children.length === 1)
+                        Languages.quick_access_language_switcher__area.style.display = 'none';
                     FrontendLanguages.define_good_borders_for_studied_languages();
                     FrontendLanguages.define_good_borders_for_all_languages();
                     FrontendLanguages.active_language = false;
@@ -344,6 +356,7 @@ class Languages {
                     let studied_languages = document.querySelectorAll(Languages.selectors.get('Кнопки изучаемых языков для переключения'));
                     if(studied_languages.length === 0)
                         Languages.#hide_actions();
+                    Adaptive.defineDevice();
                 }
                 else if(xhr.response.hasOwnProperty('redirect'))
                     location.href = '/auth/view';
@@ -380,8 +393,11 @@ class Languages {
 
 
 
-    static update_studied_for_getting_lists() {
-
+    static update_studied_in_quick_access(_language_mark, _language_data) {
+        let language_button = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        language_button.textContent = 
+        language_button.dataset.mark = _language_data.mark;
+        language_button.dataset.kanji = _language_data.kanji;
     }
 
     static #update_studied_for_switching(_language_mark, _language_data) {
@@ -448,8 +464,18 @@ class Languages {
         Languages.#kanji.checked = false;
     }
 
-    static add_studied_for_getting_lists() {
-
+    static add_studied_in_quick_access() {
+        let clone = Languages.quick_access_studied_language__template.content.cloneNode(true);
+        let studied_language_from_switching_area_in_settings = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.language.mark}"]`);
+        studied_language_from_switching_area_in_settings.addEventListener('click', Lists.get_lists_from_another_language);
+        let language_button = clone.querySelector('button');
+        language_button.textContent = 
+        language_button.dataset.mark = Languages.language.mark;
+        language_button.dataset.kanji = Languages.language.kanji;
+        language_button.addEventListener('click', Lists.get_lists_from_another_language);
+        Languages.quick_access_language_switcher__area.append(language_button);
+        Languages.quick_access_language_switcher__area.style.display = '';
+        Adaptive.defineDevice();
     }
 
     static #add_studied_for_switching() {
@@ -498,10 +524,6 @@ class Languages {
             language_button_for_adding.dataset.kanji = language.kanji;
         }
         Languages.all_languages__area.append(language_button_for_adding);
-    }
-
-    static remove_studied_for_getting_lists() {
-        
     }
 
     static #remove_studied_for_selection(button) {

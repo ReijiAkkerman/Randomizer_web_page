@@ -417,9 +417,12 @@
             </div>
             <div class="other">
                 <div class="other-languages" <?php if(!$data->studied_languages) echo 'style="display:none;"' ?>>
+                    <template class="other-languages__template">
+                        <button class="other-languages__button" data-mark="" data-kanji=""></button>
+                    </template>
                     <?php
                     $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
-                    for($i = 0; $i < $max; $i++) {
+                    for($i = 0; $i < sizeof($data->studied_languages); $i++) {
                     ?>
                     <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($i === 0) echo 'style="color:#000;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
                     <?php } ?>

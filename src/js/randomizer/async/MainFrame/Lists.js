@@ -203,11 +203,15 @@ class Lists {
      * панели быстрого доступа и при выборе языка из списка в настройках.
      */
     static define_active_language(onstart = false, _language = false) {
-        if(onstart === true)
-            Lists.active_language_mark = Lists.active_language__button.dataset.mark;
-        else 
-            Lists.active_language_mark = _language.dataset.mark;
-        // console.log(Lists.active_language_mark);
+        if(Lists.active_language__button !== null)
+            if(onstart === true)
+                Lists.active_language_mark = Lists.active_language__button.dataset.mark;
+            else 
+                Lists.active_language_mark = _language.dataset.mark;
+    }
+
+    static unset_active_language_mark() {
+        Lists.active_language_mark = false;
     }
 
     static focus_on_next_row() {
@@ -290,7 +294,8 @@ class Lists {
     }
 
     static get_lists_from_another_language() {
-        Languages.unset_active_color_for_active_language(Lists.active_language_mark);
+        if(Lists.active_language_mark)
+            Languages.unset_active_color_for_active_language(Lists.active_language_mark);
         Lists.define_active_language(false, this);
         WordsTypes.defineSections(false, this);
         Words.switch_mode();
