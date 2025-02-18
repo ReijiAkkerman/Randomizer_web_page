@@ -190,17 +190,33 @@ class Adaptive {
 
 
     static set_quick_access_languages_for_mobile() {
-        for(let i = 0; i < 3; i++) 
-            Adaptive.quick_access_languages__bar.children[i].style.display = '';
-        for(let i = 3; i < Adaptive.quick_access_languages__bar.children.length; i++) 
-            Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
+        let first_button_index = 1;
+        let buttons_amount = Adaptive.quick_access_languages__bar.children.length - first_button_index;
+        if(buttons_amount < first_button_index);
+        else {
+            for(let i = first_button_index; i <= buttons_amount; i++) {
+                // здесь указывается максимальный размер панели
+                if(i < 3)
+                    Adaptive.quick_access_languages__bar.children[i].style.display = '';
+                else 
+                    Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
+            }
+        }
     }
 
     static set_quick_access_languages_for_desktop() {
-        for(let i = 0; i < 4; i++) 
-            Adaptive.quick_access_languages__bar.children[i].style.display = '';
-        for(let i = 4; i < Adaptive.quick_access_languages__bar.children.length; i++) 
-            Adaptive.quick_access_languages__bar.children[i].style.display = '';
+        let first_button_index = 1;
+        let buttons_amount = Adaptive.quick_access_languages__bar.children.length - first_button_index;
+        if(buttons_amount < first_button_index);
+        else {
+            for(let i = first_button_index; i <= buttons_amount; i++) {
+                // здесь указывается максимальный размер панели
+                if(i < 4)
+                    Adaptive.quick_access_languages__bar.children[i].style.display = '';
+                else 
+                    Adaptive.quick_access_languages__bar.children[i].style.display = 'none';
+            }
+        }
     }
 }
 

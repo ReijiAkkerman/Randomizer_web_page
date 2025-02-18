@@ -345,8 +345,10 @@ class Languages {
                     removing_studied_language_for_selection.remove();
                     removing_studied_language_from_quick_access.remove();
                     Lists.unset_active_language_mark();
-                    if(Languages.quick_access_language_switcher__area.children.length === 1)
+                    if(Languages.quick_access_language_switcher__area.children.length === 1) {
                         Languages.quick_access_language_switcher__area.style.display = 'none';
+                        Lists.mode_switcher__area.style.display = 'none';
+                    }
                     FrontendLanguages.define_good_borders_for_studied_languages();
                     FrontendLanguages.define_good_borders_for_all_languages();
                     FrontendLanguages.active_language = false;
@@ -380,6 +382,7 @@ class Languages {
             if(xhr.response === null) alert('Произошла ошибка в change_for_user!');
             else if(xhr.response.hasOwnProperty('updated')) {
                 Languages.#update_studied_for_selection(Languages.studied_language_for_exchanging, language);
+                Languages.update_studied_in_quick_access(Languages.studied_language_for_exchanging, language)
                 Languages.#update_studied_for_switching(Languages.studied_language_for_exchanging, language);
                 Languages.#clear_fields();
             }
@@ -395,6 +398,7 @@ class Languages {
 
     static update_studied_in_quick_access(_language_mark, _language_data) {
         let language_button = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${_language_mark}"]`);
+        Lists.active_language_mark =
         language_button.textContent = 
         language_button.dataset.mark = _language_data.mark;
         language_button.dataset.kanji = _language_data.kanji;
