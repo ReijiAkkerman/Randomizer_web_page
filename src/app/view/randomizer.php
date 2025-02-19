@@ -107,7 +107,7 @@
                                     </template>
                                     <?php $counter = 0 ?>
                                     <?php foreach($data->studied_languages as $language) { ?>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($counter === 0) echo 'style="color:#000;"' ?>><?= $language->name ?></button>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($counter === 0) echo 'style="color:#00f;"' ?>><?= $language->name ?></button>
                                     <?php $counter++ ?>
                                     <?php } ?>
                                     <?php unset($counter) ?>
@@ -424,7 +424,7 @@
                     $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
                     for($i = 0; $i < sizeof($data->studied_languages); $i++) {
                     ?>
-                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($i === 0) echo 'style="color:#000;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
+                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($i === 0) echo 'style="color:#00f;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
                     <?php } ?>
                 </div>
                 <div class="other-modes" <?php if(!$data->studied_languages || !$data->studied_languages[0]->kanji) echo 'style="display:none;"' ?>>

@@ -480,6 +480,7 @@ class Languages {
         Languages.quick_access_language_switcher__area.append(language_button);
         Languages.quick_access_language_switcher__area.style.display = '';
         Adaptive.defineDevice();
+        language_button.click();
     }
 
     static #add_studied_for_switching() {
@@ -619,8 +620,8 @@ class Languages {
     static set_active_color_for_active_language(_language_mark) {
         let language_button_from_settings = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${_language_mark}"]`);
         let language_button_from_quick_access = Languages.quick_access_language_switcher__area.querySelector(`button[data-mark="${_language_mark}"]`);
-        language_button_from_settings.style.color = UserInterface.text_color;
-        language_button_from_quick_access.style.color = UserInterface.text_color;
+        language_button_from_settings.style.color = UserInterface.language_selection_color;
+        language_button_from_quick_access.style.color = UserInterface.language_selection_color;
     }
 
     static unset_active_color_for_active_language(_language_mark) {
