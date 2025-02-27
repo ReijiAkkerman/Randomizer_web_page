@@ -193,7 +193,7 @@
                 $this->closeAuthConnection();
 
                 $this->createListsConnection();
-                $query = "SELECT source,translation,transcription FROM $tableName WHERE ID";
+                $query = "SELECT source,translation,transcription FROM $tableName WHERE ID=$_list_id";
                 $result = $this->mysql->query($query);
                 $listData = new ListData();
                 foreach($result as $value) {

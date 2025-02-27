@@ -10,6 +10,8 @@ class Lists {
         ['Кнопка разрешающая создание нового списка', '.actions-main__button_create-new-list'],
         ['Кнопка закрывающая действие над списками', '.actions-main__button_close-editing'],
         ['Кнопки быстрого переключения между изучаемыми языками', '.other-languages__button'],
+        ['Кнопки списков', '.lists_select-list'],
+        ['Кнопки основных списков', '.lists-word .lists_select-list'],
         // define_active_language
         ['Область переключения изучаемых языков', '.languages-additional-languages-list'],
         // focus_on_next_row
@@ -53,6 +55,8 @@ class Lists {
     static transcription_row = 0;
     static row_number_for_deletion = false;
     static editing_mode = false;
+    static selected_list_type = false;
+    static selected_list_id = false;
 
 
 
@@ -62,6 +66,8 @@ class Lists {
     static new_list_creation_access__button = document.querySelector(Lists.selectors.get('Кнопка разрешающая создание нового списка'));
     static close_main_action__button = document.querySelector(Lists.selectors.get('Кнопка закрывающая действие над списками'));
     static quick_access_to_studied_languages__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки быстрого переключения между изучаемыми языками'));
+    static list__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+    static main_list__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки основных списков'));
     // define_active_language
     static studied_languages_for_switching__area = document.querySelector(Lists.selectors.get('Область переключения изучаемых языков'));
     // focus_on_next_row
@@ -591,10 +597,6 @@ class Lists {
         Lists.source_numbers__area.append(number);
     }
 
-    static show_words_from_last_list() {
-
-    }
-
     static close_main_action() {
         Lists.close_main_action__button.click();
         Lists.disable_editing_mode();
@@ -606,6 +608,52 @@ class Lists {
 
     static disable_editing_mode() {
         Lists.editing_mode = false;
+    }
+
+    static set_selected_list_id(onstart = false, selected_list = false) {
+        if(onstart === true) {
+            if(Lists.main_list__buttons.length)
+                Lists.selected_list_id = Lists.main_list__buttons[0].dataset.id;
+        }
+        else 
+            Lists.selected_list_id = selected_list.dataset.id;
+    }
+
+    static set_selected_list_type(onstart = false, selected_list = false) {
+        if(onstart === true) {
+            if(Lists.main_list__buttons.length) 
+                Lists.selected_list_type = Lists.main_list__buttons[0].dataset.type;
+        }
+        else 
+            Lists.selected_list_type = selected_list.dataset.type;
+    }
+
+    static unset_selected_list_id() {
+        Lists.selected_list_id = false;
+    }
+
+    static unset_selected_list_type() {
+        Lists.selected_list_type = false;
+    }
+
+    static highlight_list_button(onstart = false) {
+        if(onstart === true) {
+            Lists.set_selected_list_type(true);
+            Lists.set_selected_list_id(true);
+            if(Lists.main_list__buttons.length) 
+                Lists.set_active_color_for_list_button(Lists.main_list__buttons[0]);
+        }
+        else {
+            Lists.reset_list_button_highlighting();
+            Lists.set_selected_list_type(false, this);
+            Lists.set_selected_list_id(false, this);
+            Lists.set_active_color_for_list_button(this);
+        }
+    }
+
+    static reset_list_button_highlighting() {
+        let button = document.querySelector(`.lists .lists_select-list[data-type="${Lists.selected_list_type}"][data-id="${Lists.selected_list_id}"]`);
+        Lists.unset_active_color_for_list_button(button);
     }
 
 
@@ -636,10 +684,6 @@ class Lists {
         Lists.hide_lists_absense_info();
         Lists.show_main_lists_block();
         Lists.show_list_data(onstart);
-    }
-
-    static create_button_of_main_list() {
-        let list_button = Lists.#create_list_button();
     }
 
     static #create_list_button(list_name = '', default_deletion = true) {
@@ -704,6 +748,7 @@ document.addEventListener('DOMContentLoaded', function() {
     Lists.define_active_language(true);
     Lists.define_mode_switcher_visibility();
     Lists.restore_list(true);
+    Lists.highlight_list_button(true);
     Lists.new_list_creation_access__button.addEventListener('click', Lists.new_list_creation_access);
     /**
      * Переключение языков через кнопки языков на панели быстрого доступа
@@ -716,6 +761,10 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     for(const button of Languages.studied_languages_for_switching__buttons) {
         button.addEventListener('click', Lists.get_lists_from_another_language);
+    }
+    for(const button of Lists.list__buttons) {
+        button.addEventListener('click', Lists.show_list_data);
+        button.addEventListener('click', Lists.highlight_list_button);
     }
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });
