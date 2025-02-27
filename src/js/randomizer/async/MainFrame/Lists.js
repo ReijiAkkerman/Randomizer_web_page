@@ -370,6 +370,10 @@ class Lists {
         Lists.select_text(row);
     }
 
+    static edit_row_by_click_on_number() {
+
+    }
+
     /**
      * Работает всегда.
      * Переключает языки.
@@ -461,26 +465,89 @@ class Lists {
                 let xhr = new XMLHttpRequest();
                 xhr.open('GET', `/randomizer/getListData/${this.dataset.id}`);
                 xhr.send();
-                xhr.responseType = 'text';
+                xhr.responseType = 'json';
                 xhr.onloadend = () => {
-                    alert(xhr.response);
+                    if(xhr.response === null) alert('Произошла ошибка в show_list_data!');
+                    else if(xhr.response.hasOwnProperty('updated')) {
+                        Lists.#clear_words_area();
+                        Lists.#insert_sources(xhr.response.source);
+                        Lists.#insert_translations(xhr.response.translation);
+                        Lists.#insert_transcriptions(xhr.response.transcription);
+                    }
+                    else if(xhr.response.hasOwnProperty('redirect'))
+                        location.href = '/auth/view';
+                    // alert(xhr.response);
                 };
                 break;
         }
     }
 
+    static #insert_sources(data) {
+        if(data !== null) {
+            let words = data.split(';');
+            for(let i = 0; i < words.length; i++)
+                Lists.#insert_row(
+                    i + 1,
+                    words[i],
+                    Lists.source_numbers__area,
+                    Lists.source__area
+                );
+        }
+    }
+
+    static #insert_translations(data) {
+        if(data !== null) {
+            let words = data.split(';');
+            for(let i = 0; i < words.length; i++)
+                Lists.#insert_row(
+                    i + 1,
+                    words[i],
+                    Lists.translation_numbers__area,
+                    Lists.translation__area
+                );
+        }
+    }
+
+    static #insert_transcriptions(data) {
+        if(data !== null) {
+            let words = data.split(';');
+            for(let i = 0; i < words.length; i++)
+                Lists.#insert_row(
+                    i + 1,
+                    words[i],
+                    Lists.transcription_numbers__area,
+                    Lists.transcription__area
+                );
+        }
+    }
+
+    static #insert_row(id, text, place_for_number, place_for_row) {
+        let number_clone = Lists.row_number__template.content.cloneNode(true);
+        let row_clone = Lists.row__template.content.cloneNode(true);
+        let number = number_clone.querySelector('p');
+        let row = row_clone.querySelector('pre');
+        number.dataset.id = 
+        number.textContent = 
+        row.dataset.id = id;
+        row.textContent = text;
+        if(Lists.editing_mode) 
+            number.addEventListener('click', Lists.select_row_by_click_on_number);
+        else 
+            number.addEventListener('click', Lists.edit_row_by_click_on_number);
+        place_for_number.append(number);
+        place_for_row.append(row);
+    }
+
     static delete_new_list(event) {
         event.stopPropagation();
         Lists.#clear_words_area();
-        if(Lists.main_lists__area.length > 2) {
-            Lists.show_words_from_last_list();
-        }
-        else 
-            Lists.#insert_empty_rows();
+        Lists.#insert_empty_rows();
         Lists.#delete_new_list_button();
         localStorage.clear();
-        Lists.hide_main_lists_block();
-        Lists.show_list_absense_info();
+        if(Lists.main_lists__area.children.length === 1) {
+            Lists.hide_main_lists_block();
+            Lists.show_list_absense_info();
+        }
     }
 
     static create_main() {
@@ -587,12 +654,10 @@ class Lists {
         number.textContent = 
         number.dataset.id = '1';
         row.textContent = '';
-        if(Lists.editing_mode === true) {
+        if(Lists.editing_mode === true) 
             number.addEventListener('click', Lists.select_row_by_click_on_number);
-        }
-        else {
-
-        }
+        else 
+            number.addEventListener('click', Lists.edit_row_by_click_on_number);
         Lists.source__area.append(row);
         Lists.source_numbers__area.append(number);
     }
