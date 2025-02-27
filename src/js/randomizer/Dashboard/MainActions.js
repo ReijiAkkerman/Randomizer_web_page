@@ -16,6 +16,8 @@ class MainActions {
         // Создание нового списка
         ['Создание нового списка Кнопка включения раздела', '.actions-main__button_create-new-list'],
         ['Создание нового списка Кнопка запуска действия', '.actions-additional__button_save-list'],
+        ['Поле для наименования списка', '.actions-additional__input[name="list_name"]'],
+        ['Информация об ошибках для поля с наименованием списка', '.actions-additional_errors-info'],
         // Закрытие основного действия
         ['Закрытие основного действия Кнопка', '.actions-main__button_close-editing'],
     ]);
@@ -40,6 +42,8 @@ class MainActions {
     static #create_new_list_section_button = document.querySelector(MainActions.selectors.get('Создание нового списка Кнопка включения раздела'));
     static create_new_list_button = document.querySelector(MainActions.selectors.get('Создание нового списка Кнопка запуска действия'));
     static #svg_of_create_new_list_section_button = MainActions.#create_new_list_section_button.firstElementChild;
+    static list_name__input = document.querySelector(MainActions.selectors.get('Поле для наименования списка'));
+    static list_name_errors_info = document.querySelector(MainActions.selectors.get('Информация об ошибках для поля с наименованием списка'));
 
     // Закрытие основного действия
 
@@ -171,11 +175,15 @@ class MainActions {
 
     static #create_new_list_activate() {
         MainActions.#create_new_list_set_active_color_on_section_button();
+        MainActions.#show_errors_info_for_list_name_field();
+        MainActions.#show_input_for_list_name();
         MainActions.#create_new_list_show_run_button();
     }
 
     static #create_new_list_deactivate() {
         MainActions.#create_new_list_unset_active_color_on_section_button();
+        MainActions.#hide_errors_info_for_list_name_field();
+        MainActions.#hide_input_for_list_name();
         MainActions.#create_new_list_hide_run_button();
     }
 
@@ -193,6 +201,22 @@ class MainActions {
 
     static #create_new_list_hide_run_button() {
         MainActions.create_new_list_button.style.display = 'none';
+    }
+
+    static #hide_input_for_list_name() {
+        MainActions.list_name__input.style.display = 'none';
+    }
+
+    static #show_input_for_list_name() {
+        MainActions.list_name__input.style.display = '';
+    }
+
+    static #hide_errors_info_for_list_name_field() {
+        MainActions.list_name_errors_info.style.display = 'none';
+    }
+
+    static #show_errors_info_for_list_name_field() {
+        MainActions.list_name_errors_info.style.display = '';
     }
 
 

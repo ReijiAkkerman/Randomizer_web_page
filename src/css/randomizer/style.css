@@ -487,6 +487,19 @@ svg {
 .randomizer > .dashboard .actions-additional__button:hover {
   color: #000;
 }
+.randomizer > .dashboard .actions-additional__input {
+  box-sizing: border-box;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
+  font-size: 20px;
+  padding: 5px 5px 5px 15px;
+}
+.randomizer > .dashboard .actions-additional_errors-info {
+  font-size: 13px;
+  line-height: 13px;
+  color: #f00;
+  margin-top: 5px;
+}
 .randomizer > .dashboard .parameters > div {
   gap: 20px;
 }

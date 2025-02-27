@@ -9,6 +9,7 @@
     use project\model\traits\SendErrors;
     use project\model\traits\SettingsConnection;
     use project\model\components\Language;
+    use project\model\components\LanguageSelected;
 
     class Languages extends User {
         private string $Name;
@@ -95,6 +96,7 @@
                 else {
                     $LANGUAGES_IDS = $this->language_id;
                 }
+                $LANGUAGES_IDS = ltrim($LANGUAGES_IDS, ',');
                 $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
@@ -151,6 +153,7 @@
                     $LANGUAGES_IDS .= $id . ',';
                 }
                 $LANGUAGES_IDS .= $exchangeOnId;
+                $LANGUAGES_IDS = ltrim($LANGUAGES_IDS, ',');
                 $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
@@ -183,7 +186,8 @@
                     foreach($languagesIds__array as $id) {
                         $LANGUAGES_IDS .= $id . ',';
                     }
-                    rtrim($LANGUAGES_IDS, ',');
+                    $LANGUAGES_IDS = rtrim($LANGUAGES_IDS, ',');
+                    $LANGUAGES_IDS = ltrim($LANGUAGES_IDS, ',');
                 }
                 else {
                     $LANGUAGES_IDS = NULL;
@@ -294,6 +298,50 @@
             }
         }
 
+        public function setSelected($_language_mark): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                // получаем ID выбранного языка
+                $query = "SELECT LANG_ID FROM changed_languages WHERE mark='$_language_mark' && USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $LANG_ID = $value['LANG_ID'];
+                    }
+                }
+                else {
+                    $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                    $result = $this->mysql->query($query);
+                    foreach($result as $value) {
+                        $LANG_ID = $value['ID'];
+                    }
+                }
+                // устанавливаем выбранный язык
+                $query = "UPDATE languages SET selected=$LANG_ID WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
+        public function unsetSelected(): void {
+            if($this->getCookie()) {
+                $this->createSettingsConnection();
+                $query = "UPDATE languages SET selected=NULL WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeSettingsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
 
 
 
@@ -367,11 +415,16 @@
                     $studied_languages = [];
                     foreach($result as $value) {
                         if(in_array($value['ID'], $languagesIds__array)) {
-                            $language = new Language();
+                            $language = new LanguageSelected();
+                            $selectedLanguageId = $this->getSelected();
                             $language->name = $value['name'];
                             $language->foldername = $value['foldername'];
                             $language->mark = $value['mark'];
                             $language->kanji = (bool)$value['kanji'];
+                            if(isset($selectedLanguageId))
+                                $language->selected = ($selectedLanguageId == $value['ID']) ? true : false;
+                            else 
+                                $language->selected = false;
                             $studied_languages[] = clone $language;
                         }
                     }
@@ -413,6 +466,17 @@
                 $this->closeSettingsConnection();
                 return $all_languages;
             }
+        }
+
+        private function getSelected(): int|null {
+            $query = "SELECT selected FROM languages WHERE USER_ID={$this->_id}";
+            $result = $this->mysql->query($query);
+            foreach($result as $value) {
+                if($value['selected'] !== NULL)
+                    $selected_language_id = (int)$value['selected'];
+                else return null;
+            }
+            return $selected_language_id;
         }
 
 

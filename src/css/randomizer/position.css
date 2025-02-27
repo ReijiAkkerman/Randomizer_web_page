@@ -248,6 +248,9 @@ svg {
   width: 100%;
   height: fit-content;
 }
+.randomizer > .dashboard .actions-additional__input {
+  width: 100%;
+}
 .randomizer > .dashboard .parameters {
   display: block;
   position: relative;

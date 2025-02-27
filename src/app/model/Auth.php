@@ -509,7 +509,8 @@
                 "CREATE TABLE IF NOT EXISTS languages(
                     USER_ID INT UNSIGNED UNIQUE NOT NULL,
                     main SMALLINT NULL,
-                    studied VARCHAR(255) NULL
+                    studied VARCHAR(255) NULL,
+                    selected SMALLINT NULL
                 )",
                 "CREATE TABLE IF NOT EXISTS changed_languages(
                     USER_ID INT UNSIGNED NOT NULL,

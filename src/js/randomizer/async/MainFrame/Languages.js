@@ -344,7 +344,9 @@ class Languages {
                     removing_studied_language_for_switching.remove();
                     removing_studied_language_for_selection.remove();
                     removing_studied_language_from_quick_access.remove();
+                    Lists.unset_active_language_on_server();
                     Lists.unset_active_language_mark();
+                    Lists.hide_mode_switcher();
                     if(Languages.quick_access_language_switcher__area.children.length === 1) {
                         Languages.quick_access_language_switcher__area.style.display = 'none';
                         Lists.mode_switcher__area.style.display = 'none';
@@ -458,6 +460,7 @@ class Languages {
         Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
         Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
         Languages.substitute_main_language__button.dataset.kanji = Languages.language.kanji;
+        Lists.define_native_language();
         return language;
     }
 

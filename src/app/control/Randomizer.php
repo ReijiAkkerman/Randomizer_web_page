@@ -6,6 +6,7 @@
 
     use project\model\Git;
     use project\model\Languages;
+    use project\model\Lists;
     use project\model\components\Data;
 
     class Randomizer extends Page {
@@ -144,5 +145,36 @@
             $languageMark = $args[0];
             $languages = new Languages();
             $languages->changeForUser($languageMark);
+        }
+
+        public function setSelectedLanguage(array $args): void {
+            $languageMark = $args[0];
+            $languages = new Languages();
+            $languages->setSelected($languageMark);
+        }
+
+        public function unsetSelectedLanguage(): void {
+            $languages = new Languages();
+            $languages->unsetSelected();
+        }
+
+
+
+
+        // Методы для работы со списками
+
+        public function createNewList(array $args): void {
+            $activeLanguageMark = $args[0];
+            $listType = $args[1];
+            if(isset($args[2])) $listName = $args[2];
+            else $listName = '';
+            $lists = new Lists();
+            $lists->createNew($activeLanguageMark, $listType, $listName);
+        }
+
+        public function getListData(array $args): void {
+            $listId = $args[0];
+            $lists = new Lists();
+            $lists->getListData($listId);
         }
     }

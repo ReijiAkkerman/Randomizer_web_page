@@ -574,6 +574,21 @@
                         color: text.$active;
                     }
                 }
+
+                &__input {
+                    box-sizing: border-box;
+                    @include borders.default(bottom);
+                    @include borders.default(top);
+                    font-size: 20px;
+                    padding: 5px 5px 5px 15px;
+                }
+
+                &_errors-info {
+                    font-size: 13px;
+                    line-height: 13px;
+                    color: #f00;
+                    margin-top: 5px;
+                }
             }
         }
 

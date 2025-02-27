@@ -3,6 +3,7 @@ import {MainActions} from "/src/js/randomizer/Dashboard/MainActions.js";
 import {WordsTypes} from "/src/js/randomizer/DataStructures/WordsTypes.js";
 import {Languages} from "/src/js/randomizer/async/MainFrame/Languages.js";
 import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
+import {UserInterface} from "/src/js/randomizer/UserInterface.js";
 
 class Lists {
     static selectors = new Map([
@@ -10,7 +11,7 @@ class Lists {
         ['Кнопка закрывающая действие над списками', '.actions-main__button_close-editing'],
         ['Кнопки быстрого переключения между изучаемыми языками', '.other-languages__button'],
         // define_active_language
-        ['Активный язык', '.languages-additional-languages-list__button_studied-language'],
+        ['Область переключения изучаемых языков', '.languages-additional-languages-list'],
         // focus_on_next_row
         ['Шаблон нумерации строки', '.words__template_number'],
         ['Шаблон строки', '.words__template_word'],
@@ -30,11 +31,16 @@ class Lists {
         ['Область нумерации исходных значений', '.words .source .counter'],
         ['Область нумерации чтений', '.words .transcription .counter'],
         ['Область нумерации переводов', '.words .translation .counter'],
-
-
-
+        // create_button_of_new_list
         ['Область основных списков', '.lists-word'],
         ['Место вставки основных списков', '.lists-word .lists_title'],
+        // save_new_list
+        ['Форма слов', '.words__form'],
+        ['Поле для наименования языка', '.actions-additional__input[name="list_name"]'],
+        ['Место вывода ошибки о наименовании списка', '.actions-additional_errors-info'],
+        ['Кнопка сохранения списка', '.actions-additional__button_save-list'],
+        // define_native_language
+        ['Кнопка основного языка', '#main'],
     ]);
 
 
@@ -46,6 +52,7 @@ class Lists {
     static translation_row = 0;
     static transcription_row = 0;
     static row_number_for_deletion = false;
+    static editing_mode = false;
 
 
 
@@ -56,7 +63,7 @@ class Lists {
     static close_main_action__button = document.querySelector(Lists.selectors.get('Кнопка закрывающая действие над списками'));
     static quick_access_to_studied_languages__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки быстрого переключения между изучаемыми языками'));
     // define_active_language
-    static active_language__button = document.querySelector(Lists.selectors.get('Активный язык'));
+    static studied_languages_for_switching__area = document.querySelector(Lists.selectors.get('Область переключения изучаемых языков'));
     // focus_on_next_row
     static row_number__template = document.querySelector(Lists.selectors.get('Шаблон нумерации строки'));
     static row__template = document.querySelector(Lists.selectors.get('Шаблон строки'));
@@ -74,11 +81,16 @@ class Lists {
     static source_numbers__area = document.querySelector(Lists.selectors.get('Область нумерации исходных значений'));
     static translation_numbers__area = document.querySelector(Lists.selectors.get('Область нумерации переводов'));
     static transcription_numbers__area = document.querySelector(Lists.selectors.get('Область нумерации чтений'));
-
-
-
+    // create_button_of_new_list
     static main_lists__area = document.querySelector(Lists.selectors.get('Область основных списков'));
     static main_lists__insertion_place = document.querySelector(Lists.selectors.get('Место вставки основных списков'));
+    // save_new_list
+    static words__form = document.querySelector(Lists.selectors.get('Форма слов'));
+    static list_name__input = document.querySelector(Lists.selectors.get('Поле для наименования языка'));
+    static list_name__error = document.querySelector(Lists.selectors.get('Место вывода ошибки о наименовании списка'));
+    static save_list__button = document.querySelector(Lists.selectors.get('Кнопка сохранения списка'));
+    // define_native_language
+    static main_language__button = document.querySelector(Lists.selectors.get('Кнопка основного языка'));
 
 
 
@@ -122,6 +134,7 @@ class Lists {
             let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
             row.focus();
             Lists.select_text(row);
+            Lists.enable_editing_mode();
         }
     }
 
@@ -225,9 +238,10 @@ class Lists {
      * панели быстрого доступа и при выборе языка из списка в настройках.
      */
     static define_active_language(onstart = false, _language = false) {
-        if(onstart === true) {
-            if(Lists.active_language__button !== null)
-                Lists.active_language_mark = Lists.active_language__button.dataset.mark;
+        if(onstart === true){
+            let active_language__button = Lists.studied_languages_for_switching__area.querySelector('button[data-selected="true"]');
+            if(active_language__button !== null)
+                Lists.active_language_mark = active_language__button.dataset.mark;
         }
         else 
             Lists.active_language_mark = _language.dataset.mark;
@@ -235,6 +249,26 @@ class Lists {
 
     static unset_active_language_mark() {
         Lists.active_language_mark = false;
+    }
+
+    static set_active_language_on_server(_language_mark) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/setSelectedLanguage/${_language_mark}`);
+        xhr.send();
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
+    }
+
+    static unset_active_language_on_server() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/randomizer/unsetSelectedLanguage');
+        xhr.send();
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
     }
 
     static focus_on_next_row() {
@@ -338,6 +372,7 @@ class Lists {
         if(Lists.active_language_mark)
             Languages.unset_active_color_for_active_language(Lists.active_language_mark);
         Lists.define_active_language(false, this);
+        Lists.set_active_language_on_server(Lists.active_language_mark);
         WordsTypes.defineSections(false, this);
         Words.switch_mode();
         Lists.check_mode_switcher_existence_for_language(this);
@@ -382,30 +417,11 @@ class Lists {
     }
 
     static show_list_data(onstart = false) {
-        switch((onstart) ? 'new' : this.dataset.type) {
+        switch((onstart === true) ? 'new' : this.dataset.type) {
             case 'new':
-                let type__area;
-                let type_numbers__area;
+                Lists.#clear_words_area();
                 let types = ['source', 'translation', 'transcription'];
-                for(const type of types) {
-                    switch(type) {
-                        case 'source':
-                            type__area = Lists.source__area.children;
-                            type_numbers__area = Lists.source_numbers__area.children;
-                            break;
-                        case 'translation':
-                            type__area = Lists.translation__area.children;
-                            type_numbers__area = Lists.translation_numbers__area.children;
-                            break;
-                        case 'transcription':
-                            type__area = Lists.transcription__area.children;
-                            type_numbers__area = Lists.transcription_numbers__area.children;
-                            break;
-                    }
-                    for(const number of type__area)
-                        number.remove();
-                    for(const row of type_numbers__area)
-                        row.remove();
+                for(let type of types) {
                     let rows_in_type = localStorage.getItem(type + '_rows_number');
                     if(rows_in_type !== null)
                         for(let i = 1; i <= rows_in_type; i++) {
@@ -414,6 +430,7 @@ class Lists {
                             let number = number_clone.querySelector('p');
                             let row = row_clone.querySelector('pre');
                             number.textContent = 
+                            number.dataset.id = 
                             row.dataset.id = i;
                             row.textContent = localStorage.getItem(type + '_' + i);
                             switch(type) {
@@ -434,11 +451,161 @@ class Lists {
                 }
                 Lists.new_list_creation_access__button.click();
                 break;
+            default:
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', `/randomizer/getListData/${this.dataset.id}`);
+                xhr.send();
+                xhr.responseType = 'text';
+                xhr.onloadend = () => {
+                    alert(xhr.response);
+                };
+                break;
         }
+    }
+
+    static delete_new_list(event) {
+        event.stopPropagation();
+        Lists.#clear_words_area();
+        if(Lists.main_lists__area.length > 2) {
+            Lists.show_words_from_last_list();
+        }
+        else 
+            Lists.#insert_empty_rows();
+        Lists.#delete_new_list_button();
+        localStorage.clear();
+        Lists.hide_main_lists_block();
+        Lists.show_list_absense_info();
+    }
+
+    static create_main() {
+        Lists.#prepare_words();
+        let list_name = Lists.list_name__input.value;
+        let data = new FormData(Lists.words__form);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/createNewList/${Lists.active_language_mark}/main/${list_name}`);
+        xhr.send(data);
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в create_main!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                let listName = (list_name) ? list_name : xhr.response.date;
+                let list_button = Lists.#create_list_button(listName);
+                Lists.set_active_color_for_list_button(list_button);
+                list_button.addEventListener('click', Lists.show_list_data);
+                Lists.#delete_new_list_button();
+                Lists.main_lists__insertion_place.after(list_button);
+                Lists.close_main_action();
+                localStorage.clear();
+                Lists.hide_lists_absense_info();
+                Lists.show_main_lists_block();
+            }
+            else if(xhr.response.hasOwnProperty('fields')) {
+                for(let error of xhr.response.fields) {
+                    switch(error) {
+                        case 'list_name':
+                            Lists.list_name__error.textContent = xhr.response.list_name;
+                            break;
+                        case 'alert':
+                            alert(xhr.response.alert);
+                            break;
+                    }
+                }
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
+        };
+    }
+
+    static #prepare_words() {
+        let type__words;
+        let types = ['source', 'translation', 'transcription'];
+        for(const type of types) {
+            switch(type) {
+                case 'source':
+                    type__words = Lists.source__area.children;
+                    break;
+                case 'translation':
+                    type__words = Lists.translation__area.children;
+                    break;
+                case 'transcription':
+                    type__words = Lists.transcription__area.children;
+                    break;
+            }
+            let words = '';
+            for(const row of type__words)
+                words += row.textContent + ';';
+            let input = document.querySelector(`.words__input[name="${type}"]`);
+            input.value = words;
+        }
+    }
+
+    static #delete_new_list_button() {
+        let new_list = Lists.main_lists__area.querySelector('div[data-type="new"]');
+        if(new_list !== null)
+            new_list.remove();
+    }
+
+    static #clear_words_area() {
+        let type__area;
+        let type_numbers__area;
+        let types = ['source', 'translation', 'transcription'];
+        for(const type of types) {
+            switch(type) {
+                case 'source':
+                    type__area = Lists.source__area.children;
+                    type_numbers__area = Lists.source_numbers__area.children;
+                    break;
+                case 'translation':
+                    type__area = Lists.translation__area.children;
+                    type_numbers__area = Lists.translation_numbers__area.children;
+                    break;
+                case 'transcription':
+                    type__area = Lists.transcription__area.children;
+                    type_numbers__area = Lists.transcription_numbers__area.children;
+                    break;
+            }
+            for(let i = type__area.length; i > 0; i--)
+                type__area[i - 1].remove();
+            for (let i = type_numbers__area.length; i > 0; i--)
+                type_numbers__area[i - 1].remove();
+        }
+    }
+
+    static #insert_empty_rows() {
+        let number_clone = Lists.row_number__template.content.cloneNode(true);
+        let row_clone = Lists.row__template.content.cloneNode(true);
+        let number =  number_clone.querySelector('p');
+        let row = row_clone.querySelector('pre');
+        row.dataset.id = 
+        number.textContent = 
+        number.dataset.id = '1';
+        row.textContent = '';
+        if(Lists.editing_mode === true) {
+            number.addEventListener('click', Lists.select_row_by_click_on_number);
+        }
+        else {
+
+        }
+        Lists.source__area.append(row);
+        Lists.source_numbers__area.append(number);
+    }
+
+    static show_words_from_last_list() {
+
     }
 
     static close_main_action() {
         Lists.close_main_action__button.click();
+        Lists.disable_editing_mode();
+    }
+
+    static enable_editing_mode() {
+        Lists.editing_mode = true;
+    }
+
+    static disable_editing_mode() {
+        Lists.editing_mode = false;
     }
 
 
@@ -454,19 +621,28 @@ class Lists {
             block.style.display = 'none';
     }
 
+    static show_list_absense_info() {
+        for(const block of Lists.lists_absense_info__blocks)
+            block.style.display = '';
+    }
+
     static create_button_of_new_list(onstart) {
         let list_button = Lists.#create_list_button('Новый список', false);
         list_button.dataset.type = 'new';
         let list_button_delete = list_button.querySelector('button');
-        // здесь привязка функции удаления списка
+        list_button_delete.addEventListener('click', Lists.delete_new_list);
         list_button.addEventListener('click', Lists.show_list_data);
         Lists.main_lists__insertion_place.after(list_button);
         Lists.hide_lists_absense_info();
-        Lists.main_lists__area.style.display = '';
+        Lists.show_main_lists_block();
         Lists.show_list_data(onstart);
     }
 
-    static #create_list_button(list_name, default_deletion = true) {
+    static create_button_of_main_list() {
+        let list_button = Lists.#create_list_button();
+    }
+
+    static #create_list_button(list_name = '', default_deletion = true) {
         let clone = Lists.list_button__template.content.cloneNode(true);
         let list_button = clone.querySelector('div');
         let list_button_name = list_button.querySelector('p');
@@ -493,8 +669,32 @@ class Lists {
         Lists.mode_switcher__area.style.display = '';
     }
 
-    static show_usual_lists_block() {
-        
+    static define_mode_switcher_visibility() {
+        let active_language__button = Lists.studied_languages_for_switching__area.querySelector('button[data-selected="true"]');
+        if(active_language__button !== null)
+            if(active_language__button.dataset.selected)
+                if(active_language__button.dataset.kanji)
+                    Lists.show_mode_switcher();
+    }
+
+    static show_main_lists_block() {
+        Lists.main_lists__area.style.display = '';
+    }
+
+    static hide_main_lists_block() {
+        Lists.main_lists__area.style.display = 'none';
+    }
+
+    static set_active_color_for_list_button(button) {
+        let text = button.querySelector('p');
+        button.style.borderColor = 
+        text.style.color = UserInterface.color_of_selected_list;
+    }
+
+    static unset_active_color_for_list_button(button) {
+        let text = button.querySelector('p');
+        button.style.borderColor = 
+        text.style.color = '';
     }
 }
 
@@ -502,6 +702,7 @@ export {Lists};
 
 document.addEventListener('DOMContentLoaded', function() {
     Lists.define_active_language(true);
+    Lists.define_mode_switcher_visibility();
     Lists.restore_list(true);
     Lists.new_list_creation_access__button.addEventListener('click', Lists.new_list_creation_access);
     /**
@@ -516,4 +717,5 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of Languages.studied_languages_for_switching__buttons) {
         button.addEventListener('click', Lists.get_lists_from_another_language);
     }
+    Lists.save_list__button.addEventListener('click', Lists.create_main);
 });

@@ -40,6 +40,11 @@
                         <!-- <pre data-id="1">Сюда писать чтение</pre> -->
                     </div>
                 </div>
+                <form class="words__form" style="display:none;">
+                    <input class="words__input" type="text" name="source">
+                    <input class="words__input" type="text" name="translation">
+                    <input class="words__input" type="text" name="transcription">
+                </form>
             </section>
             <section class="guide" style="display:none;">
                 <h1>Руководство</h1>
@@ -103,14 +108,11 @@
                             <div>
                                 <div class="languages-additional-languages-list">
                                     <template class="languages-additional-languages-list__template">
-                                        <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="">
+                                        <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="" data-selected="">
                                     </template>
-                                    <?php $counter = 0 ?>
                                     <?php foreach($data->studied_languages as $language) { ?>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($counter === 0) echo 'style="color:#00f;"' ?>><?= $language->name ?></button>
-                                    <?php $counter++ ?>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($language->selected === true) echo 'style="color:#00f;"' ?> data-selected="<?php if($language->selected === true) echo 'true' ?>"><?= $language->name ?></button>
                                     <?php } ?>
-                                    <?php unset($counter) ?>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="" data-mark="" data-folder="" data-kanji="" id="new">
                                         <svg viewBox="0 0 32 32">
                                             <path d="M24,15v2h-7v7h-2v-7H8v-2h7V8h2v7H24z M24.485,24.485c-4.686,4.686-12.284,4.686-16.971,0 c-4.686-4.686-4.686-12.284,0-16.971c4.687-4.686,12.284-4.686,16.971,0C29.172,12.201,29.172,19.799,24.485,24.485z M23.071,8.929 c-3.842-3.842-10.167-3.975-14.142,0c-3.899,3.899-3.899,10.243,0,14.142c3.975,3.975,10.301,3.841,14.142,0 C26.97,19.172,26.97,12.828,23.071,8.929z"/>
@@ -267,6 +269,8 @@
                     </button>
                 </div>
                 <div class="actions-additional">
+                    <p class="actions-additional_errors-info" style="display:none;"></p>
+                    <input class="actions-additional__input" type="text" name="list_name" placeholder="Название списка . . . " style="display:none;">
                     <button class="actions-additional__button actions-additional__button_save-list" style="display:none;">Сохранить список</button>
                     <button class="actions-additional__button actions-additional__button_split-list" style="display:none;">Разделить список на</button>
                     <button class="actions-additional__button actions-additional__button_combine-lists" style="display:none;">Обьединить списки</button>
@@ -284,7 +288,7 @@
                 <template class="lists_select-list__template">
                     <div class="lists_select-list" data-type="" data-id="">
                         <p></p>
-                        <button class="lists_delete-list">
+                        <button class="lists_delete-list" data-type="" data-id="">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
@@ -390,22 +394,6 @@
                 </div>
                 <div class="lists-word" style="display:none;">
                     <p class="lists_title">Списки слов</p>
-                    <div class="lists_select-list">
-                        <p>Список слов</p>
-                        <button class="lists_delete-list">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="lists_select-list">
-                        <p>Список слов</p>
-                        <button class="lists_delete-list">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="filters">
@@ -424,10 +412,10 @@
                     $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
                     for($i = 0; $i < sizeof($data->studied_languages); $i++) {
                     ?>
-                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($i === 0) echo 'style="color:#00f;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
+                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($data->studied_languages[$i]->selected === true) echo 'style="color:#00f;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
                     <?php } ?>
                 </div>
-                <div class="other-modes" <?php if(!$data->studied_languages || !$data->studied_languages[0]->kanji) echo 'style="display:none;"' ?>>
+                <div class="other-modes" style="display:none;">
                     <button class="other-modes__button other-modes__button_source" data-type_index="0" id="source">
                         <svg viewBox="0 0 64 64" enable-background="new 0 0 64 64" style="fill:#00f;">
                             <path d="M56,0H8C5.789,0,4,1.789,4,4v56c0,2.211,1.789,4,4,4h48c2.211,0,4-1.789,4-4V4C60,1.789,58.211,0,56,0z M58,60c0,1.104-0.896,2-2,2H8c-1.104,0-2-0.896-2-2V4c0-1.104,0.896-2,2-2h48c1.104,0,2,0.896,2,2V60z"/>
