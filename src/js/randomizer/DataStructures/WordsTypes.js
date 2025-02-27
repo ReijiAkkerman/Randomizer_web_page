@@ -1,6 +1,7 @@
 class WordsTypes {
     static selectors = new Map([
         ['Изучаемые языки', '.languages-additional-languages-list__button_studied-language'],
+        ['Область переключения изучаемых языков', '.languages-additional-languages-list'],
         ['Кнопки переключения режима изучения', '.other-modes__button'],
     ]);
 
@@ -9,6 +10,7 @@ class WordsTypes {
 
 
     static studied_languages = document.querySelectorAll(WordsTypes.selectors.get('Изучаемые языки'));
+    static studied_languages_for_switching__area = document.querySelector(WordsTypes.selectors.get('Область переключения изучаемых языков'));
     static switcher__buttons = document.querySelectorAll(WordsTypes.selectors.get('Кнопки переключения режима изучения'));
     
 
@@ -31,8 +33,9 @@ class WordsTypes {
             WordsTypes.hidden_section__index = 1;
         };
         if(onstart === true) {
-            if(WordsTypes.studied_languages.length) {
-                if(WordsTypes.studied_languages[0].dataset.kanji) {
+            let active_language__button = WordsTypes.studied_languages_for_switching__area.querySelector('button[data-selected="true"]');
+            if(active_language__button !== null) {
+                if(active_language__button.dataset.kanji) {
                     WordsTypes.sections = ['source', 'transcription', 'translation'];
                     WordsTypes.shown_section__index = 0;
                     WordsTypes.hidden_section__index = 1;
