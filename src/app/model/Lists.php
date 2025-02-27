@@ -14,6 +14,7 @@
     use project\model\traits\SendErrors;
 
     use project\model\components\ListData;
+    use project\model\components\ListsData;
 
     class Lists extends User {
         private \mysqli $mysql;
@@ -211,26 +212,59 @@
             }
         }
 
-        public function getAllListsData(): array {
+        public function getAllListsData($_async = false) {
             if($this->getCookie()) {
                 $this->createAuthConnection();
                 $tableName = $this->getUserTableName();
                 $this->closeAuthConnection();
 
                 $this->createSettingsConnection();
-                // получение основного языка 
-                $query = "SELECT main FROM languages";
+                // получение основного и изучаемого языка 
+                $query = "SELECT main,selected FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
-                    
+                    $mainLanguageId = $value['main'];
+                    $selectedLanguageId = $value['selected'];
                 }
-                // получение изучаемого языка
-
                 $this->closeSettingsConnection();
 
                 $this->createListsConnection();
                 // получение списков
+                $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$selectedLanguageId'";
+                $result = $this->mysql->query($query);
+                $list = new ListData();
+                $lists = new ListsData();
+                foreach($result as $value) {
+                    $list->sources = $value['source'];
+                    $list->translations = $value['translation'];
+                    $list->transcriptions = $value['transcription'];
+                    $list->date = $value['date'];
+                    $list->name = $value['name'];
+                    $list->type = $value['type'];
+                    $list->id = $value['ID'];
+                    switch($list->type) {
+                        case 'main':
+                            $lists->main[] = clone $list;
+                            break;
+                        case 'hard':
+                            $lists->hard[] = clone $list;
+                            break;
+                        case 'split':
+                            $lists->split[] = clone $list;
+                            break;
+                        case 'combined':
+                            $lists->combined[] = clone $list;
+                            break;
+                    }
+                }
                 $this->closeListsConnection();
+                $lists->updated = true;
+                if($_async === true) {
+                    $Lists = json_encode($lists, JSON_UNESCAPED_UNICODE);
+                    echo $Lists;
+                }
+                else 
+                    return $lists;
             }
             else {
                 $this->deleteCookie();

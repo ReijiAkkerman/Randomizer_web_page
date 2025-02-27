@@ -32,6 +32,7 @@
                 $data = new Data();
                 $git = new Git();
                 $languages = new Languages();
+                $lists = new Lists();
 
                 $git->getSettings();
 
@@ -41,6 +42,16 @@
                 $data->main_language = $languages->getMain();
                 $data->studied_languages = $languages->getStudied();
                 $data->all_languages = $languages->getAll();
+                $data->lists = $lists->getAllListsData();
+                if(sizeof($data->lists->main)) {
+                    $word_types = ['sources', 'translations', 'transcriptions'];
+                    foreach($word_types as $type) {
+                        if($data->lists->main[sizeof($data->lists->main) - 1]->$type === null)
+                        $data->$type = [];
+                    else 
+                        $data->$type = explode(';', $data->lists->main[sizeof($data->lists->main) - 1]->$type);
+                    }
+                }
 
                 foreach($data->studied_languages as $language) {
                     $data->studied_languages_list[] = $language->name;

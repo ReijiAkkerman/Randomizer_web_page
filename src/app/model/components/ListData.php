@@ -7,4 +7,8 @@
         public string $source;
         public string $translation;
         public string|null $transcription;
+        public string $date;
+        public string $name;
+        public string $type;
+        public int $id;
     }

@@ -18,26 +18,54 @@
                 </template>
                 <div class="source scrollable">
                     <div class="counter">
+                        <?php if($data->sources) { ?>
+                        <?php for($i = 0; $i < sizeof($data->sources); $i++) { ?>
+                        <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
+                        <?php } ?>
+                        <?php } else { ?>
                         <p data-id="1">1</p>
+                        <?php } ?>
                     </div>
                     <div class="words_section" data-type="source">
+                        <?php if($data->sources) { ?>
+                        <?php for($i = 0; $i < sizeof($data->sources); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->sources[$i] ?></pre>
+                        <?php } ?>
+                        <?php } else { ?>
                         <pre data-id="1">Сюда писать исходное значение</pre>
+                        <?php } ?>
                     </div>
                 </div>
                 <div class="translation" style="display:none;">
                     <div class="counter">
-                        <!-- <p>1</p> -->
+                        <?php if($data->translations) { ?>
+                        <?php for($i = 0; $i < sizeof($data->translations); $i++) { ?>
+                        <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
+                        <?php } ?>
+                        <?php } ?>
                     </div>
                     <div class="words_section" data-type="translation">
-                        <!-- <pre data-id="1">Сюда писать перевод</pre> -->
+                        <?php if($data->translations) { ?>
+                        <?php for($i = 0; $i < sizeof($data->translations); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->translations[$i] ?></pre>
+                        <?php } ?>
+                        <?php } ?>
                     </div>
                 </div>
                 <div class="transcription" style="display:none;">
                     <div class="counter">
-                        <!-- <p>1</p> -->
+                        <?php if($data->transcriptions) { ?>
+                        <?php for($i = 0; $i < sizeof($data->transcriptions); $i++) { ?>
+                        <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
+                        <?php } ?>
+                        <?php } ?>
                     </div>
                     <div class="words_section" data-type="transcription">
-                        <!-- <pre data-id="1">Сюда писать чтение</pre> -->
+                        <?php if($data->transcriptions) { ?>
+                        <?php for($i = 0; $i < sizeof($data->transcriptions); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->transcriptions[$i] ?></pre>
+                        <?php } ?>
+                        <?php } ?>
                     </div>
                 </div>
                 <form class="words__form" style="display:none;">
@@ -283,8 +311,8 @@
                 </div>
             </div>
             <div class="lists">
-                <p class="lists_absense-info">Списки слов отсутствуют!</p>
-                <p class="lists_absense-info"><br>Чтобы увидеть здесь свои списки - создайте их, или синхронизируйте данные с удаленным репозиторием!</p>
+                <p class="lists_absense-info" <?php if($data->lists->main) echo 'style="display:none;"' ?>>Списки слов отсутствуют!</p>
+                <p class="lists_absense-info" <?php if($data->lists->main) echo 'style="display:none;"' ?>><br>Чтобы увидеть здесь свои списки - создайте их, или синхронизируйте данные с удаленным репозиторием!</p>
                 <template class="lists_select-list__template">
                     <div class="lists_select-list" data-type="" data-id="">
                         <p></p>
@@ -314,86 +342,90 @@
                         </button>
                     </div>
                 </div>
-                <div class="lists-combined" style="display:none;">
+                <div class="lists-combined" <?php if(!$data->lists->combined) echo 'style="display:none;"' ?>>
                     <div class="lists_header">
                         <p class="lists_title">Объединенные списки</p>
-                        <button class="lists_delete-lists">
+                        <button class="lists_delete-lists lists_delete-combined-lists">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Обьединенный список</p>
-                        <button class="lists_delete-list">
+                    <?php for($i = sizeof($data->lists->combined); $i > 0; $i--) { ?>
+                    <div class="lists_select-list" data-type="<?= $data->lists->combined[$i - 1]->type ?>" data-id="<?= $data->lists->combined[$i - 1]->id ?>">
+                        <p><?php
+                            if($data->lists->combined[$i - 1]->name) echo $data->lists->combined[$i - 1]->name;
+                            else echo $data->lists->combined[$i - 1]->date;
+                        ?></p>
+                        <button class="lists_delete-list" data-type="<?= $data->lists->combined[$i - 1]->type ?>" data-id="<?= $data->lists->combined[$i - 1]->id ?>">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Обьединенный список</p>
-                        <button class="lists_delete-list">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                    </div>
+                    <?php } ?>
                 </div>
-                <div class="lists-temporary-split" style="display:none;">
+                <div class="lists-temporary-split" <?php if(!$data->lists->split) echo 'style="display:none;"' ?>>
                     <div class="lists_header">
                         <p class="lists_title">Разделенные списки</p>
-                        <button class="lists_delete-lists">
+                        <button class="lists_delete-lists lists_delete-split-lists">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Разделенный список</p>
-                        <button class="lists_delete-list">
+                    <?php for($i = sizeof($data->lists->split); $i > 0; $i--) { ?>
+                    <div class="lists_select-list" data-type="<?= $data->lists->split[$i - 1]->type ?>" data-id="<?= $data->lists->split[$i - 1]->id ?>">
+                        <p><?php
+                            if($data->lists->split[$i - 1]->name) echo $data->lists->split[$i - 1]->name;
+                            else echo $data->lists->split[$i - 1]->date;
+                        ?></p>
+                        <button class="lists_delete-list" data-type="<?= $data->lists->split[$i - 1]->type ?>" data-id="<?= $data->lists->split[$i - 1]->id ?>">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Разделенный список</p>
-                        <button class="lists_delete-list">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                    </div>
+                    <?php } ?>
                 </div>
-                <div class="lists-hard-word" style="display:none;">
+                <div class="lists-hard-word" <?php if(!$data->lists->hard) echo 'style="display:none;"' ?>>
                     <div class="lists_header">
                         <p class="lists_title">Трудные слова</p>
-                        <button class="lists_delete-lists">
+                        <button class="lists_delete-lists lists_delete-hard-lists">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Список трудных слов</p>
-                        <button class="lists_delete-list">
+                    <?php for($i = sizeof($data->lists->hard); $i > 0; $i--) { ?>
+                    <div class="lists_select-list" data-type="<?= $data->lists->hard[$i - 1]->type ?>" data-id="<?= $data->lists->hard[$i - 1]->id ?>">
+                        <p><?php
+                            if($data->lists->hard[$i - 1]->name) echo $data->lists->hard[$i - 1]->name;
+                            else echo $data->lists->hard[$i - 1]->date;
+                        ?></p>
+                        <button class="lists_delete-list" data-type="<?= $data->lists->hard[$i - 1]->type ?>" data-id="<?= $data->lists->hard[$i - 1]->id ?>">
                             <svg viewBox="0 0 1024 1024">
                                 <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
                             </svg>
                         </button>
                     </div>
-                    <div class="lists_select-list">
-                        <p>Список трудных слов</p>
-                        <button class="lists_delete-list">
-                            <svg viewBox="0 0 1024 1024">
-                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
-                            </svg>
-                        </button>
-                    </div>
+                    <?php } ?>
                 </div>
-                <div class="lists-word" style="display:none;">
+                <div class="lists-word" <?php if(!$data->lists->main) echo 'style="display:none;"' ?>>
                     <p class="lists_title">Списки слов</p>
+                    <?php for($i = sizeof($data->lists->main); $i > 0; $i--) { ?>
+                    <div class="lists_select-list" data-type="<?= $data->lists->main[$i - 1]->type ?>" data-id="<?= $data->lists->main[$i - 1]->id ?>">
+                        <p><?php
+                            if($data->lists->main[$i - 1]->name) echo $data->lists->main[$i - 1]->name;
+                            else echo $data->lists->main[$i - 1]->date;
+                        ?></p>
+                        <button class="lists_delete-list" data-type="<?= $data->lists->main[$i - 1]->type ?>" data-id="<?= $data->lists->main[$i - 1]->id ?>">
+                            <svg viewBox="0 0 1024 1024">
+                                <path d="M764.288 214.592 512 466.88 259.712 214.592a31.936 31.936 0 0 0-45.12 45.12L466.752 512 214.528 764.224a31.936 31.936 0 1 0 45.12 45.184L512 557.184l252.288 252.288a31.936 31.936 0 0 0 45.12-45.12L557.12 512.064l252.288-252.352a31.936 31.936 0 1 0-45.12-45.184z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <?php } ?>
                 </div>
             </div>
             <div class="filters">
