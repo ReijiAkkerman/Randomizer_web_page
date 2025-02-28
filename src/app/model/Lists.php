@@ -212,14 +212,14 @@
             }
         }
 
-        public function getAllListsData($_async = false) {
+        public function getAllListsData(int|false $_selected_language_id = false, $_async = false) {
             if($this->getCookie()) {
                 $this->createAuthConnection();
                 $tableName = $this->getUserTableName();
                 $this->closeAuthConnection();
 
                 $this->createSettingsConnection();
-                // получение основного и изучаемого языка 
+                // получение основного языка
                 $query = "SELECT main,selected FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
@@ -230,7 +230,10 @@
 
                 $this->createListsConnection();
                 // получение списков
-                $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$selectedLanguageId'";
+                if($_selected_language_id)
+                    $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$_selected_language_id'";
+                else 
+                    $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$selectedLanguageId'";
                 $result = $this->mysql->query($query);
                 $list = new ListData();
                 $lists = new ListsData();

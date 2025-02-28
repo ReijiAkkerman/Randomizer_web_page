@@ -188,4 +188,11 @@
             $lists = new Lists();
             $lists->getListData($listId);
         }
+
+        public function getAllListsData(array $args): void {
+            $selectedLanguageId = (int)$args[0];
+            $async = (bool)$args[1];
+            $lists = new Lists();
+            $lists->getAllListsData($selectedLanguageId, $async);
+        }
     }

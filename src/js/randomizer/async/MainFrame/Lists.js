@@ -261,9 +261,13 @@ class Lists {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', `/randomizer/setSelectedLanguage/${_language_mark}`);
         xhr.send();
-        xhr.responseType = 'text';
+        xhr.responseType = 'json';
         xhr.onloadend = () => {
-            alert(xhr.response);
+            if(xhr.response === null) alert('Произошла ошибка в set_active_language_on_server!');
+            else if(xhr.response.hasOwnProperty('updated'));
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
         };
     }
 
@@ -390,6 +394,44 @@ class Lists {
         QuickAccess.set_active_colors_for_modes(true);
         QuickAccess.unset_active_colors_for_modes();
         Languages.set_active_color_for_active_language(Lists.active_language_mark);
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', `/randomizer/getAllListsData/${this.dataset.id}/1`);
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в get_lists_from_another_language!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                Lists.#clear_words_area();
+                Lists.#delete_all_lists();
+                localStorage.clear();
+                if(xhr.response.main.length) {
+                    Lists.hide_lists_absense_info();
+                    Lists.show_main_lists_block();
+                    Lists.#insert_main_lists(xhr.response.main);
+                    Lists.#insert_sources(xhr.response.main[0].sources);
+                    Lists.#insert_translations(xhr.response.main[0].translations);
+                    Lists.#insert_transcriptions(xhr.response.main[0].transcriptions);
+                }
+                else {
+                    Lists.hide_main_lists_block();
+                    Lists.show_list_absense_info();
+                    Lists.#insert_empty_rows();
+                }
+                Lists.source_row = 0;
+                Lists.translation_row = 0;
+                Lists.transcription_row = 0;
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
+        };
+    }
+
+    static #insert_main_lists(lists) {
+        for(let i = lists.length; i > 0; i--) {
+            let name = (lists[i - 1].name) ? lists[i - 1].name : lists[i - 1].date;
+            Lists.create_button_of_main_list(name, lists[i - 1].id);
+        }
     }
 
     static stash_by_change() {
@@ -550,6 +592,31 @@ class Lists {
         }
     }
 
+    static delete_list(event) {
+        event.stopPrepagation();
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/deleteList/${this.dataset.id}`);
+        xhr.send();
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
+    }
+
+    static #delete_all_lists() {
+        let types = ['main', 'hard', 'split', 'combined'];
+        for(const type of types) {
+            switch(type) {
+                case 'main':
+                    let main_lists = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                    let max = main_lists.length;
+                    for(let i = max; i > 0; i--) 
+                        main_lists[i - 1].remove();
+                    break;
+            }
+        }
+    }
+
     static create_main() {
         Lists.#prepare_words();
         let list_name = Lists.list_name__input.value;
@@ -562,15 +629,10 @@ class Lists {
             if(xhr.response === null) alert('Произошла ошибка в create_main!');
             else if(xhr.response.hasOwnProperty('updated')) {
                 let listName = (list_name) ? list_name : xhr.response.date;
-                let list_button = Lists.#create_list_button(listName);
-                Lists.set_active_color_for_list_button(list_button);
-                list_button.addEventListener('click', Lists.show_list_data);
+                Lists.create_button_of_main_list(listName, xhr.response.id);
                 Lists.#delete_new_list_button();
-                Lists.main_lists__insertion_place.after(list_button);
                 Lists.close_main_action();
                 localStorage.clear();
-                Lists.hide_lists_absense_info();
-                Lists.show_main_lists_block();
             }
             else if(xhr.response.hasOwnProperty('fields')) {
                 for(let error of xhr.response.fields) {
@@ -718,7 +780,8 @@ class Lists {
 
     static reset_list_button_highlighting() {
         let button = document.querySelector(`.lists .lists_select-list[data-type="${Lists.selected_list_type}"][data-id="${Lists.selected_list_id}"]`);
-        Lists.unset_active_color_for_list_button(button);
+        if(button !== null)
+            Lists.unset_active_color_for_list_button(button);
     }
 
 
@@ -751,6 +814,19 @@ class Lists {
         Lists.show_list_data(onstart);
     }
 
+    static create_button_of_main_list(_list_name, _id) {
+        let list_button = Lists.#create_list_button(_list_name);
+        list_button.dataset.type = 'main';
+        list_button.dataset.id = _id;
+        list_button.addEventListener('click', Lists.show_list_data);
+        list_button.addEventListener('click', Lists.highlight_list_button);
+        Lists.reset_list_button_highlighting();
+        Lists.selected_list_type = 'main';
+        Lists.selected_list_id = _id;
+        Lists.set_active_color_for_list_button(list_button);
+        Lists.main_lists__insertion_place.after(list_button);
+    }
+
     static #create_list_button(list_name = '', default_deletion = true) {
         let clone = Lists.list_button__template.content.cloneNode(true);
         let list_button = clone.querySelector('div');
@@ -758,7 +834,7 @@ class Lists {
         list_button_name.textContent = list_name;
         if(default_deletion === true) {
             let list_button_delete = list_button.querySelector('button');
-            // здесь привязка функции удаления списка
+            list_button_delete.addEventListener('click', Lists.delete_list);
         }
         return list_button;
     }

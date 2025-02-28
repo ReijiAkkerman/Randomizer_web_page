@@ -216,8 +216,8 @@ class Languages {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в add_studied!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                Languages.#add_studied_for_switching();
-                Languages.#add_studied_for_selection();
+                Languages.#add_studied_for_switching(xhr.response.id);
+                Languages.#add_studied_for_selection(xhr.response.id);
                 Languages.add_studied_in_quick_access();
                 Languages.#show_actions();
                 FrontendLanguages.define_good_borders_for_all_languages();
@@ -236,7 +236,7 @@ class Languages {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в add_main!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                Languages.language = Languages.#update_main();
+                Languages.language = Languages.#update_main(xhr.response.id);
                 Languages.#add_all_for_selection(Languages.language);
                 FrontendLanguages.define_good_borders_for_all_languages();
             }
@@ -383,6 +383,7 @@ class Languages {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в change_for_user!');
             else if(xhr.response.hasOwnProperty('updated')) {
+                language.id = xhr.response.id;
                 Languages.#update_studied_for_selection(Languages.studied_language_for_exchanging, language);
                 Languages.update_studied_in_quick_access(Languages.studied_language_for_exchanging, language)
                 Languages.#update_studied_for_switching(Languages.studied_language_for_exchanging, language);
@@ -434,6 +435,7 @@ class Languages {
             _language_button.dataset.folder = _language_data.dataset.folder;
             _language_button.dataset.mark = _language_data.dataset.mark;
             _language_button.dataset.kanji = _language_data.dataset.kanji;
+            _language_button.dataset.id = _language_data.dataset.id;
         }
         else {
             _language_button.textContent = 
@@ -441,6 +443,7 @@ class Languages {
             _language_button.dataset.folder = _language_data.foldername;
             _language_button.dataset.mark = _language_data.mark;
             _language_button.dataset.kanji = _language_data.kanji;
+            _language_button.dataset.id = _language_data.id;
         }
     }
 
@@ -449,17 +452,19 @@ class Languages {
      * и после обновляет их
      */
 
-    static #update_main() {
+    static #update_main(_lang_id = false) {
         let language = {};
         language.name = Languages.substitute_main_language__button.dataset.language;
         language.foldername = Languages.substitute_main_language__button.dataset.folder;
         language.mark = Languages.substitute_main_language__button.dataset.mark;
         language.kanji = Languages.substitute_main_language__button.dataset.kanji;
+        language.id = Languages.substitute_main_language__button.dataset.id;
         Languages.substitute_main_language__button.textContent = Languages.language.name + ' язык';
         Languages.substitute_main_language__button.dataset.language = Languages.language.name;
         Languages.substitute_main_language__button.dataset.folder = Languages.language.foldername;
         Languages.substitute_main_language__button.dataset.mark = Languages.language.mark;
         Languages.substitute_main_language__button.dataset.kanji = Languages.language.kanji;
+        Languages.substitute_main_language__button.dataset.id = _lang_id;
         Lists.define_native_language();
         return language;
     }
@@ -471,7 +476,7 @@ class Languages {
         Languages.#kanji.checked = false;
     }
 
-    static add_studied_in_quick_access() {
+    static add_studied_in_quick_access(_lang_id) {
         let clone = Languages.quick_access_studied_language__template.content.cloneNode(true);
         let studied_language_from_switching_area_in_settings = Languages.studied_languages_for_switching__area.querySelector(`button[data-mark="${Languages.language.mark}"]`);
         studied_language_from_switching_area_in_settings.addEventListener('click', Lists.get_lists_from_another_language);
@@ -479,6 +484,7 @@ class Languages {
         language_button.textContent = 
         language_button.dataset.mark = Languages.language.mark;
         language_button.dataset.kanji = Languages.language.kanji;
+        language_button.dataset.id = _lang_id;
         language_button.addEventListener('click', Lists.get_lists_from_another_language);
         Languages.quick_access_language_switcher__area.append(language_button);
         Languages.quick_access_language_switcher__area.style.display = '';
@@ -486,7 +492,7 @@ class Languages {
         language_button.click();
     }
 
-    static #add_studied_for_switching() {
+    static #add_studied_for_switching(_lang_id) {
         let clone = Languages.studied_language_for_switching__template.content.cloneNode(true);
         let button = clone.querySelector('button');
         button.addEventListener('click', FrontendLanguages.select_learning_language);
@@ -498,18 +504,19 @@ class Languages {
         button.dataset.folder = Languages.language.foldername;
         button.dataset.mark = Languages.language.mark;
         button.dataset.kanji = Languages.language.kanji;
+        button.dataset.id = _lang_id;
         Languages.add_studied_language__button.before(button);
     }
 
-    static #add_studied_for_selection() {
+    static #add_studied_for_selection(_lang_id) {
         let clone = Languages.studied_language_for_selection__template.content.cloneNode(true);
         let button = clone.querySelector('button');
-        // !!!!!!! здесь метод для замены соответствующего языка
         button.textContent = 
         button.dataset.language = Languages.language.name;
         button.dataset.folder = Languages.language.foldername;
         button.dataset.mark = Languages.language.mark;
         button.dataset.kanji = Languages.language.kanji;
+        button.dataset.id = _lang_id;
         Languages.studied_languages_for_selection__area.append(button);
     }
 
@@ -523,6 +530,7 @@ class Languages {
             language_button_for_adding.dataset.folder = language.dataset.folder;
             language_button_for_adding.dataset.mark = language.dataset.mark;
             language_button_for_adding.dataset.kanji = language.dataset.kanji;
+            language_button_for_adding.dataset.id = language.dataset.id;
         }
         else {
             language_button_for_adding.textContent = 
@@ -530,6 +538,7 @@ class Languages {
             language_button_for_adding.dataset.folder = language.foldername;
             language_button_for_adding.dataset.mark = language.mark;
             language_button_for_adding.dataset.kanji = language.kanji;
+            language_button_for_adding.dataset.id = language.id;
         }
         Languages.all_languages__area.append(language_button_for_adding);
     }
@@ -544,6 +553,7 @@ class Languages {
             Languages.language.foldername = _language_data.dataset.folder;
             Languages.language.mark = _language_data.dataset.mark;
             Languages.language.kanji = _language_data.dataset.kanji;
+            Languages.language.id = _language_data.dataset.id;
         }
         else {
             let language = {};
@@ -551,6 +561,7 @@ class Languages {
             language.foldername = _language_data.dataset.folder;
             language.mark = _language_data.dataset.mark;
             language.kanji = _language_data.dataset.kanji;
+            language.id = _language_data.dataset.id;
             return language;
         }
     }

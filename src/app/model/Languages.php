@@ -100,7 +100,7 @@
                 $query = "UPDATE languages SET studied='$LANGUAGES_IDS' WHERE USER_ID={$this->_id}";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
-                echo '{"updated":true}';
+                echo "{\"updated\":true,\"id\":{$this->language_id}}";
             }
             else {
                 $this->deleteCookie();
@@ -119,7 +119,7 @@
                 $query = "UPDATE languages SET main={$this->language_id} WHERE USER_ID={$this->_id}";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
-                echo '{"updated":true}';
+                echo "{\"updated\":true,\"id\":{$this->language_id}}";
             }
             else {
                 $this->deleteCookie();
@@ -168,10 +168,19 @@
         public function removeStudied($_language_mark): void {
             if($this->getCookie()) {
                 $this->createSettingsConnection();
-                $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                $query = "SELECT LANG_ID FROM changed_languages WHERE mark='$_language_mark'";
                 $result = $this->mysql->query($query);
-                foreach($result as $value) {
-                    $this->language_id = $value['ID'];
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $this->language_id = $value['LANG_ID'];
+                    }
+                }
+                else {
+                    $query = "SELECT ID FROM all_languages WHERE mark='$_language_mark'";
+                    $result = $this->mysql->query($query);
+                    foreach($result as $value) {
+                        $this->language_id = $value['ID'];
+                    }
                 }
                 $query = "SELECT studied FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
@@ -215,7 +224,16 @@
                 $this->checkErrors($functionsNeedTrue);
                 $this->Kanji = ($_POST['kanji'] ?? '') ? true : false;
                 // Сравнение полученных данных с данными из БД
-                $query = "SELECT * FROM all_languages WHERE mark='$_language_mark'";
+                $query = "SELECT LANG_ID FROM changed_languages WHERE mark='$_language_mark'";
+                $result = $this->mysql->query($query);
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $this->language_id = $value['LANG_ID'];
+                    }
+                    $query = "SELECT * FROM all_languages WHERE ID={$this->language_id}";
+                }
+                else 
+                    $query = "SELECT * FROM all_languages WHERE mark='$_language_mark'";
                 $result = $this->mysql->query($query);
                 $language_differ = false;
                 foreach($result as $row) {
@@ -290,7 +308,7 @@
                     $query = "DELETE FROM changed_languages WHERE USER_ID={$this->_id} && LANG_ID={$this->language_id}";
                 $this->mysql->query($query);
                 $this->closeSettingsConnection();
-                echo '{"updated":true}';
+                echo "{\"updated\":true,\"id\":{$this->language_id}}";
             }
             else {
                 $this->deleteCookie();
@@ -373,6 +391,7 @@
                     ID=$languageId";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
+                    $language->id = $value['ID'];
                     $language->name = $value['name'];
                     $language->foldername = $value['foldername'];
                     $language->mark = $value['mark'];
@@ -386,7 +405,6 @@
         public function getStudied(): array {
             if($this->getCookie()) {
                 $studied_languages = [];
-                $language = new Language();
                 $this->createSettingsConnection();
                 $query = "SELECT * FROM languages WHERE USER_ID={$this->_id}";
                 $result = $this->mysql->query($query);
@@ -417,6 +435,7 @@
                         if(in_array($value['ID'], $languagesIds__array)) {
                             $language = new LanguageSelected();
                             $selectedLanguageId = $this->getSelected();
+                            $language->id = $value['ID'];
                             $language->name = $value['name'];
                             $language->foldername = $value['foldername'];
                             $language->mark = $value['mark'];
@@ -457,6 +476,7 @@
                     all_languages.name";
                 $result = $this->mysql->query($query);
                 foreach($result as $value) {
+                    $language->id = $value['ID'];
                     $language->name = $value['name'];
                     $language->foldername = $value['foldername'];
                     $language->mark = $value['mark'];

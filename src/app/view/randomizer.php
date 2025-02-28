@@ -129,17 +129,17 @@
                     <div class="languages">
                         <div class="languages-main-language">
                             <p>Основной язык</p>
-                            <button class="languages-main-language__button" data-language_type="main" data-language="<?= $data->main_language->name ?>" data-mark="<?= $data->main_language->mark ?>" data-folder="<?= $data->main_language->foldername ?>" data-kanji="<?php if($data->main_language->kanji) echo 'true' ?>" id="main"><?= $data->main_language->name ?> язык</button>
+                            <button class="languages-main-language__button" data-language_type="main" data-language="<?= $data->main_language->name ?>" data-mark="<?= $data->main_language->mark ?>" data-folder="<?= $data->main_language->foldername ?>" data-kanji="<?php if($data->main_language->kanji) echo 'true' ?>" data-id="<?= $data->main_language->id ?>" id="main"><?= $data->main_language->name ?> язык</button>
                         </div>
                         <div class="languages-additional-languages">
                             <p>Изучаемые языки</p>
                             <div>
                                 <div class="languages-additional-languages-list">
                                     <template class="languages-additional-languages-list__template">
-                                        <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="" data-selected="">
+                                        <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="" data-mark="" data-folder="" data-kanji="" data-selected="" data-id="">
                                     </template>
                                     <?php foreach($data->studied_languages as $language) { ?>
-                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" id="<?= $language->name ?>" <?php if($language->selected === true) echo 'style="color:#00f;"' ?> data-selected="<?php if($language->selected === true) echo 'true' ?>"><?= $language->name ?></button>
+                                    <button class="languages-additional-languages-list__button languages-additional-languages-list__button_studied-language" data-language_type="learning" data-language="<?= $language->name ?>" data-mark="<?= $language->mark ?>" data-folder="<?= $language->foldername ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" data-id="<?= $language->id ?>" id="<?= $language->name ?>" <?php if($language->selected === true) echo 'style="color:#00f;"' ?> data-selected="<?php if($language->selected === true) echo 'true' ?>"><?= $language->name ?></button>
                                     <?php } ?>
                                     <button class="languages-additional-languages-list__button languages-additional-languages-list__button_add-language" data-language_type="new" data-language="" data-mark="" data-folder="" data-kanji="" id="new">
                                         <svg viewBox="0 0 32 32">
@@ -168,19 +168,19 @@
                     <div class="languages-add" style="display:none;">
                         <div class="languages-add-select languages-add-select_recent-languages" <?php if(!(sizeof($data->studied_languages) > 0)) echo 'style="display:none;"' ?>>
                             <template class="languages-add-select__template_recent-languages">
-                                <button class="languages-add-select__button" data-language="" data-folder="" data-mark="" data-kanji=""></button>
+                                <button class="languages-add-select__button" data-language="" data-folder="" data-mark="" data-kanji="" data-id=""></button>
                             </template>
                             <?php foreach($data->studied_languages as $language) { ?>
-                            <button class="languages-add-select__button" data-language="<?= $language->name ?>" data-folder="<?= $language->foldername ?>" data-mark="<?= $language->mark ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>"><?= $language->name ?></button>
+                            <button class="languages-add-select__button" data-language="<?= $language->name ?>" data-folder="<?= $language->foldername ?>" data-mark="<?= $language->mark ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" data-id="<?= $language->id ?>"><?= $language->name ?></button>
                             <?php } ?>
                         </div>
                         <div class="languages-add-select languages-add-select_all-languages" <?php if(!((sizeof($data->all_languages) > 1) && $data->show_all_languages)) echo 'style="display:none;"' ?>>
                             <template class="languages-add-select__template_all-languages">
-                                <button class="languages-add-select__button" data-language="" data-folder="" data-mark="" data-kanji=""></button>
+                                <button class="languages-add-select__button" data-language="" data-folder="" data-mark="" data-kanji="" data-id=""></button>
                             </template>
                         <?php foreach($data->all_languages as $language) { ?>
                             <?php if(($language->name !== $data->main_language->name) && (!in_array($language->name, $data->studied_languages_list))) { ?>
-                            <button class="languages-add-select__button" data-language="<?= $language->name ?>" data-folder="<?= $language->foldername ?>" data-mark="<?= $language->mark ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>"><?= $language->name ?></button>
+                            <button class="languages-add-select__button" data-language="<?= $language->name ?>" data-folder="<?= $language->foldername ?>" data-mark="<?= $language->mark ?>" data-kanji="<?php if($language->kanji) echo 'true' ?>" data-id="<?= $language->id ?>"><?= $language->name ?></button>
                             <?php } ?>
                         <?php } ?>
                         </div>
@@ -438,13 +438,13 @@
             <div class="other">
                 <div class="other-languages" <?php if(!$data->studied_languages) echo 'style="display:none;"' ?>>
                     <template class="other-languages__template">
-                        <button class="other-languages__button" data-mark="" data-kanji=""></button>
+                        <button class="other-languages__button" data-mark="" data-kanji="" data-id=""></button>
                     </template>
                     <?php
                     $max = (sizeof($data->studied_languages) < 3) ? sizeof($data->studied_languages) : 3;
                     for($i = 0; $i < sizeof($data->studied_languages); $i++) {
                     ?>
-                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($data->studied_languages[$i]->selected === true) echo 'style="color:#00f;"' ?>><?= $data->studied_languages[$i]->mark ?></button>
+                    <button class="other-languages__button" data-mark="<?= $data->studied_languages[$i]->mark ?>" data-kanji="<?php if($data->studied_languages[$i]->kanji) echo 'true' ?>" <?php if($data->studied_languages[$i]->selected === true) echo 'style="color:#00f;"' ?> data-id="<?= $data->studied_languages[$i]->id ?>"><?= $data->studied_languages[$i]->mark ?></button>
                     <?php } ?>
                 </div>
                 <div class="other-modes" style="display:none;">
