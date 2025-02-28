@@ -18,8 +18,8 @@
                 </template>
                 <div class="source scrollable">
                     <div class="counter">
-                        <?php if($data->sources) { ?>
-                        <?php for($i = 0; $i < sizeof($data->sources); $i++) { ?>
+                        <?php if($data->source) { ?>
+                        <?php for($i = 0; $i < sizeof($data->source); $i++) { ?>
                         <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
                         <?php } ?>
                         <?php } else { ?>
@@ -27,9 +27,9 @@
                         <?php } ?>
                     </div>
                     <div class="words_section" data-type="source">
-                        <?php if($data->sources) { ?>
-                        <?php for($i = 0; $i < sizeof($data->sources); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->sources[$i] ?></pre>
+                        <?php if($data->source) { ?>
+                        <?php for($i = 0; $i < sizeof($data->source); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->source[$i] ?></pre>
                         <?php } ?>
                         <?php } else { ?>
                         <pre data-id="1">Сюда писать исходное значение</pre>
@@ -38,32 +38,32 @@
                 </div>
                 <div class="translation" style="display:none;">
                     <div class="counter">
-                        <?php if($data->translations) { ?>
-                        <?php for($i = 0; $i < sizeof($data->translations); $i++) { ?>
+                        <?php if($data->translation) { ?>
+                        <?php for($i = 0; $i < sizeof($data->translation); $i++) { ?>
                         <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
                         <?php } ?>
                         <?php } ?>
                     </div>
                     <div class="words_section" data-type="translation">
-                        <?php if($data->translations) { ?>
-                        <?php for($i = 0; $i < sizeof($data->translations); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->translations[$i] ?></pre>
+                        <?php if($data->translation) { ?>
+                        <?php for($i = 0; $i < sizeof($data->translation); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->translation[$i] ?></pre>
                         <?php } ?>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="transcription" style="display:none;">
                     <div class="counter">
-                        <?php if($data->transcriptions) { ?>
-                        <?php for($i = 0; $i < sizeof($data->transcriptions); $i++) { ?>
+                        <?php if($data->transcription) { ?>
+                        <?php for($i = 0; $i < sizeof($data->transcription); $i++) { ?>
                         <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
                         <?php } ?>
                         <?php } ?>
                     </div>
                     <div class="words_section" data-type="transcription">
-                        <?php if($data->transcriptions) { ?>
-                        <?php for($i = 0; $i < sizeof($data->transcriptions); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->transcriptions[$i] ?></pre>
+                        <?php if($data->transcription) { ?>
+                        <?php for($i = 0; $i < sizeof($data->transcription); $i++) { ?>
+                        <pre data-id="<?= $i + 1 ?>"><?= $data->transcription[$i] ?></pre>
                         <?php } ?>
                         <?php } ?>
                     </div>

@@ -44,6 +44,11 @@ svg {
   box-sizing: border-box;
   font-size: 20px;
   outline: none;
+  height: 30px;
+  align-content: center;
+}
+.randomizer main > .words p {
+  font-size: 25px;
 }
 .randomizer main > .words .counter {
   width: fit-content;

@@ -34,9 +34,9 @@
             $this->studied_languages = [];
             $this->all_languages = [];
 
-            $this->sources = [];
-            $this->translations = [];
-            $this->transcriptions = [];
+            $this->source = [];
+            $this->translation = [];
+            $this->transcription = [];
 
             $this->studied_languages_list = [];
             $this->show_all_languages = false;

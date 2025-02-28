@@ -408,9 +408,9 @@ class Lists {
                     Lists.hide_lists_absense_info();
                     Lists.show_main_lists_block();
                     Lists.#insert_main_lists(xhr.response.main);
-                    Lists.#insert_sources(xhr.response.main[0].sources);
-                    Lists.#insert_translations(xhr.response.main[0].translations);
-                    Lists.#insert_transcriptions(xhr.response.main[0].transcriptions);
+                    Lists.#insert_sources(xhr.response.main[0].source);
+                    Lists.#insert_translations(xhr.response.main[0].translation);
+                    Lists.#insert_transcriptions(xhr.response.main[0].transcription);
                 }
                 else {
                     Lists.hide_main_lists_block();
@@ -428,9 +428,9 @@ class Lists {
     }
 
     static #insert_main_lists(lists) {
-        for(let i = lists.length; i > 0; i--) {
-            let name = (lists[i - 1].name) ? lists[i - 1].name : lists[i - 1].date;
-            Lists.create_button_of_main_list(name, lists[i - 1].id);
+        for(let i = 0; i < lists.length; i++) {
+            let name = (lists[i].name) ? lists[i].name : lists[i].date;
+            Lists.create_button_of_main_list(name, lists[i].id);
         }
     }
 
@@ -593,14 +593,29 @@ class Lists {
     }
 
     static delete_list(event) {
-        event.stopPrepagation();
+        event.stopPropagation();
         let xhr = new XMLHttpRequest();
         xhr.open('POST', `/randomizer/deleteList/${this.dataset.id}`);
         xhr.send();
-        xhr.responseType = 'text';
+        xhr.responseType = 'json';
         xhr.onloadend = () => {
-            alert(xhr.response);
+            if(xhr.response === null) alert('Произошла ошибка в delete_list!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                Lists.#clear_words_area();
+                Lists.#insert_empty_rows();
+                let list_for_deletion = Lists.main_lists__area.querySelector(`.lists_select-list[data-type="${this.dataset.type}"][data-id="${this.dataset.id}"]`);
+                list_for_deletion.remove();
+                let main_list__buttons = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                if(main_list__buttons.length === 0) {
+                    Lists.hide_main_lists_block();
+                    Lists.show_list_absense_info();
+                }
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
         };
+        event.stopPropagation();
     }
 
     static #delete_all_lists() {
@@ -633,6 +648,8 @@ class Lists {
                 Lists.#delete_new_list_button();
                 Lists.close_main_action();
                 localStorage.clear();
+                Lists.hide_lists_absense_info();
+                Lists.show_main_lists_block();
             }
             else if(xhr.response.hasOwnProperty('fields')) {
                 for(let error of xhr.response.fields) {
@@ -816,8 +833,11 @@ class Lists {
 
     static create_button_of_main_list(_list_name, _id) {
         let list_button = Lists.#create_list_button(_list_name);
-        list_button.dataset.type = 'main';
-        list_button.dataset.id = _id;
+        let list_button__delete = list_button.querySelector('button');
+        list_button.dataset.type = 
+        list_button__delete.dataset.type = 'main';
+        list_button.dataset.id = 
+        list_button__delete.dataset.id = _id;
         list_button.addEventListener('click', Lists.show_list_data);
         list_button.addEventListener('click', Lists.highlight_list_button);
         Lists.reset_list_button_highlighting();
@@ -906,6 +926,7 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of Lists.list__buttons) {
         button.addEventListener('click', Lists.show_list_data);
         button.addEventListener('click', Lists.highlight_list_button);
+        button.addEventListener('click', Lists.delete_list);
     }
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });

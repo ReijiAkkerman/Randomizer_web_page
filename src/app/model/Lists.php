@@ -238,9 +238,9 @@
                 $list = new ListData();
                 $lists = new ListsData();
                 foreach($result as $value) {
-                    $list->sources = $value['source'];
-                    $list->translations = $value['translation'];
-                    $list->transcriptions = $value['transcription'];
+                    $list->source = $value['source'];
+                    $list->translation = $value['translation'];
+                    $list->transcription = $value['transcription'];
                     $list->date = $value['date'];
                     $list->name = $value['name'];
                     $list->type = $value['type'];
@@ -268,6 +268,24 @@
                 }
                 else 
                     return $lists;
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
+        public function deleteList($_list_id): void {
+            if($this->getCookie()) {
+                $this->createAuthConnection();
+                $tableName = $this->getUserTableName();
+                $this->closeAuthConnection();
+
+                $this->createListsConnection();
+                $query = "DELETE FROM $tableName WHERE ID=$_list_id";
+                $this->mysql->query($query);
+                $this->closeListsConnection();
+                echo '{"updated":true}';
             }
             else {
                 $this->deleteCookie();

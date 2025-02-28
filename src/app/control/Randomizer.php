@@ -44,7 +44,7 @@
                 $data->all_languages = $languages->getAll();
                 $data->lists = $lists->getAllListsData();
                 if(sizeof($data->lists->main)) {
-                    $word_types = ['sources', 'translations', 'transcriptions'];
+                    $word_types = ['source', 'translation', 'transcription'];
                     foreach($word_types as $type) {
                         if($data->lists->main[sizeof($data->lists->main) - 1]->$type === null)
                         $data->$type = [];
@@ -194,5 +194,11 @@
             $async = (bool)$args[1];
             $lists = new Lists();
             $lists->getAllListsData($selectedLanguageId, $async);
+        }
+
+        public function deleteList(array $args): void {
+            $listId = $args[0];
+            $lists = new Lists();
+            $lists->deleteList($listId);
         }
     }
