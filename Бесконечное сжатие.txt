@@ -1,0 +1,220 @@
+
+import os
+import json
+import tkinter as tk
+from tkinter import filedialog, messagebox
+
+DATA_FILE = "data.json"
+COMPRESSED_EXT = ".ctxt"
+
+ALPHABET = (
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    'abcdefghijklmnopqrstuvwxyz'
+    '0123456789'
+    '一丁七万丈三上下不与丑专且世丘丙业丛东丝丞丢两严並丧丨'
+    'अआइईउऊऋएऐओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरлвшищзжзийклмнопрстуфхцчшщъыьэюяєіїґ' # Added more cyrillic letters just in case
+)
+ALPHABET = ''.join(sorted(set(ALPHABET)))
+
+def int_to_hash(n, length=4):
+    base = len(ALPHABET)
+    hash_str = []
+    for _ in range(length):
+        n, rem = divmod(n, base)
+        hash_str.append(ALPHABET[rem])
+    return ''.join(reversed(hash_str))
+
+def dict_tuple_to_str(dictionaries):
+    return [{str(k): v for k, v in d.items()} for d in dictionaries]
+
+def dict_str_to_tuple(dictionaries):
+    return [{eval(k): v for k, v in d.items()} for d in dictionaries]
+
+def save_data_file(data):
+    try:
+        data["dictionary"] = dict_tuple_to_str(data["dictionary"])
+        with open(DATA_FILE, 'w') as f:
+            json.dump(data, f, indent=4)
+    except Exception as e:
+      messagebox.showerror("Error", f"Error saving data file: {str(e)}")
+
+
+def load_data_file():
+    try:
+      if os.path.exists(DATA_FILE):
+          with open(DATA_FILE, 'r') as f:
+              data = json.load(f)
+              data["dictionary"] = dict_str_to_tuple(data["dictionary"])
+              return data
+    except Exception as e:
+        messagebox.showerror("Error", f"Error loading data file: {str(e)}")
+        return {"dictionary": [{} for _ in range(4)], "files": []}
+    return {"dictionary": [{} for _ in range(4)], "files": []}
+
+
+def split_into_2bit_blocks(data):
+    blocks = []
+    for byte in data:
+        blocks.append((byte >> 6) & 0x3)
+        blocks.append((byte >> 4) & 0x3)
+        blocks.append((byte >> 2) & 0x3)
+        blocks.append(byte & 0x3)
+    return blocks
+
+def combine_from_2bit_blocks(blocks):
+    data = []
+    for i in range(0, len(blocks), 4):
+        byte = (blocks[i] << 6) | (blocks[i+1] << 4) | (blocks[i+2] << 2) | blocks[i+3]
+        data.append(byte)
+    return data
+
+def compress(data, dictionary):
+    current_data = split_into_2bit_blocks(data)
+
+    for level in range(4):
+        print(f"Compression Level: {level}") # Debug print
+        new_data = []
+        print(f"  Dictionary Level {level} before compression: {dictionary[level]}") # Debug print
+        for i in range(0, len(current_data), 2):
+            pair = tuple(current_data[i:i+2])
+            if pair not in dictionary[level]:
+                hash_code = int_to_hash(len(dictionary[level]))
+                dictionary[level][pair] = hash_code
+                print(f"  Level {level}: Added to dictionary: Pair {pair} -> Hash {hash_code}") # Debug print
+            else:
+                print(f"  Level {level}: Pair {pair} already in dictionary, Hash: {dictionary[level][pair]}") # Debug print
+            new_data.append(dictionary[level][pair])
+        current_data = new_data
+        print(f"  Level {level} Compressed Data: {current_data}") # Debug print
+
+        if len(new_data) <= 1: # Modified condition to exit when data is compressed to single or zero hash
+            break
+
+    return ''.join(current_data)
+
+def decompress(compressed_str, dictionary):
+    try:
+        current_data = [compressed_str[i:i+4] for i in range(0, len(compressed_str), 4)] # Изменено на 4 для чтения 4-значных хешей
+    except Exception as e:
+        messagebox.showerror("Error", f"Error during initial string split: {str(e)}")
+        return [] # Return empty data on error
+
+    print(f"Decompressed String Chunks (initial): {current_data}") # Debug print
+
+    for level in reversed(range(4)):
+        print(f"Decompression Level: {level}") # Debug print
+        reverse_dict = {v: k for k, v in dictionary[level].items()}
+        print(f"  Reverse Dictionary Level {level}: {reverse_dict}") # Debug print
+        new_data = []
+        for hash_code in current_data:
+            print(f"  Level {level}: Processing Hash Code: '{hash_code}'") # Debug print
+            if hash_code in reverse_dict:
+                original_pair = reverse_dict[hash_code]
+                new_data.extend(original_pair)
+                print(f"  Level {level}: Hash '{hash_code}' found, Original Pair: {original_pair}") # Debug print
+            else:
+                # Handle case where hash_code is not in dictionary (for robustness)
+                # In a perfect scenario this should not happen if compression/decompression use the same dictionary
+                # However, for error handling, you might want to consider how to proceed.
+                # For now, we'll assume it's an error and might raise an exception or log a warning.
+                print(f"Warning: Hash code '{hash_code}' not found in level {level} dictionary. Data might be corrupted.")
+                new_data.extend([0, 0]) # Placeholder in case of missing hash, you may need more sophisticated error handling
+        current_data = new_data
+        print(f"  Level {level} Decompressed Data: {current_data}") # Debug print
+
+    return combine_from_2bit_blocks(current_data)
+
+
+class FileManager:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("4-Level Compressor")
+        self.data = load_data_file()
+        self.dictionary = self.data["dictionary"]
+        print("Loaded Dictionary on Startup:", self.dictionary) # Debug print on startup
+
+        self.listbox = tk.Listbox(self.root)
+        self.listbox.pack(fill=tk.BOTH, expand=True)
+
+        btn_frame = tk.Frame(self.root)
+        btn_frame.pack(fill=tk.X)
+
+        self.compress_btn = tk.Button(btn_frame, text="Compress", command=self.compress_file)
+        self.compress_btn.pack(side=tk.LEFT, padx=5)
+
+        self.decompress_btn = tk.Button(btn_frame, text="Decompress", command=self.decompress_file)
+        self.decompress_btn.pack(side=tk.RIGHT, padx=5)
+
+        self.update_list()
+
+    def update_list(self):
+        self.listbox.delete(0, tk.END)
+        for fname in self.data["files"]:
+            self.listbox.insert(tk.END, fname)
+
+    def compress_file(self):
+        path = filedialog.askopenfilename()
+        if not path:
+            return
+
+        try:
+            with open(path, 'rb') as f:
+                data = list(f.read())
+        except Exception as e:
+          messagebox.showerror("Error", f"Error reading file: {str(e)}")
+          return
+
+        compressed_str = compress(data, self.dictionary)
+        output_name = os.path.basename(path) + COMPRESSED_EXT
+
+        try:
+            with open(output_name, 'w', encoding='utf-8') as f:
+                f.write(compressed_str)
+        except Exception as e:
+          messagebox.showerror("Error", f"Error writing compressed file: {str(e)}")
+          return
+
+        if output_name not in self.data["files"]:
+            self.data["files"].append(output_name)
+            save_data_file(self.data)
+            self.update_list()
+        print("Dictionary after compression:", self.dictionary) # Debug print after compression
+
+    def decompress_file(self):
+        selected = self.listbox.get(tk.ACTIVE)
+        if not selected:
+            return
+
+        save_path = filedialog.asksaveasfilename(
+            defaultextension=".bin",
+            initialfile=selected.replace(COMPRESSED_EXT, "")
+        )
+
+        if not save_path:
+            return
+        try:
+            with open(selected, 'r', encoding='utf-8') as f:
+                compressed_str = f.read()
+        except Exception as e:
+             messagebox.showerror("Error", f"Error reading compressed file: {str(e)}")
+             return
+
+
+        print("Compressed String read from file:", compressed_str) # Debug print compressed string before decompression
+        print("Dictionary before decompression:", self.dictionary) # Debug print dictionary before decompression
+
+        try:
+            decompressed = decompress(compressed_str, self.dictionary)
+            if decompressed: #Check for empty data to avoid errors
+                with open(save_path, 'wb') as f:
+                    f.write(bytes(decompressed))
+                messagebox.showinfo("Success", "Decompression successful!") # Added success message
+            else:
+                messagebox.showerror("Error", "Decompression failed.") # Display error if decompress returns empty
+        except Exception as e:
+            messagebox.showerror("Error", f"Decompression failed: {str(e)}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = FileManager(root)
+    root.mainloop()
