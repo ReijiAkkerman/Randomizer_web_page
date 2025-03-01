@@ -369,6 +369,7 @@ class Lists {
                     break;
             }
         }
+        row.focus();
         Lists.select_text(row);
     }
 
