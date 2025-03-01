@@ -115,6 +115,7 @@ class Lists {
             for(const element of elements) {
                 element.removeAttribute('contenteditable');
                 element.removeEventListener('input', Lists.stash_by_change);
+                element.removeEventListener('compositionstart', Lists.composition_alert);
                 element.removeEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
@@ -128,6 +129,7 @@ class Lists {
             for(const element of elements) {
                 element.setAttribute('contenteditable', '');
                 element.addEventListener('input', Lists.stash_by_change);
+                element.addEventListener('compositionstart', Lists.composition_alert);
                 element.addEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
@@ -141,6 +143,10 @@ class Lists {
             Lists.select_text(row);
             Lists.enable_editing_mode();
         }
+    }
+
+    static composition_alert() {
+        alert('compositionstart сработал');
     }
 
     /**
