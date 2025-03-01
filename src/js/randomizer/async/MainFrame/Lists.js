@@ -188,6 +188,7 @@ class Lists {
                 break;
         }
         Lists.deletion_access = true;
+        console.log('deletion_access установлен на true в execute_by_input');
     }
 
     /**
@@ -327,6 +328,7 @@ class Lists {
             row.focus();
             Lists.select_text(row);
             Lists.deletion_access = false;
+            console.log('deletion_access установлен на false в focus_on_next_row');
         }
         else 
             target_row.focus();
@@ -373,6 +375,7 @@ class Lists {
         row.focus();
         Lists.select_text(row);
         Lists.deletion_access = true;
+        console.log('deletion_access установлен на true в select_row_by_click_on_number');
     }
 
     static edit_row_by_click_on_number() {
