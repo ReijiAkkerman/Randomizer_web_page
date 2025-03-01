@@ -186,9 +186,13 @@ class Lists {
                     }
                 }
                 break;
+            case 'insertCompositionText':
+                Lists.deletion_access = true;
+                console.log('deletion_access установлен на true в case:insertCompositionText');
+                break;
         }
-        Lists.deletion_access = true;
-        console.log('deletion_access установлен на true в execute_by_input');
+        // Lists.deletion_access = true;
+        // console.log('deletion_access установлен на true в execute_by_input');
     }
 
     /**
