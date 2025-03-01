@@ -116,7 +116,10 @@ class Lists {
             for(const element of elements) {
                 element.removeAttribute('contenteditable');
                 element.removeEventListener('input', Lists.stash_by_change);
-                element.removeEventListener('input', Lists.execute_by_input);
+                if(Adaptive.getDevice() === 'desktop') 
+                    element.removeEventListener('keyup', Lists.execute_by_keyup);
+                else
+                    element.removeEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
             for(const button of elements)
@@ -129,7 +132,10 @@ class Lists {
             for(const element of elements) {
                 element.setAttribute('contenteditable', '');
                 element.addEventListener('input', Lists.stash_by_change);
-                element.addEventListener('input', Lists.execute_by_input);
+                if(Adaptive.getDevice() === 'desktop') 
+                    element.addEventListener('keyup', Lists.execute_by_keyup);
+                else
+                    element.addEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
             for(const button of elements)
@@ -188,11 +194,47 @@ class Lists {
                 break;
             case 'insertCompositionText':
                 Lists.deletion_access = true;
-                console.log('deletion_access установлен на true в case:insertCompositionText');
                 break;
         }
-        // Lists.deletion_access = true;
-        // console.log('deletion_access установлен на true в execute_by_input');
+    }
+
+    static execute_by_keyup(event) {
+        switch(WordsTypes.getShownSectionType()) {
+            case 'source':
+                Lists.source_row = this.dataset.id;
+                break;
+            case 'translation':
+                Lists.translation_row = this.dataset.id;
+                break;
+            case 'transcription':
+                Lists.transcription_row = this.dataset.id;
+                break;
+        }
+        switch(event.code) {
+            /**
+             * Добавление новых строк по нажатию на Enter
+             */
+            case 'Enter':
+                for(const element of this.children) {
+                    let text = this.textContent;
+                    element.remove();
+                    this.textContent = text;
+                }
+                Words.switch_to_next_mode();
+                Lists.focus_on_next_row();
+                break;
+            /**
+             * Удаление существующей строки по нажатию на Backspace
+             */
+            case 'Backspace':
+                if(this.textContent === "") {
+                    if(this.dataset.id > 1) {
+                        Lists.delete_number_and_row(this.dataset.id);
+                        this.remove();
+                    }
+                }
+                break;
+        }
     }
 
     /**
@@ -324,15 +366,18 @@ class Lists {
             row.textContent += text;
             row.setAttribute('contenteditable', '');
             row.addEventListener('input', Lists.stash_by_change);
-            row.addEventListener('input', Lists.execute_by_input);
+            if(Adaptive.getDevice() === 'desktop') 
+                row.addEventListener('keyup', Lists.execute_by_keyup);
+            else
+                row.addEventListener('input', Lists.execute_by_input);
             let number_insertion_place = document.querySelector(`.${current_mode} .counter`);
             let row_insertion_place = document.querySelector(`.words_section[data-type="${current_mode}"]`);
             number_insertion_place.append(number);
             row_insertion_place.append(row);
             row.focus();
             Lists.select_text(row);
-            Lists.deletion_access = false;
-            console.log('deletion_access установлен на false в focus_on_next_row');
+            if(Adaptive.getDevice() === 'mobile')
+                Lists.deletion_access = false;
         }
         else 
             target_row.focus();
@@ -378,8 +423,8 @@ class Lists {
         }
         row.focus();
         Lists.select_text(row);
-        Lists.deletion_access = true;
-        console.log('deletion_access установлен на true в select_row_by_click_on_number');
+        if(Adaptive.getDevice() === 'mobile')
+            Lists.deletion_access = true;
     }
 
     static edit_row_by_click_on_number() {
