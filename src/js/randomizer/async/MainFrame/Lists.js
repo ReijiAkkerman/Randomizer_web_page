@@ -145,8 +145,8 @@ class Lists {
         }
     }
 
-    static composition_alert() {
-        alert('compositionstart сработал');
+    static composition_alert(event) {
+        console.log('compositionstart');
     }
 
     /**
