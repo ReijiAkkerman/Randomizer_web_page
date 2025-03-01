@@ -144,6 +144,8 @@ class Lists {
             Words.switch_mode();
             let current_mode = WordsTypes.getShownSectionType();
             let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
+            Lists.#clear_words_area();
+            Lists.#insert_empty_rows();
             row.focus();
             Lists.select_text(row);
             Lists.enable_editing_mode();
