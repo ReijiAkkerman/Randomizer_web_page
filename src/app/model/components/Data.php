@@ -14,9 +14,9 @@
         public array $all_languages;
 
         public ListsData $lists;
-        public array $sources;
-        public array $translations;
-        public array $transcriptions;
+        public array $source;
+        public array $translation;
+        public array $transcription;
 
         public array $studied_languages_list;
         public bool $show_all_languages;

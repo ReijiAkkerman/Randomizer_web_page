@@ -34,6 +34,7 @@ class Adaptive {
     static guide = document.querySelector(Adaptive.selectors.get('Руководство'));
 
     static quick_access_languages__bar = document.querySelector(Adaptive.selectors.get('Панель языков для быстрого доступа'));
+    static #device = false;
 
 
 
@@ -43,18 +44,24 @@ class Adaptive {
         if(window.innerWidth <= 1050) {
             Adaptive.resizeWindow(Adaptive.#mobile);
             Adaptive.set_quick_access_languages_for_mobile();
+            Adaptive.#device = 'mobile';
         }
         else {
             if(Adaptive.current_mode === 'dashboard')
                 Adaptive.current_mode = 'words';
             Adaptive.resizeWindow(Adaptive.#desktop);
             Adaptive.set_quick_access_languages_for_desktop();
+            Adaptive.#device = 'desktop';
         }
     }
 
     static resizeWindow(method) {
         clearTimeout(Adaptive.#timeout);
         Adaptive.#timeout = setTimeout(method, Adaptive.#delay);
+    }
+
+    static getDevice() {
+        return Adaptive.#device;
     }
 
 

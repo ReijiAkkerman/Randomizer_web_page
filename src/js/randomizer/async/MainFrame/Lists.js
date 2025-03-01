@@ -4,6 +4,7 @@ import {WordsTypes} from "/src/js/randomizer/DataStructures/WordsTypes.js";
 import {Languages} from "/src/js/randomizer/async/MainFrame/Languages.js";
 import {QuickAccess} from "/src/js/randomizer/Dashboard/QuickAccess.js";
 import {UserInterface} from "/src/js/randomizer/UserInterface.js";
+import {Adaptive} from "/src/js/randomizer/Adaptive.js";
 
 class Lists {
     static selectors = new Map([
@@ -113,9 +114,8 @@ class Lists {
             let elements = Words.words__area.querySelectorAll('pre');
             for(const element of elements) {
                 element.removeAttribute('contenteditable');
-                element.removeEventListener('keydown', Lists.remember_row_number);
-                element.removeEventListener('keyup', Lists.stash_by_change);
-                element.removeEventListener('keyup', Lists.execute_by_keyup);
+                element.removeEventListener('input', Lists.stash_by_change);
+                element.removeEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
             for(const button of elements)
@@ -127,9 +127,8 @@ class Lists {
             let elements = Words.words__area.querySelectorAll('pre');
             for(const element of elements) {
                 element.setAttribute('contenteditable', '');
-                element.addEventListener('keydown', Lists.remember_row_number);
-                element.addEventListener('keyup', Lists.stash_by_change);
-                element.addEventListener('keyup', Lists.execute_by_keyup);
+                element.addEventListener('input', Lists.stash_by_change);
+                element.addEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
             for(const button of elements)
@@ -148,7 +147,7 @@ class Lists {
      * Работает только при включенном режиме создания нового списка.
      * Определяет что происходит при нажатии определенной клавиши.
      */
-    static execute_by_keyup(event) {
+    static execute_by_input(event) {
         switch(WordsTypes.getShownSectionType()) {
             case 'source':
                 Lists.source_row = this.dataset.id;
@@ -160,11 +159,11 @@ class Lists {
                 Lists.transcription_row = this.dataset.id;
                 break;
         }
-        switch(event.code) {
-            case 'Enter':
-                /**
-                 * Добавление новых строк по нажатию на Enter
-                 */
+        switch(event.inputType) {
+            /**
+             * Добавление новых строк по нажатию на Enter
+             */
+            case 'insertParagraph':
                 for(const element of this.children) {
                     let text = this.textContent;
                     element.remove();
@@ -173,10 +172,10 @@ class Lists {
                 Words.switch_to_next_mode();
                 Lists.focus_on_next_row();
                 break;
-            case 'Backspace':
-                /**
-                 * Удаление существующей строки по нажатию на Backspace
-                 */
+            /**
+             * Удаление существующей строки по нажатию на Backspace
+             */
+            case 'deleteContentBackward':
                 if(this.textContent === "") {
                     if(this.dataset.id > 1) {
                         Lists.delete_number_and_row(this.dataset.id);
@@ -234,7 +233,7 @@ class Lists {
                 }
             }
             Lists.select_text(row);
-            Lists.check_row_existence();
+            Lists.check_row_existence(_number + 1);
         }
     }
 
@@ -319,9 +318,8 @@ class Lists {
             }
             row.textContent += text;
             row.setAttribute('contenteditable', '');
-            row.addEventListener('keydown', Lists.remember_row_number);
-            row.addEventListener('keyup', Lists.stash_by_change);
-            row.addEventListener('keyup', Lists.execute_by_keyup);
+            row.addEventListener('input', Lists.stash_by_change);
+            row.addEventListener('input', Lists.execute_by_input);
             let number_insertion_place = document.querySelector(`.${current_mode} .counter`);
             let row_insertion_place = document.querySelector(`.words_section[data-type="${current_mode}"]`);
             number_insertion_place.append(number);
@@ -455,11 +453,14 @@ class Lists {
         Lists.row_number_for_deletion = this.dataset.id;
     }
 
-    static check_row_existence() {
+    static check_row_existence(number = false) {
         let current_mode = WordsTypes.getShownSectionType();
         let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="${Lists.row_number_for_deletion}"]`);
         if(row === null) 
-            localStorage.removeItem(current_mode + '_' + Lists.row_number_for_deletion);
+            if(number)
+                localStorage.removeItem(current_mode + '_' + number);
+            else 
+                localStorage.removeItem(current_mode + '_' + Lists.row_number_for_deletion);
     }
 
     static restore_list(onstart = false) {
