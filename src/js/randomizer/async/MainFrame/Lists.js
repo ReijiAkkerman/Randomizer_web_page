@@ -982,7 +982,8 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of Lists.list__buttons) {
         button.addEventListener('click', Lists.show_list_data);
         button.addEventListener('click', Lists.highlight_list_button);
-        button.addEventListener('click', Lists.delete_list);
+        let button__delete = button.querySelector('button');
+        button__delete.addEventListener('click', Lists.delete_list);
     }
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });
