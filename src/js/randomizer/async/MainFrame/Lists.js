@@ -58,6 +58,7 @@ class Lists {
     static editing_mode = false;
     static selected_list_type = false;
     static selected_list_id = false;
+    static deletion_access;
 
 
 
@@ -115,7 +116,6 @@ class Lists {
             for(const element of elements) {
                 element.removeAttribute('contenteditable');
                 element.removeEventListener('input', Lists.stash_by_change);
-                element.removeEventListener('compositionstart', Lists.composition_alert);
                 element.removeEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
@@ -129,7 +129,6 @@ class Lists {
             for(const element of elements) {
                 element.setAttribute('contenteditable', '');
                 element.addEventListener('input', Lists.stash_by_change);
-                element.addEventListener('compositionstart', Lists.composition_alert);
                 element.addEventListener('input', Lists.execute_by_input);
             }
             elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
@@ -143,10 +142,6 @@ class Lists {
             Lists.select_text(row);
             Lists.enable_editing_mode();
         }
-    }
-
-    static composition_alert(event) {
-        console.log('compositionstart');
     }
 
     /**
@@ -184,12 +179,15 @@ class Lists {
             case 'deleteContentBackward':
                 if(this.textContent === "") {
                     if(this.dataset.id > 1) {
-                        Lists.delete_number_and_row(this.dataset.id);
-                        this.remove();
+                        if(Lists.deletion_access === true) {
+                            Lists.delete_number_and_row(this.dataset.id);
+                            this.remove();
+                        }
                     }
                 }
                 break;
         }
+        Lists.deletion_access = true;
     }
 
     /**
@@ -280,10 +278,6 @@ class Lists {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/randomizer/unsetSelectedLanguage');
         xhr.send();
-        xhr.responseType = 'text';
-        xhr.onloadend = () => {
-            alert(xhr.response);
-        };
     }
 
     static focus_on_next_row() {
@@ -332,6 +326,7 @@ class Lists {
             row_insertion_place.append(row);
             row.focus();
             Lists.select_text(row);
+            Lists.deletion_access = false;
         }
         else 
             target_row.focus();
@@ -377,6 +372,7 @@ class Lists {
         }
         row.focus();
         Lists.select_text(row);
+        Lists.deletion_access = true;
     }
 
     static edit_row_by_click_on_number() {
