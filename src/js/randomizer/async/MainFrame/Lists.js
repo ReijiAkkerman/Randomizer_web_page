@@ -461,12 +461,11 @@ class Lists {
      * Редактирование строк всех списков кроме нового списка.
      * Мобильная версия(функции ниже до комментария относятся к редактированию)
      */
-    static edit_row__mobile(event) {
+    static edit_row__mobile() {
         if(Lists.row_id_for_editing) {
             let touchend_timer = Date.now();
             let time_delta = touchend_timer - Lists.touchstart_timer;
             if(time_delta > 500) {
-                // Lists.write_deviation(event);
                 if(Lists.deviation.x_access && Lists.deviation.y_access) {
                     Words.reverse_mode();
                     let current_mode = WordsTypes.getShownSectionType();
@@ -481,7 +480,6 @@ class Lists {
                             Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
                             break;
                     }
-                    document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
                     Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
                     Lists.edited_row.style.userSelect = 'text';
                     Lists.edited_row.setAttribute('contenteditable', '');
@@ -542,7 +540,6 @@ class Lists {
                     Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row = false;
                     Lists.deviation = {};
-                    document.addEventListener('keyup', Words.reverse_mode_by_keyup);
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
                     break;
             }
@@ -554,7 +551,49 @@ class Lists {
      * Компьютерная версия
      */
     static edit_row__desktop() {
+        Lists.row_id_for_editing = this.dataset.id;
+        // Words.reverse_mode();
+        let current_mode = WordsTypes.getShownSectionType();
+        switch(current_mode) {
+            case 'source':
+                Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                break;
+            case 'translation':
+                Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                break;
+            case 'transcription':
+                Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                break;
+        }
+        document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
+        Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
+        Lists.edited_row.style.userSelect = 'text';
+        Lists.edited_row.setAttribute('contenteditable', '');
+        Lists.edited_row.addEventListener('keyup', Lists.close_row_editing__desktop);
+        Lists.edited_row.focus();
+        Lists.select_text(Lists.edited_row);
+    }
 
+    static close_row_editing__desktop(event) {
+        for(const element of Lists.edited_row.children) {
+            let text = Lists.edited_row.textContent;
+            element.remove();
+            Lists.edited_row.textContent = text;
+        }
+        if(/\p{L}+/u.test(Lists.edited_row.textContent)) {
+            switch(event.code) {
+                case 'Enter':
+                    Lists.edited_row.removeAttribute('contenteditable');
+                    Lists.edited_row.style.userSelect = '';
+                    Lists.edited_row.style.alignContent = 'center';
+                    Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
+                    Lists.edited_row = false;
+                    Lists.deviation = {};
+                    document.addEventListener('keyup', Words.reverse_mode_by_keyup);
+                    Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
+                    break;
+            }
+        }
     }
 
     /**
@@ -1118,8 +1157,11 @@ document.addEventListener('DOMContentLoaded', function() {
         button__delete.addEventListener('click', Lists.delete_list);
     }
     let rows = Lists.words__area.querySelectorAll('pre');
-    for(const row of rows)
-        row.addEventListener('click', Lists.set_row_id_for_editing);
+    for(const row of rows) {
+        if(Adaptive.getDevice() === 'mobile')
+            row.addEventListener('click', Lists.set_row_id_for_editing);
+        row.addEventListener('dblclick', Lists.edit_row__desktop);
+    }
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });
 
