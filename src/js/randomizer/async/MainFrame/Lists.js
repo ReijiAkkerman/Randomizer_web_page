@@ -126,6 +126,8 @@ class Lists {
                 button.removeEventListener('click', Lists.select_row_by_click_on_number);
         }
         else {
+            Lists.#clear_words_area();
+            Lists.#insert_empty_rows('Сюда писать исходное значение');
             document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
             Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
             let elements = Words.words__area.querySelectorAll('pre');
@@ -142,8 +144,6 @@ class Lists {
                 button.addEventListener('click', Lists.select_row_by_click_on_number);
             WordsTypes.resetSections();
             Words.switch_mode();
-            Lists.#clear_words_area();
-            Lists.#insert_empty_rows('Сюда писать исходное значение');
             let current_mode = WordsTypes.getShownSectionType();
             let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
             row.focus();
@@ -882,15 +882,21 @@ class Lists {
     }
 
     static create_button_of_new_list(onstart) {
-        let list_button = Lists.#create_list_button('Новый список', false);
-        list_button.dataset.type = 'new';
-        let list_button_delete = list_button.querySelector('button');
-        list_button_delete.addEventListener('click', Lists.delete_new_list);
-        list_button.addEventListener('click', Lists.show_list_data);
-        Lists.main_lists__insertion_place.after(list_button);
-        Lists.hide_lists_absense_info();
-        Lists.show_main_lists_block();
-        Lists.show_list_data(onstart);
+        let new_list = Lists.main_lists__area.querySelector('.lists_word .lists_select-list[data-type="new"]');
+        if(new_list === null) {
+            let list_button = Lists.#create_list_button('Новый список', false);
+            list_button.dataset.type = 'new';
+            let list_button_delete = list_button.querySelector('button');
+            list_button_delete.addEventListener('click', Lists.delete_new_list);
+            list_button.addEventListener('click', Lists.show_list_data);
+            Lists.main_lists__insertion_place.after(list_button);
+            Lists.hide_lists_absense_info();
+            Lists.show_main_lists_block();
+            Lists.show_list_data(onstart);
+        }
+        else {
+            Lists.set_active_color_for_list_button(new_list);
+        }
     }
 
     static create_button_of_main_list(_list_name, _id) {
