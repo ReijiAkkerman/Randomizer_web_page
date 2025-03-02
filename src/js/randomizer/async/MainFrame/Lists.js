@@ -509,7 +509,7 @@ class Lists {
             Lists.deviation.y_access = true;
             Lists.editing_access__timeoutID = setTimeout(() => {
                 Lists.#enable_editing_access();
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -542,6 +542,7 @@ class Lists {
                 case 'insertParagraph':
                     Lists.edited_row.removeAttribute('contenteditable');
                     Lists.edited_row.style.userSelect = '';
+                    Lists.edited_row.style.alignContent = 'center';
                     Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row = false;
                     Lists.deviation = {};
