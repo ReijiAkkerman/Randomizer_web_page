@@ -629,6 +629,18 @@ class Lists {
                     Lists.#insert_sources(xhr.response.main[xhr.response.main.length - 1].source);
                     Lists.#insert_translations(xhr.response.main[xhr.response.main.length - 1].translation);
                     Lists.#insert_transcriptions(xhr.response.main[xhr.response.main.length - 1].transcription);
+                    let rows = Lists.words__area.querySelectorAll('pre');
+                    for(const row of rows) {
+                        if(Adaptive.getDevice() === 'mobile')
+                            row.addEventListener('click', Lists.set_row_id_for_editing);
+                        else 
+                            row.addEventListener('dblclick', Lists.edit_row__desktop);
+                    }
+                    if(Adaptive.getDevice() === 'mobile') {
+                        document.addEventListener('touchstart', Lists.start_keeping_timer);
+                        document.addEventListener('touchmove', Lists.write_deviation);
+                        document.addEventListener('touchend', Lists.edit_row__mobile);
+                    }
                 }
                 else {
                     Lists.hide_main_lists_block();
