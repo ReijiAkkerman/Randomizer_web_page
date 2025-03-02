@@ -476,6 +476,8 @@ class Lists {
                             Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
                             break;
                     }
+                    document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
+                    Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
                     Lists.edited_row.style.userSelect = 'text';
                     Lists.edited_row.setAttribute('contenteditable', '');
                     Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
@@ -544,6 +546,8 @@ class Lists {
                     Lists.edited_row = false;
                     Lists.deviation = {};
                     Lists.#disable_editing_access();
+                    document.addEventListener('keyup', Words.reverse_mode_by_keyup);
+                    Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
                     break;
             }
         }
