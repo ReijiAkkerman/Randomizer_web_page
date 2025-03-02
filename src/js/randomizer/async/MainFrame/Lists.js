@@ -466,7 +466,7 @@ class Lists {
             let touchend_timer = Date.now();
             let time_delta = touchend_timer - Lists.touchstart_timer;
             if(time_delta > 500) {
-                Lists.write_deviation(event);
+                // Lists.write_deviation(event);
                 if(Lists.deviation.x_access && Lists.deviation.y_access) {
                     Words.reverse_mode();
                     let current_mode = WordsTypes.getShownSectionType();
