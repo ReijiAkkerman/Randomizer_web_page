@@ -626,9 +626,9 @@ class Lists {
                     Lists.hide_lists_absense_info();
                     Lists.show_main_lists_block();
                     Lists.#insert_main_lists(xhr.response.main);
-                    Lists.#insert_sources(xhr.response.main[0].source);
-                    Lists.#insert_translations(xhr.response.main[0].translation);
-                    Lists.#insert_transcriptions(xhr.response.main[0].transcription);
+                    Lists.#insert_sources(xhr.response.main[xhr.response.main.length - 1].source);
+                    Lists.#insert_translations(xhr.response.main[xhr.response.main.length - 1].translation);
+                    Lists.#insert_transcriptions(xhr.response.main[xhr.response.main.length - 1].transcription);
                 }
                 else {
                     Lists.hide_main_lists_block();
