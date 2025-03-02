@@ -537,7 +537,7 @@ class Lists {
             element.remove();
             Lists.edited_row.textContent = text;
         }
-        if(/\w+/.test(Lists.edited_row.textContent)) {
+        if(/\p{L}+/u.test(Lists.edited_row.textContent)) {
             switch(event.inputType) {
                 case 'insertParagraph':
                     Lists.edited_row.removeAttribute('contenteditable');
