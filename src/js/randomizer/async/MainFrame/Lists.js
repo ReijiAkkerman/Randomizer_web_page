@@ -480,7 +480,7 @@ class Lists {
                     Lists.edited_row.setAttribute('contenteditable', '');
                     Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row.focus();
-                    Lists.select_text(Lists.edited_row);
+                    Lists.edited_row.select_text(Lists.edited_row);
                 }
             }
         }
@@ -530,15 +530,25 @@ class Lists {
     }
 
     static close_row_editing__mobile(event) {
-        switch(event.inputType) {
-            case 'insertParagraph':
-                Lists.edited_row.removeAttribute('contenteditable');
-                Lists.edited_row.style.userSelect = '';
-                Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
-                Lists.edited_row = false;
-                Lists.deviation = {};
-                Lists.#disable_editing_access();
-                break;
+        for(const element of Lists.edited_row) {
+            let text = Lists.edited_row.textContent;
+            element.remove();
+            Lists.edited_row.textContent = text;
+        }
+        if(/\w+/.test(Lists.edited_row.textContent)) {
+            switch(event.inputType) {
+                case 'insertParagraph':
+                    Lists.edited_row.removeAttribute('contenteditable');
+                    Lists.edited_row.style.userSelect = '';
+                    Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
+                    Lists.edited_row = false;
+                    Lists.deviation = {};
+                    Lists.#disable_editing_access();
+                    break;
+            }
+        }
+        else {
+
         }
     }
 
