@@ -142,10 +142,10 @@ class Lists {
                 button.addEventListener('click', Lists.select_row_by_click_on_number);
             WordsTypes.resetSections();
             Words.switch_mode();
-            let current_mode = WordsTypes.getShownSectionType();
-            let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
             Lists.#clear_words_area();
             Lists.#insert_empty_rows('Сюда писать исходное значение');
+            let current_mode = WordsTypes.getShownSectionType();
+            let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
             row.focus();
             Lists.select_text(row);
             Lists.enable_editing_mode();
