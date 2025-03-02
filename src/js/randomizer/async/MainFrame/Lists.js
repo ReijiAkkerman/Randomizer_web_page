@@ -128,13 +128,14 @@ class Lists {
         }
     }
 
-    static set_editing_mode() {
+    static set_editing_mode(stash_enabled = true) {
         document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
         Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
         let elements = Words.words__area.querySelectorAll('pre');
         for(const element of elements) {
             element.setAttribute('contenteditable', '');
-            element.addEventListener('input', Lists.stash_by_change);
+            if(stash_enabled === true)
+                element.addEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.addEventListener('keyup', Lists.execute_by_keyup);
             else
@@ -145,13 +146,14 @@ class Lists {
             button.addEventListener('click', Lists.select_row_by_click_on_number);
     }
 
-    static unset_editing_mode() {
+    static unset_editing_mode(stash_enabled = true) {
         document.addEventListener('keyup', Words.reverse_mode_by_keyup);
         Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
         let elements = Words.words__area.querySelectorAll('pre');
         for(const element of elements) {
             element.removeAttribute('contenteditable');
-            element.removeEventListener('input', Lists.stash_by_change);
+            if(stash_enabled === true)
+                element.removeEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.removeEventListener('keyup', Lists.execute_by_keyup);
             else
@@ -658,6 +660,9 @@ class Lists {
         Lists.#clear_words_area();
         Lists.#insert_empty_rows();
         Lists.#delete_new_list_button();
+        MainActions.close_main_action_hide_button();
+        MainActions.create_new_list_deactivate();
+        Lists.unset_editing_mode();
         localStorage.clear();
         if(Lists.main_lists__area.children.length === 1) {
             Lists.hide_main_lists_block();
