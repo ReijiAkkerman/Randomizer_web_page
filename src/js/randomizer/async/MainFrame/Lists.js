@@ -480,7 +480,7 @@ class Lists {
                     Lists.edited_row.setAttribute('contenteditable', '');
                     Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row.focus();
-                    Lists.edited_row.select_text(Lists.edited_row);
+                    Lists.select_text(Lists.edited_row);
                 }
             }
         }
@@ -530,7 +530,7 @@ class Lists {
     }
 
     static close_row_editing__mobile(event) {
-        for(const element of Lists.edited_row) {
+        for(const element of Lists.edited_row.children) {
             let text = Lists.edited_row.textContent;
             element.remove();
             Lists.edited_row.textContent = text;
