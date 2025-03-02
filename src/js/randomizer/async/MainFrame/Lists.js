@@ -13,6 +13,7 @@ class Lists {
         ['Кнопки быстрого переключения между изучаемыми языками', '.other-languages__button'],
         ['Кнопки списков', '.lists_select-list'],
         ['Кнопки основных списков', '.lists-word .lists_select-list'],
+        ['Область слов', '.words'],
         // define_active_language
         ['Область переключения изучаемых языков', '.languages-additional-languages-list'],
         // focus_on_next_row
@@ -59,6 +60,12 @@ class Lists {
     static selected_list_type = false;
     static selected_list_id = false;
     static deletion_access;
+    static row_id_for_editing = false;
+    static deviation = {};
+    static editing_access = false;
+    static editing_access__timeoutID = false;
+    static row_id__timeoutID = false;
+    static edited_row = false;
 
 
 
@@ -70,6 +77,7 @@ class Lists {
     static quick_access_to_studied_languages__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки быстрого переключения между изучаемыми языками'));
     static list__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки списков'));
     static main_list__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки основных списков'));
+    static words__area = document.querySelector(Lists.selectors.get('Область слов'));
     // define_active_language
     static studied_languages_for_switching__area = document.querySelector(Lists.selectors.get('Область переключения изучаемых языков'));
     // focus_on_next_row
@@ -128,14 +136,13 @@ class Lists {
         }
     }
 
-    static set_editing_mode(stash_enabled = true) {
+    static set_editing_mode() {
         document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
         Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
         let elements = Words.words__area.querySelectorAll('pre');
         for(const element of elements) {
             element.setAttribute('contenteditable', '');
-            if(stash_enabled === true)
-                element.addEventListener('input', Lists.stash_by_change);
+            element.addEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.addEventListener('keyup', Lists.execute_by_keyup);
             else
@@ -146,14 +153,13 @@ class Lists {
             button.addEventListener('click', Lists.select_row_by_click_on_number);
     }
 
-    static unset_editing_mode(stash_enabled = true) {
+    static unset_editing_mode() {
         document.addEventListener('keyup', Words.reverse_mode_by_keyup);
         Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
         let elements = Words.words__area.querySelectorAll('pre');
         for(const element of elements) {
             element.removeAttribute('contenteditable');
-            if(stash_enabled === true)
-                element.removeEventListener('input', Lists.stash_by_change);
+            element.removeEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.removeEventListener('keyup', Lists.execute_by_keyup);
             else
@@ -339,6 +345,13 @@ class Lists {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/randomizer/unsetSelectedLanguage');
         xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в unset_active_language_on_server!');
+            else if(xhr.response.hasOwnProperty('updated'));
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+        };
     }
 
     static focus_on_next_row() {
@@ -441,11 +454,95 @@ class Lists {
             Lists.deletion_access = true;
     }
 
-    static edit_row_by_click_on_number__mobile() {
-
+    /**
+     * Редактирование строк всех списков кроме нового списка.
+     * Мобильная версия(функции ниже до комментария относятся к редактированию)
+     */
+    static edit_row__mobile(event) {
+        if(Lists.row_id_for_editing) {
+            Lists.write_deviation(event);
+            if(Lists.deviation.x_access && Lists.deviation.y_access) {
+                Words.reverse_mode();
+                let current_mode = WordsTypes.getShownSectionType();
+                switch(current_mode) {
+                    case 'source':
+                        Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                        break;
+                    case 'translation':
+                        Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                        break;
+                    case 'transcription':
+                        Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                        break;
+                }
+                Lists.edited_row.setAttribute('contenteditable', '');
+                Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
+                Lists.edited_row.focus();
+                Lists.select_text(Lists.edited_row);
+            }
+        }
+    }
+    
+    static write_deviation(event) {
+        Lists.deviation.currentX = event.touches[0].clientX;
+        Lists.deviation.currentY = event.touches[0].clientY;
+        Lists.deviation.deltaX = Lists.deviation.startX - Lists.deviation.currentX;
+        Lists.deviation.deltaY = Lists.deviation.startY - Lists.deviation.currentY;
+        Math.abs(Lists.deviation.deltaX);
+        Math.abs(Lists.deviation.deltaY);
+        if(Lists.deviation.deltaX > 40)
+            Lists.deviation.x_access = false;
+        if(Lists.deviation.deltaY > 40)
+            Lists.deviation.y_access = false;
     }
 
-    static edit_row_by_click_on_number__desktop() {
+    static start_keeping_timer(event) {
+        if(Lists.row_id_for_editing) {
+            Lists.deviation.startX = event.touches[0].clientX;
+            Lists.deviation.startY = event.touches[0].clientY;
+            Lists.deviation.x_access = true;
+            Lists.deviation.y_access = true;
+            Lists.editing_access__timeoutID = setTimeout(() => {
+                Lists.#enable_editing_access();
+            }, 1000);
+        }
+    }
+
+    static #enable_editing_access() {
+        Lists.editing_access = true;
+    }
+
+    static #disable_editing_access() {
+        Lists.editing_access = false;
+    }
+
+    static set_row_id_for_editing() {
+        if(Lists.selected_list_type && Lists.selected_list_type !== 'new') {
+            Lists.row_id_for_editing = this.dataset.id;
+            Lists.row_id__timeoutID = setTimeout(() => {
+                Lists.#disable_editing_access();
+                Lists.row_id_for_editing = false;
+            }, 3000);
+        }
+    }
+
+    static close_row_editing__mobile(event) {
+        switch(event.inputType) {
+            case 'insertParagraph':
+                Lists.edited_row.removeAttribute('contenteditable');
+                Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
+                Lists.edited_row = false;
+                Lists.deviation = {};
+                Lists.#disable_editing_access();
+                break;
+        }
+    }
+
+    /**
+     * Редактирование строк всех списков кроме нового списка.
+     * Компьютерная версия
+     */
+    static edit_row__desktop() {
 
     }
 
@@ -1009,5 +1106,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let button__delete = button.querySelector('button');
         button__delete.addEventListener('click', Lists.delete_list);
     }
+    let rows = Lists.words__area.querySelectorAll('pre');
+    for(const row of rows)
+        row.addEventListener('click', Lists.set_row_id_for_editing);
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });
+
+document.addEventListener('touchstart', Lists.start_keeping_timer);
+// document.addEventListener('touchmove', Lists.write_deviation);
+document.addEventListener('touchend', Lists.edit_row__mobile);
