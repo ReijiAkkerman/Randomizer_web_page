@@ -551,9 +551,6 @@ class Lists {
                     break;
             }
         }
-        else {
-
-        }
     }
 
     /**
