@@ -128,6 +128,9 @@ class Lists {
         else {
             Lists.#clear_words_area();
             Lists.#insert_empty_rows('Сюда писать исходное значение');
+            Lists.create_button_of_new_list(false);
+            Lists.hide_lists_absense_info();
+            Lists.show_main_lists_block();
             document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
             Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
             let elements = Words.words__area.querySelectorAll('pre');
