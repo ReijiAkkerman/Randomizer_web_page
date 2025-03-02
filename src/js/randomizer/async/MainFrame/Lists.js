@@ -476,6 +476,7 @@ class Lists {
                             Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
                             break;
                     }
+                    Lists.edited_row.style.userSelect = 'text';
                     Lists.edited_row.setAttribute('contenteditable', '');
                     Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row.focus();
@@ -532,6 +533,7 @@ class Lists {
         switch(event.inputType) {
             case 'insertParagraph':
                 Lists.edited_row.removeAttribute('contenteditable');
+                Lists.edited_row.style.userSelect = '';
                 Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                 Lists.edited_row = false;
                 Lists.deviation = {};

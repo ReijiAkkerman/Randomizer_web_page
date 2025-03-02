@@ -46,6 +46,7 @@ svg {
   outline: none;
   height: 30px;
   align-content: center;
+  user-select: none;
 }
 .randomizer main > .words p {
   font-size: 22px;
