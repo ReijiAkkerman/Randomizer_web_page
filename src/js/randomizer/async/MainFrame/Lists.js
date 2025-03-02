@@ -460,7 +460,7 @@ class Lists {
      */
     static edit_row__mobile(event) {
         if(Lists.row_id_for_editing) {
-            Lists.write_deviation(event);
+            // Lists.write_deviation(event);
             if(Lists.deviation.x_access && Lists.deviation.y_access) {
                 Words.reverse_mode();
                 let current_mode = WordsTypes.getShownSectionType();
@@ -1113,5 +1113,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('touchstart', Lists.start_keeping_timer);
-// document.addEventListener('touchmove', Lists.write_deviation);
+document.addEventListener('touchmove', Lists.write_deviation);
 document.addEventListener('touchend', Lists.edit_row__mobile);
