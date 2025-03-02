@@ -460,25 +460,27 @@ class Lists {
      */
     static edit_row__mobile(event) {
         if(Lists.row_id_for_editing) {
-            // Lists.write_deviation(event);
-            if(Lists.deviation.x_access && Lists.deviation.y_access) {
-                Words.reverse_mode();
-                let current_mode = WordsTypes.getShownSectionType();
-                switch(current_mode) {
-                    case 'source':
-                        Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                        break;
-                    case 'translation':
-                        Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                        break;
-                    case 'transcription':
-                        Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                        break;
+            if(Lists.editing_access) {
+                // Lists.write_deviation(event);
+                if(Lists.deviation.x_access && Lists.deviation.y_access) {
+                    Words.reverse_mode();
+                    let current_mode = WordsTypes.getShownSectionType();
+                    switch(current_mode) {
+                        case 'source':
+                            Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                            break;
+                        case 'translation':
+                            Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                            break;
+                        case 'transcription':
+                            Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                            break;
+                    }
+                    Lists.edited_row.setAttribute('contenteditable', '');
+                    Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
+                    Lists.edited_row.focus();
+                    Lists.select_text(Lists.edited_row);
                 }
-                Lists.edited_row.setAttribute('contenteditable', '');
-                Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
-                Lists.edited_row.focus();
-                Lists.select_text(Lists.edited_row);
             }
         }
     }
