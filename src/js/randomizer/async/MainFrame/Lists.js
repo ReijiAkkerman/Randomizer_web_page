@@ -145,7 +145,7 @@ class Lists {
             let current_mode = WordsTypes.getShownSectionType();
             let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
             Lists.#clear_words_area();
-            Lists.#insert_empty_rows();
+            Lists.#insert_empty_rows('Сюда писать исходное значение');
             row.focus();
             Lists.select_text(row);
             Lists.enable_editing_mode();
