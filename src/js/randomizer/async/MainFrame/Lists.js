@@ -429,7 +429,11 @@ class Lists {
             Lists.deletion_access = true;
     }
 
-    static edit_row_by_click_on_number() {
+    static edit_row_by_click_on_number__mobile() {
+
+    }
+
+    static edit_row_by_click_on_number__desktop() {
 
     }
 
@@ -782,7 +786,7 @@ class Lists {
         }
     }
 
-    static #insert_empty_rows() {
+    static #insert_empty_rows(text = '') {
         let number_clone = Lists.row_number__template.content.cloneNode(true);
         let row_clone = Lists.row__template.content.cloneNode(true);
         let number =  number_clone.querySelector('p');
@@ -790,11 +794,11 @@ class Lists {
         row.dataset.id = 
         number.textContent = 
         number.dataset.id = '1';
-        row.textContent = '';
+        row.textContent = text;
         if(Lists.editing_mode === true) 
             number.addEventListener('click', Lists.select_row_by_click_on_number);
-        else 
-            number.addEventListener('click', Lists.edit_row_by_click_on_number);
+        // else 
+            // number.addEventListener('click', Lists.edit_row_by_click_on_number);
         Lists.source__area.append(row);
         Lists.source_numbers__area.append(number);
     }
