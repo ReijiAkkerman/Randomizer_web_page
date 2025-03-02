@@ -121,8 +121,8 @@ class Lists {
         else {
             let new_list = Lists.main_lists__area.querySelector('.lists_select-list[data-type="new"]');
             if(new_list === null) {
-                Lists.#clear_words_area();
-                Lists.#insert_empty_rows('Сюда писать исходное значение');
+                Lists.clear_words_area();
+                Lists.insert_empty_rows('Сюда писать исходное значение');
             }
             Lists.set_editing_mode();
             WordsTypes.resetSections();
@@ -619,7 +619,7 @@ class Lists {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в get_lists_from_another_language!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                Lists.#clear_words_area();
+                Lists.clear_words_area();
                 Lists.#delete_all_lists();
                 localStorage.clear();
                 if(xhr.response.main.length) {
@@ -633,7 +633,7 @@ class Lists {
                 else {
                     Lists.hide_main_lists_block();
                     Lists.show_list_absense_info();
-                    Lists.#insert_empty_rows();
+                    Lists.insert_empty_rows();
                 }
                 Lists.source_row = 0;
                 Lists.translation_row = 0;
@@ -692,7 +692,7 @@ class Lists {
     static show_list_data(onstart = false) {
         switch((onstart === true) ? 'new' : this.dataset.type) {
             case 'new':
-                Lists.#clear_words_area();
+                Lists.clear_words_area();
                 let types = ['source', 'translation', 'transcription'];
                 for(let type of types) {
                     let rows_in_type = localStorage.getItem(type + '_rows_number');
@@ -732,7 +732,7 @@ class Lists {
                 xhr.onloadend = () => {
                     if(xhr.response === null) alert('Произошла ошибка в show_list_data!');
                     else if(xhr.response.hasOwnProperty('updated')) {
-                        Lists.#clear_words_area();
+                        Lists.clear_words_area();
                         Lists.#insert_sources(xhr.response.source);
                         Lists.#insert_translations(xhr.response.translation);
                         Lists.#insert_transcriptions(xhr.response.transcription);
@@ -816,8 +816,8 @@ class Lists {
 
     static delete_new_list(event) {
         event.stopPropagation();
-        Lists.#clear_words_area();
-        Lists.#insert_empty_rows();
+        Lists.clear_words_area();
+        Lists.insert_empty_rows();
         Lists.#delete_new_list_button();
         MainActions.close_main_action_hide_button();
         MainActions.create_new_list_deactivate();
@@ -838,8 +838,8 @@ class Lists {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в delete_list!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                Lists.#clear_words_area();
-                Lists.#insert_empty_rows();
+                Lists.clear_words_area();
+                Lists.insert_empty_rows();
                 let list_for_deletion = Lists.main_lists__area.querySelector(`.lists_select-list[data-type="${this.dataset.type}"][data-id="${this.dataset.id}"]`);
                 list_for_deletion.remove();
                 let main_list__buttons = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
@@ -935,7 +935,7 @@ class Lists {
             new_list.remove();
     }
 
-    static #clear_words_area() {
+    static clear_words_area() {
         let type__area;
         let type_numbers__area;
         let types = ['source', 'translation', 'transcription'];
@@ -961,7 +961,7 @@ class Lists {
         }
     }
 
-    static #insert_empty_rows(text = '') {
+    static insert_empty_rows(text = '') {
         let number_clone = Lists.row_number__template.content.cloneNode(true);
         let row_clone = Lists.row__template.content.cloneNode(true);
         let number =  number_clone.querySelector('p');

@@ -347,6 +347,8 @@ class Languages {
                     Lists.unset_active_language_on_server();
                     Lists.unset_active_language_mark();
                     Lists.hide_mode_switcher();
+                    Lists.clear_words_area();
+                    Lists.insert_empty_rows('Выберите изучаемый язык');
                     if(Languages.quick_access_language_switcher__area.children.length === 1) {
                         Languages.quick_access_language_switcher__area.style.display = 'none';
                         Lists.mode_switcher__area.style.display = 'none';
