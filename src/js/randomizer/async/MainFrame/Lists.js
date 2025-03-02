@@ -1160,11 +1160,13 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const row of rows) {
         if(Adaptive.getDevice() === 'mobile')
             row.addEventListener('click', Lists.set_row_id_for_editing);
-        row.addEventListener('dblclick', Lists.edit_row__desktop);
+        else 
+            row.addEventListener('dblclick', Lists.edit_row__desktop);
+    }
+    if(Adaptive.getDevice() === 'mobile') {
+        document.addEventListener('touchstart', Lists.start_keeping_timer);
+        document.addEventListener('touchmove', Lists.write_deviation);
+        document.addEventListener('touchend', Lists.edit_row__mobile);
     }
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });
-
-document.addEventListener('touchstart', Lists.start_keeping_timer);
-document.addEventListener('touchmove', Lists.write_deviation);
-document.addEventListener('touchend', Lists.edit_row__mobile);
