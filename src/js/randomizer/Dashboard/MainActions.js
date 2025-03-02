@@ -58,11 +58,11 @@ class MainActions {
     activate() {
         const activateCloseButton = () => {
             MainActions.stack.push(this.dataset.action_type);
-            MainActions.#close_main_action_show_button();
+            MainActions.close_main_action_show_button();
         };
         const deactivateCloseButton = () => {
             MainActions.#close_main_action();
-            MainActions.#close_main_action_hide_button();
+            MainActions.close_main_action_hide_button();
         };
         if(MainActions.stack.peek() !== this.dataset.action_type)
             MainActions.#close_main_action();
@@ -80,7 +80,7 @@ class MainActions {
                 activateCloseButton();
                 break;
             case 'create-new-list':
-                MainActions.#create_new_list_activate();
+                MainActions.create_new_list_activate();
                 activateCloseButton();
                 break;
             case 'close-editing':
@@ -173,14 +173,14 @@ class MainActions {
 
     // Создание нового списка 
 
-    static #create_new_list_activate() {
+    static create_new_list_activate() {
         MainActions.#create_new_list_set_active_color_on_section_button();
         MainActions.#show_errors_info_for_list_name_field();
         MainActions.#show_input_for_list_name();
         MainActions.#create_new_list_show_run_button();
     }
 
-    static #create_new_list_deactivate() {
+    static create_new_list_deactivate() {
         MainActions.#create_new_list_unset_active_color_on_section_button();
         MainActions.#hide_errors_info_for_list_name_field();
         MainActions.#hide_input_for_list_name();
@@ -232,18 +232,19 @@ class MainActions {
                 MainActions.#combine_lists_deactivate();
                 break;
             case 'create-new-list':
-                MainActions.#create_new_list_deactivate();
-                Lists.new_list_creation_access();
+                MainActions.create_new_list_deactivate();
+                // Lists.new_list_creation_access();
+                Lists.unset_editing_mode();
                 break;
         }
         MainActions.stack.pop();
     }
 
-    static #close_main_action_show_button() {
+    static close_main_action_show_button() {
         MainActions.#close_main_action_button.style.display = '';
     }
 
-    static #close_main_action_hide_button() {
+    static close_main_action_hide_button() {
         MainActions.#close_main_action_button.style.display = 'none';
     }
 }

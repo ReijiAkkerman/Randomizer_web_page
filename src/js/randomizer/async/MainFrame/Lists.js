@@ -109,42 +109,15 @@ class Lists {
      * запускает режим создания нового списка.
      */
     static new_list_creation_access() {
-        if(MainActions.stack.peek() === 'create-new-list') {
-            document.addEventListener('keyup', Words.reverse_mode_by_keyup);
-            Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
-            let elements = Words.words__area.querySelectorAll('pre');
-            for(const element of elements) {
-                element.removeAttribute('contenteditable');
-                element.removeEventListener('input', Lists.stash_by_change);
-                if(Adaptive.getDevice() === 'desktop') 
-                    element.removeEventListener('keyup', Lists.execute_by_keyup);
-                else
-                    element.removeEventListener('input', Lists.execute_by_input);
-            }
-            elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
-            for(const button of elements)
-                button.removeEventListener('click', Lists.select_row_by_click_on_number);
-        }
+        if(MainActions.stack.peek() === 'create-new-list')
+            Lists.set_editing_mode();
         else {
-            Lists.#clear_words_area();
-            Lists.#insert_empty_rows('Сюда писать исходное значение');
-            Lists.create_button_of_new_list(false);
-            Lists.hide_lists_absense_info();
-            Lists.show_main_lists_block();
-            document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
-            Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
-            let elements = Words.words__area.querySelectorAll('pre');
-            for(const element of elements) {
-                element.setAttribute('contenteditable', '');
-                element.addEventListener('input', Lists.stash_by_change);
-                if(Adaptive.getDevice() === 'desktop') 
-                    element.addEventListener('keyup', Lists.execute_by_keyup);
-                else
-                    element.addEventListener('input', Lists.execute_by_input);
+            let new_list = Lists.main_lists__area.querySelector('.lists_select-list[data-type="new"]');
+            if(new_list === null) {
+                Lists.#clear_words_area();
+                Lists.#insert_empty_rows('Сюда писать исходное значение');
             }
-            elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
-            for(const button of elements)
-                button.addEventListener('click', Lists.select_row_by_click_on_number);
+            Lists.set_editing_mode();
             WordsTypes.resetSections();
             Words.switch_mode();
             let current_mode = WordsTypes.getShownSectionType();
@@ -153,6 +126,40 @@ class Lists {
             Lists.select_text(row);
             Lists.enable_editing_mode();
         }
+    }
+
+    static set_editing_mode() {
+        document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
+        Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
+        let elements = Words.words__area.querySelectorAll('pre');
+        for(const element of elements) {
+            element.setAttribute('contenteditable', '');
+            element.addEventListener('input', Lists.stash_by_change);
+            if(Adaptive.getDevice() === 'desktop') 
+                element.addEventListener('keyup', Lists.execute_by_keyup);
+            else
+                element.addEventListener('input', Lists.execute_by_input);
+        }
+        elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
+        for(const button of elements)
+            button.addEventListener('click', Lists.select_row_by_click_on_number);
+    }
+
+    static unset_editing_mode() {
+        document.addEventListener('keyup', Words.reverse_mode_by_keyup);
+        Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
+        let elements = Words.words__area.querySelectorAll('pre');
+        for(const element of elements) {
+            element.removeAttribute('contenteditable');
+            element.removeEventListener('input', Lists.stash_by_change);
+            if(Adaptive.getDevice() === 'desktop') 
+                element.removeEventListener('keyup', Lists.execute_by_keyup);
+            else
+                element.removeEventListener('input', Lists.execute_by_input);
+        }
+        elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
+        for(const button of elements)
+            button.removeEventListener('click', Lists.select_row_by_click_on_number);
     }
 
     /**
@@ -585,6 +592,7 @@ class Lists {
                         location.href = '/auth/view';
                     // alert(xhr.response);
                 };
+                Lists.close_main_action();
                 break;
         }
     }
@@ -885,21 +893,16 @@ class Lists {
     }
 
     static create_button_of_new_list(onstart) {
-        let new_list = Lists.main_lists__area.querySelector('.lists_word .lists_select-list[data-type="new"]');
-        if(new_list === null) {
-            let list_button = Lists.#create_list_button('Новый список', false);
-            list_button.dataset.type = 'new';
-            let list_button_delete = list_button.querySelector('button');
-            list_button_delete.addEventListener('click', Lists.delete_new_list);
-            list_button.addEventListener('click', Lists.show_list_data);
-            Lists.main_lists__insertion_place.after(list_button);
-            Lists.hide_lists_absense_info();
-            Lists.show_main_lists_block();
-            Lists.show_list_data(onstart);
-        }
-        else {
-            Lists.set_active_color_for_list_button(new_list);
-        }
+        let list_button = Lists.#create_list_button('Новый список', false);
+        list_button.dataset.type = 'new';
+        let list_button_delete = list_button.querySelector('button');
+        list_button_delete.addEventListener('click', Lists.delete_new_list);
+        list_button.addEventListener('click', Lists.show_list_data);
+        list_button.addEventListener('click', Lists.highlight_list_button);
+        Lists.main_lists__insertion_place.after(list_button);
+        Lists.hide_lists_absense_info();
+        Lists.show_main_lists_block();
+        Lists.show_list_data(onstart);
     }
 
     static create_button_of_main_list(_list_name, _id) {
@@ -980,6 +983,7 @@ document.addEventListener('DOMContentLoaded', function() {
     Lists.define_active_language(true);
     Lists.define_mode_switcher_visibility();
     Lists.restore_list(true);
+    Lists.main_list__buttons = document.querySelectorAll(Lists.selectors.get('Кнопки основных списков'));
     Lists.highlight_list_button(true);
     Lists.new_list_creation_access__button.addEventListener('click', Lists.new_list_creation_access);
     /**
