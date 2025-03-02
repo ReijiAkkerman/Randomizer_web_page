@@ -63,8 +63,7 @@ class Lists {
     static row_id_for_editing = false;
     static deviation = {};
     static editing_access = false;
-    static editing_access__timeoutID = false;
-    static row_id__timeoutID = false;
+    static touchstart_timer = false;
     static edited_row = false;
 
 
@@ -145,8 +144,10 @@ class Lists {
             element.addEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.addEventListener('keyup', Lists.execute_by_keyup);
-            else
+            else {
                 element.addEventListener('input', Lists.execute_by_input);
+                element.removeEventListener('input', Lists.set_row_id_for_editing);
+            }
         }
         elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
         for(const button of elements)
@@ -162,8 +163,10 @@ class Lists {
             element.removeEventListener('input', Lists.stash_by_change);
             if(Adaptive.getDevice() === 'desktop') 
                 element.removeEventListener('keyup', Lists.execute_by_keyup);
-            else
+            else {
                 element.removeEventListener('input', Lists.execute_by_input);
+                element.addEventListener('input', Lists.set_row_id_for_editing);
+            }
         }
         elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
         for(const button of elements)
@@ -460,8 +463,10 @@ class Lists {
      */
     static edit_row__mobile(event) {
         if(Lists.row_id_for_editing) {
-            if(Lists.editing_access) {
-                // Lists.write_deviation(event);
+            let touchend_timer = Date.now();
+            let time_delta = touchend_timer - Lists.touchstart_timer;
+            if(time_delta > 500) {
+                Lists.write_deviation(event);
                 if(Lists.deviation.x_access && Lists.deviation.y_access) {
                     Words.reverse_mode();
                     let current_mode = WordsTypes.getShownSectionType();
@@ -485,6 +490,11 @@ class Lists {
                     Lists.select_text(Lists.edited_row);
                 }
             }
+            else {
+                Lists.row_id_for_editing = false;
+                Lists.deviation = {};
+                Lists.touchstart_timer = false;
+            }
         }
     }
     
@@ -507,27 +517,13 @@ class Lists {
             Lists.deviation.startY = event.touches[0].clientY;
             Lists.deviation.x_access = true;
             Lists.deviation.y_access = true;
-            Lists.editing_access__timeoutID = setTimeout(() => {
-                Lists.#enable_editing_access();
-            }, 500);
+            Lists.touchstart_timer = Date.now();
         }
-    }
-
-    static #enable_editing_access() {
-        Lists.editing_access = true;
-    }
-
-    static #disable_editing_access() {
-        Lists.editing_access = false;
     }
 
     static set_row_id_for_editing() {
         if(Lists.selected_list_type && Lists.selected_list_type !== 'new') {
             Lists.row_id_for_editing = this.dataset.id;
-            Lists.row_id__timeoutID = setTimeout(() => {
-                Lists.#disable_editing_access();
-                Lists.row_id_for_editing = false;
-            }, 3000);
         }
     }
 
@@ -546,7 +542,6 @@ class Lists {
                     Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row = false;
                     Lists.deviation = {};
-                    Lists.#disable_editing_access();
                     document.addEventListener('keyup', Words.reverse_mode_by_keyup);
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
                     break;
