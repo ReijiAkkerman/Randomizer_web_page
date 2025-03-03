@@ -173,6 +173,21 @@ class Lists {
             button.removeEventListener('click', Lists.select_row_by_click_on_number);
     }
 
+    static set_listeners_for_row_editing() {
+        let rows = Lists.words__area.querySelectorAll('pre');
+        for(const row of rows) {
+            if(Adaptive.getDevice() === 'mobile')
+                row.addEventListener('click', Lists.set_row_id_for_editing);
+            else 
+                row.addEventListener('dblclick', Lists.edit_row__desktop);
+        }
+        if(Adaptive.getDevice() === 'mobile') {
+            document.addEventListener('touchstart', Lists.start_keeping_timer);
+            document.addEventListener('touchmove', Lists.write_deviation);
+            document.addEventListener('touchend', Lists.edit_row__mobile);
+        }
+    }
+
     /**
      * Работает только при включенном режиме создания нового списка.
      * Определяет что происходит при нажатии определенной клавиши.
@@ -542,10 +557,13 @@ class Lists {
                     Lists.deviation = {};
                     Lists.row_id_for_editing = false;
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
+                    Lists.update_list_data();
                     break;
             }
         }
     }
+
+    
 
     /**
      * Редактирование строк всех списков кроме нового списка.
@@ -592,9 +610,26 @@ class Lists {
                     Lists.deviation = {};
                     document.addEventListener('keyup', Words.reverse_mode_by_keyup);
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
+                    Lists.update_list_data();
                     break;
             }
         }
+    }
+
+    static update_list_data() {
+        Lists.#prepare_words();
+        let data = new FormData(Lists.words__form);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/updateListData/${Lists.selected_list_id}`);
+        xhr.send(data);
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в update_list_data!');
+            else if(xhr.response.hasOwnProperty('updated'));
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
+        };
     }
 
     /**
@@ -630,27 +665,14 @@ class Lists {
                     Lists.#insert_sources(xhr.response.main[xhr.response.main.length - 1].source);
                     Lists.#insert_translations(xhr.response.main[xhr.response.main.length - 1].translation);
                     Lists.#insert_transcriptions(xhr.response.main[xhr.response.main.length - 1].transcription);
-                    let rows = Lists.words__area.querySelectorAll('pre');
-                    for(const row of rows) {
-                        if(Adaptive.getDevice() === 'mobile')
-                            row.addEventListener('click', Lists.set_row_id_for_editing);
-                        else 
-                            row.addEventListener('dblclick', Lists.edit_row__desktop);
-                    }
-                    if(Adaptive.getDevice() === 'mobile') {
-                        document.addEventListener('touchstart', Lists.start_keeping_timer);
-                        document.addEventListener('touchmove', Lists.write_deviation);
-                        document.addEventListener('touchend', Lists.edit_row__mobile);
-                    }
+                    Lists.set_listeners_for_row_editing();
                 }
                 else {
                     Lists.hide_main_lists_block();
                     Lists.show_list_absense_info();
                     Lists.insert_empty_rows();
                 }
-                Lists.source_row = 0;
-                Lists.translation_row = 0;
-                Lists.transcription_row = 0;
+                Lists.reset_rows_counter();
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -749,18 +771,7 @@ class Lists {
                         Lists.#insert_sources(xhr.response.source);
                         Lists.#insert_translations(xhr.response.translation);
                         Lists.#insert_transcriptions(xhr.response.transcription);
-                        let rows = Lists.words__area.querySelectorAll('pre');
-                        for(const row of rows) {
-                            if(Adaptive.getDevice() === 'mobile')
-                                row.addEventListener('click', Lists.set_row_id_for_editing);
-                            else 
-                                row.addEventListener('dblclick', Lists.edit_row__desktop);
-                        }
-                        if(Adaptive.getDevice() === 'mobile') {
-                            document.addEventListener('touchstart', Lists.start_keeping_timer);
-                            document.addEventListener('touchmove', Lists.write_deviation);
-                            document.addEventListener('touchend', Lists.edit_row__mobile);
-                        }
+                        Lists.set_listeners_for_row_editing();
                     }
                     else if(xhr.response.hasOwnProperty('redirect'))
                         location.href = '/auth/view';
@@ -900,6 +911,8 @@ class Lists {
                 localStorage.clear();
                 Lists.hide_lists_absense_info();
                 Lists.show_main_lists_block();
+                Lists.reset_rows_counter();
+                Lists.set_listeners_for_row_editing();
             }
             else if(xhr.response.hasOwnProperty('fields')) {
                 for(let error of xhr.response.fields) {
@@ -918,6 +931,12 @@ class Lists {
             // alert(xhr.response);
         };
     }
+
+    static reset_rows_counter() {
+        Lists.source_row = 0;
+        Lists.translation_row = 0;
+        Lists.transcription_row = 0;
+    } 
 
     static #prepare_words() {
         let type__words;
@@ -1181,17 +1200,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let button__delete = button.querySelector('button');
         button__delete.addEventListener('click', Lists.delete_list);
     }
-    let rows = Lists.words__area.querySelectorAll('pre');
-    for(const row of rows) {
-        if(Adaptive.getDevice() === 'mobile')
-            row.addEventListener('click', Lists.set_row_id_for_editing);
-        else 
-            row.addEventListener('dblclick', Lists.edit_row__desktop);
-    }
-    if(Adaptive.getDevice() === 'mobile') {
-        document.addEventListener('touchstart', Lists.start_keeping_timer);
-        document.addEventListener('touchmove', Lists.write_deviation);
-        document.addEventListener('touchend', Lists.edit_row__mobile);
-    }
+    Lists.set_listeners_for_row_editing();
     Lists.save_list__button.addEventListener('click', Lists.create_main);
 });

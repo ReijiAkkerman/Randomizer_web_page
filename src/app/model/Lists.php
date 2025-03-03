@@ -293,6 +293,38 @@
             }
         }
 
+        public function updateList($_list_id): void {
+            if($this->getCookie()) {
+                $SOURCE = $TRANSLATION = $TRANSCRIPTION = null;
+                $this->kanji = ($_POST['transcription']) ? true : false;
+                $this->prepareRows($SOURCE, $TRANSLATION, $TRANSCRIPTION);
+
+                $this->createAuthConnection();
+                $tableName = $this->getUserTableName();
+                $this->closeAuthConnection();
+
+                $this->createListsConnection();
+                if($this->kanji)
+                    $query = "UPDATE $tableName SET 
+                        source='$SOURCE',
+                        translation='$TRANSLATION',
+                        transcription='$TRANSCRIPTION'
+                    WHERE ID=$_list_id";
+                else 
+                    $query = "UPDATE $tableName SET
+                        source='$SOURCE',
+                        translation='$TRANSLATION'
+                    WHERE ID=$_list_id";
+                $this->mysql->query($query);
+                $this->closeListsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect": true}';
+            }
+        }
+
 
 
 
@@ -368,7 +400,8 @@
         private function prepareRows(
             &$sources,
             &$translations,
-            &$transcriptions = ''
+            &$transcriptions = '',
+            
         ): void {
             $sources = rtrim($_POST['source'], ';');
             $translations = rtrim($_POST['translation'], ';');

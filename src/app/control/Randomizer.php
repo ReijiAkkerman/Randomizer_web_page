@@ -201,4 +201,10 @@
             $lists = new Lists();
             $lists->deleteList($listId);
         }
+
+        public function updateListData(array $args): void {
+            $listId = $args[0];
+            $lists = new Lists();
+            $lists->updateList($listId);
+        }
     }
