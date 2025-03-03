@@ -540,6 +540,7 @@ class Lists {
                     Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row = false;
                     Lists.deviation = {};
+                    Lists.row_id_for_editing = false;
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
                     break;
             }
