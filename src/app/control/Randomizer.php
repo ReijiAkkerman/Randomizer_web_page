@@ -50,7 +50,12 @@
                         $list_type = 'main';
                         break;
                     default:
-                        $list_type = $data->lists->types[$selected_list];
+                        if(is_null($data->lists->types[$selected_list])) {
+                            $this->resetSelectedListId();
+                            $list_type = 'main';
+                        }
+                        else 
+                            $list_type = $data->lists->types[$selected_list];
                         break;
                 }
                 if(sizeof($data->lists->$list_type)) {

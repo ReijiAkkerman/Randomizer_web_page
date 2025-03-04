@@ -218,7 +218,7 @@ class Languages {
             else if(xhr.response.hasOwnProperty('updated')) {
                 Languages.#add_studied_for_switching(xhr.response.id);
                 Languages.#add_studied_for_selection(xhr.response.id);
-                Languages.add_studied_in_quick_access();
+                Languages.add_studied_in_quick_access(xhr.response.id);
                 Languages.#show_actions();
                 FrontendLanguages.define_good_borders_for_all_languages();
                 FrontendLanguages.define_good_borders_for_studied_languages();
@@ -346,6 +346,7 @@ class Languages {
                     removing_studied_language_from_quick_access.remove();
                     Lists.unset_active_language_on_server();
                     Lists.unset_active_language_mark();
+                    Lists.reset_selected_list_id();
                     Lists.hide_mode_switcher();
                     Lists.clear_words_area();
                     Lists.insert_empty_rows('Выберите изучаемый язык');
@@ -407,6 +408,7 @@ class Languages {
         language_button.textContent = 
         language_button.dataset.mark = _language_data.mark;
         language_button.dataset.kanji = _language_data.kanji;
+        language_button.dataset.id = _language_data.id;
     }
 
     static #update_studied_for_switching(_language_mark, _language_data) {

@@ -655,6 +655,7 @@ class Lists {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в get_lists_from_another_language!');
             else if(xhr.response.hasOwnProperty('updated')) {
+                Lists.reset_selected_list_id();
                 Lists.clear_words_area();
                 Lists.#delete_all_lists();
                 localStorage.clear();
