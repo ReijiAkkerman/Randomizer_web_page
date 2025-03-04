@@ -43,31 +43,34 @@
                 $data->studied_languages = $languages->getStudied();
                 $data->all_languages = $languages->getAll();
                 $data->lists = $lists->getAllListsData();
-                $selected_list = $lists->getSelectedListId();
+                // подготовка списков
+                $selected_list = $data->lists->selected_list_id = $lists->getSelectedListId();
                 switch($selected_list) {
                     case false:
                     case 0:
-                        $list_type = 'main';
+                        $list_type = $selected_list_type = 'main';
                         break;
                     default:
                         if(is_null($data->lists->types[$selected_list])) {
                             $this->resetSelectedListId();
-                            $list_type = 'main';
+                            $list_type = $data->lists->selected_list_type = 'main';
                         }
                         else 
-                            $list_type = $data->lists->types[$selected_list];
+                            $list_type = $data->lists->selected_list_type = $data->lists->types[$selected_list];
                         break;
                 }
                 if(sizeof($data->lists->$list_type)) {
-                    $words_types = ['source', 'translation', 'transcription'];
-                    foreach($words_types as $words_type) {
-                        if($data->lists->$list_type[sizeof($data->lists->$list_type) - 1]->$words_type === null)
-                            $data->$words_type = [];
+                    if($selected_list) {
+                        if(is_null($data->lists->$list_type[$selected_list]->transcription)) 
+                            $words_types = ['source', 'translation'];
                         else 
-                            $data->$words_type = explode(';', $data->lists->main[sizeof($data->lists->main) - 1]->$words_type);
+                            $words_types = ['source', 'translation', 'transcription'];
+                        foreach($words_types as $words_type) {
+                            $data->$words_type = explode(';', $data->lists->$list_type[$selected_list]->$words_type);
+                        }
                     }
                 }
-
+                // подготовка языков
                 foreach($data->studied_languages as $language) {
                     $data->studied_languages_list[] = $language->name;
                 }
@@ -78,7 +81,7 @@
                     }
                 else 
                     $data->show_all_languages = true;
-
+                // сортировка списка
                 $lists->sort($selected_list);
 
                 require_once __DIR__ . '/../view/randomizer.php';

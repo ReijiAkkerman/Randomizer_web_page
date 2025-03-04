@@ -251,16 +251,16 @@
                     $list->id = $value['ID'];
                     switch($list->type) {
                         case 'main':
-                            $lists->main[] = clone $list;
+                            $lists->main[$list->id] = clone $list;
                             break;
                         case 'hard':
-                            $lists->hard[] = clone $list;
+                            $lists->hard[$list->id] = clone $list;
                             break;
                         case 'split':
-                            $lists->split[] = clone $list;
+                            $lists->split[$list->id] = clone $list;
                             break;
                         case 'combined':
-                            $lists->combined[] = clone $list;
+                            $lists->combined[$list->id] = clone $list;
                             break;
                     }
                     $lists->types[$list->id] = $list->type;

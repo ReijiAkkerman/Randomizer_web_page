@@ -36,6 +36,7 @@ class Lists {
         ['Область нумерации чтений', '.words .transcription .counter'],
         ['Область нумерации переводов', '.words .translation .counter'],
         // create_button_of_new_list
+        ['Область списков', '.lists'],
         ['Область основных списков', '.lists-word'],
         ['Место вставки основных списков', '.lists-word .lists_title'],
         // save_new_list
@@ -97,6 +98,7 @@ class Lists {
     static translation_numbers__area = document.querySelector(Lists.selectors.get('Область нумерации переводов'));
     static transcription_numbers__area = document.querySelector(Lists.selectors.get('Область нумерации чтений'));
     // create_button_of_new_list
+    static lists__area = document.querySelector(Lists.selectors.get('Область списков'));
     static main_lists__area = document.querySelector(Lists.selectors.get('Область основных списков'));
     static main_lists__insertion_place = document.querySelector(Lists.selectors.get('Место вставки основных списков'));
     // save_new_list
@@ -659,13 +661,15 @@ class Lists {
                 Lists.clear_words_area();
                 Lists.#delete_all_lists();
                 localStorage.clear();
-                if(xhr.response.main.length) {
+                if(Object.keys(xhr.response.main).length) {
                     Lists.hide_lists_absense_info();
                     Lists.show_main_lists_block();
                     Lists.#insert_main_lists(xhr.response.main);
-                    Lists.#insert_sources(xhr.response.main[xhr.response.main.length - 1].source);
-                    Lists.#insert_translations(xhr.response.main[xhr.response.main.length - 1].translation);
-                    Lists.#insert_transcriptions(xhr.response.main[xhr.response.main.length - 1].transcription);
+                    let lists_length = Object.keys(xhr.response.main).length;
+                    let selected_list_key = Object.keys(xhr.response.main)[lists_length - 1];
+                    Lists.#insert_sources(xhr.response.main[selected_list_key].source);
+                    Lists.#insert_translations(xhr.response.main[selected_list_key].translation);
+                    Lists.#insert_transcriptions(xhr.response.main[selected_list_key].transcription);
                     Lists.set_listeners_for_row_editing();
                 }
                 else {
@@ -682,9 +686,10 @@ class Lists {
     }
 
     static #insert_main_lists(lists) {
-        for(let i = 0; i < lists.length; i++) {
-            let name = (lists[i].name) ? lists[i].name : lists[i].date;
-            Lists.create_button_of_main_list(name, lists[i].id);
+        for(let i = 0; i < Object.keys(lists).length; i++) {
+            let key = Object.keys(lists)[i];
+            let name = (lists[key].name) ? lists[key].name : lists[key].date;
+            Lists.create_button_of_main_list(name, lists[key].id);
         }
     }
 
@@ -1027,8 +1032,13 @@ class Lists {
 
     static set_selected_list_id(onstart = false, selected_list = false) {
         if(onstart === true) {
-            if(Lists.main_list__buttons.length)
-                Lists.selected_list_id = Lists.main_list__buttons[0].dataset.id;
+            if(Lists.main_list__buttons.length) {
+                let selected_list = Lists.lists__area.querySelector('.lists_select-list[data-selected="true"]');
+                if(selected_list === null) 
+                    Lists.selected_list_id = Lists.main_list__buttons[0].dataset.id;
+                else
+                    Lists.selected_list_id = selected_list.dataset.id;
+            }
         }
         else 
             Lists.selected_list_id = selected_list.dataset.id;
@@ -1037,8 +1047,14 @@ class Lists {
 
     static set_selected_list_type(onstart = false, selected_list = false) {
         if(onstart === true) {
-            if(Lists.main_list__buttons.length) 
-                Lists.selected_list_type = Lists.main_list__buttons[0].dataset.type;
+            if(Lists.main_list__buttons.length) {
+                let selected_list = Lists.lists__area.querySelector('.lists_select-list[data-selected="true"]');
+                if(selected_list === null) {
+                    Lists.selected_list_type = Lists.main_list__buttons[0].dataset.type;
+                }
+                else 
+                    Lists.selected_list_type = selected_list.dataset.type;
+            } 
         }
         else 
             Lists.selected_list_type = selected_list.dataset.type;
@@ -1086,8 +1102,13 @@ class Lists {
         if(onstart === true) {
             Lists.set_selected_list_type(true);
             Lists.set_selected_list_id(true);
-            if(Lists.main_list__buttons.length) 
-                Lists.set_active_color_for_list_button(Lists.main_list__buttons[0]);
+            if(Lists.main_list__buttons.length) {
+                let selected_list = Lists.lists__area.querySelector('.lists_select-list[data-selected="true"]');
+                if(selected_list === null)
+                    Lists.set_active_color_for_list_button(Lists.main_list__buttons[0]);
+                else
+                    Lists.set_active_color_for_list_button(selected_list);
+            }
         }
         else {
             Lists.reset_list_button_highlighting();
