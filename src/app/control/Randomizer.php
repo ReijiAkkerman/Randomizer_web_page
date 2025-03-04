@@ -43,13 +43,23 @@
                 $data->studied_languages = $languages->getStudied();
                 $data->all_languages = $languages->getAll();
                 $data->lists = $lists->getAllListsData();
-                if(sizeof($data->lists->main)) {
-                    $word_types = ['source', 'translation', 'transcription'];
-                    foreach($word_types as $type) {
-                        if($data->lists->main[sizeof($data->lists->main) - 1]->$type === null)
-                        $data->$type = [];
-                    else 
-                        $data->$type = explode(';', $data->lists->main[sizeof($data->lists->main) - 1]->$type);
+                $selected_list = $lists->getSelectedListId();
+                switch($selected_list) {
+                    case false:
+                    case 0:
+                        $list_type = 'main';
+                        break;
+                    default:
+                        $list_type = $data->lists->types[$selected_list];
+                        break;
+                }
+                if(sizeof($data->lists->$list_type)) {
+                    $words_types = ['source', 'translation', 'transcription'];
+                    foreach($words_types as $words_type) {
+                        if($data->lists->$list_type[sizeof($data->lists->$list_type) - 1]->$words_type === null)
+                            $data->$words_type = [];
+                        else 
+                            $data->$words_type = explode(';', $data->lists->main[sizeof($data->lists->main) - 1]->$words_type);
                     }
                 }
 
@@ -63,7 +73,9 @@
                     }
                 else 
                     $data->show_all_languages = true;
-                
+
+                $lists->sort($selected_list);
+
                 require_once __DIR__ . '/../view/randomizer.php';
             }
             else {
@@ -206,5 +218,16 @@
             $listId = $args[0];
             $lists = new Lists();
             $lists->updateList($listId);
+        }
+
+        public function setSelectedListId(array $args): void {
+            $selectedListId = (int)$args[0];
+            $lists = new Lists();
+            $lists->setSelectedListId($selectedListId);
+        }
+
+        public function resetSelectedListId(): void {
+            $lists = new Lists();
+            $lists->resetSelectedListId();
         }
     }

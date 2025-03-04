@@ -871,6 +871,7 @@ class Lists {
                     Lists.hide_main_lists_block();
                     Lists.show_list_absense_info();
                 }
+                Lists.reset_selected_list_id();
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
@@ -1030,6 +1031,7 @@ class Lists {
         }
         else 
             Lists.selected_list_id = selected_list.dataset.id;
+        Lists.send_selected_list_id();
     }
 
     static set_selected_list_type(onstart = false, selected_list = false) {
@@ -1039,6 +1041,36 @@ class Lists {
         }
         else 
             Lists.selected_list_type = selected_list.dataset.type;
+    }
+
+    static send_selected_list_id() {
+        if(Lists.selected_list_id) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', `/randomizer/setSelectedListId/${Lists.selected_list_id}`);
+            xhr.send();
+            xhr.responseType = 'json';
+            xhr.onloadend = () =>  {
+                if(xhr.response === null) alert('Произошла ошибка в send_selected_list_id!');
+                else if(xhr.response.hasOwnProperty('updated'));
+                else if(xhr.response.hasOwnProperty('redirect'))
+                    location.href = '/auth/view';
+                // alert(xhr.response);
+            };
+        }
+    }
+
+    static reset_selected_list_id() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/randomizer/resetSelectedListId');
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в reset_selected_list_id!');
+            else if(xhr.response.hasOwnProperty('updated'));
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
+        };
     }
 
     static unset_selected_list_id() {
@@ -1113,6 +1145,7 @@ class Lists {
         Lists.reset_list_button_highlighting();
         Lists.selected_list_type = 'main';
         Lists.selected_list_id = _id;
+        Lists.send_selected_list_id();
         Lists.set_active_color_for_list_button(list_button);
         Lists.main_lists__insertion_place.after(list_button);
     }

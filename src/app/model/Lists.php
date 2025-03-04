@@ -52,6 +52,10 @@
                     translation TEXT NOT NULL,
                     transcription TEXT NULL,
                     syncronized BOOLEAN DEFAULT 0 NOT NULL
+                )",
+                "CREATE TABLE IF NOT EXISTS __LISTS__(
+                    USER_ID SMALLINT UNSIGNED NOT NULL,
+                    SELECTED_LIST_ID BIGINT UNSIGNED NULL
                 )"
             ];
             foreach($queries as $query) {
@@ -259,6 +263,7 @@
                             $lists->combined[] = clone $list;
                             break;
                     }
+                    $lists->types[$list->id] = $list->type;
                 }
                 $this->closeListsConnection();
                 $lists->updated = true;
@@ -322,6 +327,117 @@
             else {
                 $this->deleteCookie();
                 echo '{"redirect": true}';
+            }
+        }
+
+        public function setSelectedListId(int $_selected_list_id): void {
+            if($this->getCookie()) {
+                $this->createListsConnection();
+                $query = "SELECT SELECTED_LIST_ID FROM __LISTS__ WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                if($result->num_rows) 
+                    $query = "UPDATE __LISTS__ SET SELECTED_LIST_ID=$_selected_list_id WHERE USER_ID={$this->_id}";
+                else 
+                    $query = "INSERT INTO __LISTS__(USER_ID,SELECTED_LIST_ID) VALUES ({$this->_id},$_selected_list_id)";
+                $this->mysql->query($query);
+                $this->closeListsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"updated":true}';
+            }
+        }
+
+        public function resetSelectedListId(): void {
+            if($this->getCookie()) {
+                $this->createListsConnection();
+                $query = "UPDATE __LISTS__ SET SELECTED_LIST_ID=NULL WHERE USER_ID={$this->_id}";
+                $this->mysql->query($query);
+                $this->closeListsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
+        public function getSelectedListId(): int|false {
+            if($this->getCookie()) {
+                $this->createListsConnection();
+                $query = "SELECT SELECTED_LIST_ID FROM __LISTS__ WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                $this->closeListsConnection();
+                if($result->num_rows) {
+                    foreach($result as $value) {
+                        $SelectedListId = $value['SELECTED_LIST_ID'] ?? 0;
+                        return $SelectedListId;
+                    }
+                }
+                else return false;
+            }
+        }
+
+        public function sort(int $_selected_list_id): void {
+            if($this->getCookie()) {
+                if($_selected_list_id) {
+                    $this->createAuthConnection();
+                    $tableName = $this->getUserTableName();
+                    $this->closeAuthConnection();
+    
+                    $this->createListsConnection();
+                    $query = "SELECT source,translation,transcription FROM $tableName WHERE ID=$_selected_list_id";
+                    $result = $this->mysql->query($query);
+                    foreach($result as $value) {
+                        $source = $value['source'];
+                        $translation = $value['translation'];
+                        $transcription = $value['transcription'];
+                    }
+                    $rows = $this->prepareRowsForSort($source, $translation, $transcription);
+                    $number_array = [];
+                    $random_number;
+                    for($i = 0; $i < sizeof($rows); $i++) {
+                        while(in_array($random_number = rand(0, sizeof($rows) - 1), $number_array));
+                        $number_array[] = $random_number;
+                    }
+                    $output_rows = [];
+                    for($i = 0; $i < sizeof($number_array); $i++) {
+                        $output_rows[$i] = $rows[$number_array[$i]];
+                    }
+                    $SOURCE = $TRANSLATION = $TRANSCRIPTION = '';
+                    if(isset($transcription)) {
+                        for($i = 0; $i < sizeof($output_rows); $i++) {
+                            [$source, $translation, $transcription] = explode(';', $output_rows[$i]);
+                            $SOURCE .= $source . ';';
+                            $TRANSLATION .= $translation . ';';
+                            $TRANSCRIPTION .= $transcription . ';';
+                        }
+                        $SOURCE = rtrim($SOURCE, ';');
+                        $TRANSLATION = rtrim($TRANSLATION, ';');
+                        $TRANSCRIPTION = rtrim($TRANSCRIPTION, ';');
+                        $query = "UPDATE $tableName SET
+                            source='$SOURCE',
+                            translation='$TRANSLATION',
+                            transcription='$TRANSCRIPTION'
+                        WHERE ID=$_selected_list_id";
+                    }
+                    else {
+                        for($i = 0; $i < sizeof($output_rows); $i++) {
+                            [$source, $translation] = explode(';', $output_rows[$i]);
+                            $SOURCE .= $source . ';';
+                            $TRANSLATION .= $translation . ';';
+                        }
+                        $SOURCE = rtrim($SOURCE, ';');
+                        $TRANSLATION = rtrim($TRANSLATION, ';');
+                        $query = "UPDATE $tableName SET
+                            source='$SOURCE',
+                            translation='$TRANSLATION'
+                        WHERE ID=$_selected_list_id";
+                    }
+                    $this->mysql->query($query);
+                    $this->closeListsConnection();
+                }
             }
         }
 
@@ -466,6 +582,26 @@
             $this->writeError();
             $this->sendErrors();
             exit;
+        }
+
+        private function prepareRowsForSort($source, $translation, $transcription): array {
+            $rows = [];
+            $source_rows = explode(';', $source);
+            $translation_rows = explode(';', $translation);
+            if(isset($transcription)) {
+                $transcription_rows = explode(';', $transcription);
+                for($i = 0; $i < sizeof($source_rows); $i++) {
+                    $row = $source_rows[$i] . ';' . $translation_rows[$i] . ';' . $transcription_rows[$i];
+                    $rows[$i] = $row;
+                }            
+            }
+            else {
+                for($i = 0; $i < sizeof($source_rows); $i++) {
+                    $row = $source_rows[$i] . ';' . $translation_rows[$i];
+                    $rows[$i] = $row;
+                }
+            }
+            return $rows;
         }
 
 
