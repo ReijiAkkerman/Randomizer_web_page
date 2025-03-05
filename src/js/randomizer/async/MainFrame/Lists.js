@@ -61,7 +61,8 @@ class Lists {
     static selected_list_type = false;
     static selected_list_id = false;
     static deletion_access;
-    static row_id_for_editing = false;
+    static selected_row_id = false;
+    static action_type_for_selected_row = false;
     static deviation = {};
     static editing_access = false;
     static touchstart_timer = false;
@@ -148,12 +149,14 @@ class Lists {
                 element.addEventListener('keyup', Lists.execute_by_keyup);
             else {
                 element.addEventListener('input', Lists.execute_by_input);
-                element.removeEventListener('input', Lists.set_row_id_for_editing);
+                element.removeEventListener('input', Lists.set_row_id_for_hard_words_list);
             }
         }
         elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
-        for(const button of elements)
+        for(const button of elements) {
+            button.removeEventListener('click', Lists.set_row_id_for_editing);
             button.addEventListener('click', Lists.select_row_by_click_on_number);
+        }
     }
 
     static unset_editing_mode() {
@@ -167,19 +170,21 @@ class Lists {
                 element.removeEventListener('keyup', Lists.execute_by_keyup);
             else {
                 element.removeEventListener('input', Lists.execute_by_input);
-                element.addEventListener('input', Lists.set_row_id_for_editing);
+                element.addEventListener('input', Lists.set_row_id_for_hard_words_list);
             }
         }
         elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
-        for(const button of elements)
+        for(const button of elements) {
             button.removeEventListener('click', Lists.select_row_by_click_on_number);
+            button.addEventListener('click', Lists.set_row_id_for_editing);
+        }
     }
 
     static set_listeners_for_row_editing() {
         let rows = Lists.words__area.querySelectorAll('pre');
         for(const row of rows) {
             if(Adaptive.getDevice() === 'mobile')
-                row.addEventListener('click', Lists.set_row_id_for_editing);
+                row.addEventListener('click', Lists.set_row_id_for_hard_words_list);
             else 
                 row.addEventListener('dblclick', Lists.edit_row__desktop);
         }
@@ -187,6 +192,7 @@ class Lists {
             document.addEventListener('touchstart', Lists.start_keeping_timer);
             document.addEventListener('touchmove', Lists.write_deviation);
             document.addEventListener('touchend', Lists.edit_row__mobile);
+            document.addEventListener('touchend', Lists.add_row_to_hard_words_list);
         }
     }
 
@@ -478,37 +484,87 @@ class Lists {
      * Редактирование строк всех списков кроме нового списка.
      * Мобильная версия(функции ниже до комментария относятся к редактированию)
      */
-    static edit_row__mobile() {
-        if(Lists.row_id_for_editing) {
-            let touchend_timer = Date.now();
-            let time_delta = touchend_timer - Lists.touchstart_timer;
-            if(time_delta > 500) {
-                if(Lists.deviation.x_access && Lists.deviation.y_access) {
-                    Words.reverse_mode();
-                    let current_mode = WordsTypes.getShownSectionType();
-                    switch(current_mode) {
-                        case 'source':
-                            Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                            break;
-                        case 'translation':
-                            Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                            break;
-                        case 'transcription':
-                            Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
-                            break;
+    static add_row_to_hard_words_list() {
+        if(Lists.action_type_for_selected_row === 'add') {
+            if(Lists.selected_row_id) {
+                let touchend_timer = Date.now();
+                let time_delta = touchend_timer - Lists.touchstart_timer;
+                if(time_delta > 500) {
+                    if(Lists.deviation.x_access && Lists.deviation.y_access) {
+                        Words.reverse_mode();
+                        let modes = ['source', 'translation', 'transcription'];
+                        let adding_row;
+                        for(const mode of modes) {
+                            switch(mode) {
+                                case 'source':
+                                    adding_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                    adding_row.dataset.hard = 'true';
+                                    adding_row.style.backgroundColor = '#f002';
+                                    break;
+                                case 'translation':
+                                    adding_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                    adding_row.dataset.hard = 'true';
+                                    adding_row.style.backgroundColor = '#f002';
+                                    break;
+                                case 'transcription':
+                                    adding_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                    if(adding_row !== null) {
+                                        adding_row.dataset.hard = 'true';
+                                        adding_row.style.backgroundColor = '#f002';
+                                    }
+                                    break;
+                            }
+                        }
+                        Lists.list_name__input.style.display = '';
+                        Lists.save_list__button.removeEventListener('click', Lists.create_main);
+                        Lists.save_list__button.style.display = '';
+                        Lists.save_list__button.addEventListener('click', Lists.create_hard);
                     }
-                    Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
-                    Lists.edited_row.style.userSelect = 'text';
-                    Lists.edited_row.setAttribute('contenteditable', '');
-                    Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
-                    Lists.edited_row.focus();
-                    Lists.select_text(Lists.edited_row);
+                }
+                else {
+                    Lists.action_type_for_selected_row = false;
+                    Lists.selected_row_id = false;
+                    Lists.deviation = {};
+                    Lists.touchstart_timer = false;
                 }
             }
-            else {
-                Lists.row_id_for_editing = false;
-                Lists.deviation = {};
-                Lists.touchstart_timer = false;
+        }
+    }
+
+    static edit_row__mobile() {
+        if(Lists.action_type_for_selected_row === 'edit') {
+            if(Lists.selected_row_id) {
+                let touchend_timer = Date.now();
+                let time_delta = touchend_timer - Lists.touchstart_timer;
+                if(time_delta > 500) {
+                    if(Lists.deviation.x_access && Lists.deviation.y_access) {
+                        Words.reverse_mode();
+                        let current_mode = WordsTypes.getShownSectionType();
+                        switch(current_mode) {
+                            case 'source':
+                                Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                break;
+                            case 'translation':
+                                Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                break;
+                            case 'transcription':
+                                Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                break;
+                        }
+                        Words.words__area.removeEventListener('click', Words.reverse_mode_by_click);
+                        Lists.edited_row.style.userSelect = 'text';
+                        Lists.edited_row.setAttribute('contenteditable', '');
+                        Lists.edited_row.addEventListener('input', Lists.close_row_editing__mobile);
+                        Lists.edited_row.focus();
+                        Lists.select_text(Lists.edited_row);
+                    }
+                }
+                else {
+                    Lists.action_type_for_selected_row = false;
+                    Lists.selected_row_id = false;
+                    Lists.deviation = {};
+                    Lists.touchstart_timer = false;
+                }
             }
         }
     }
@@ -527,7 +583,7 @@ class Lists {
     }
 
     static start_keeping_timer(event) {
-        if(Lists.row_id_for_editing) {
+        if(Lists.selected_row_id) {
             Lists.deviation.startX = event.touches[0].clientX;
             Lists.deviation.startY = event.touches[0].clientY;
             Lists.deviation.x_access = true;
@@ -536,9 +592,17 @@ class Lists {
         }
     }
 
+    static set_row_id_for_hard_words_list() {
+        if(Lists.selected_list_type && Lists.selected_list_type !== 'new') {
+            Lists.selected_row_id = this.dataset.id;
+            Lists.action_type_for_selected_row = 'add';
+        }
+    }
+
     static set_row_id_for_editing() {
         if(Lists.selected_list_type && Lists.selected_list_type !== 'new') {
-            Lists.row_id_for_editing = this.dataset.id;
+            Lists.selected_row_id = this.dataset.id;
+            Lists.action_type_for_selected_row = 'edit';
         }
     }
 
@@ -557,7 +621,7 @@ class Lists {
                     Lists.edited_row.removeEventListener('input', Lists.close_row_editing__mobile);
                     Lists.edited_row = false;
                     Lists.deviation = {};
-                    Lists.row_id_for_editing = false;
+                    Lists.selected_row_id = false;
                     Words.words__area.addEventListener('click', Words.reverse_mode_by_click);
                     Lists.update_list_data();
                     break;
@@ -572,18 +636,18 @@ class Lists {
      * Компьютерная версия
      */
     static edit_row__desktop() {
-        Lists.row_id_for_editing = this.dataset.id;
+        Lists.selected_row_id = this.dataset.id;
         // Words.reverse_mode();
         let current_mode = WordsTypes.getShownSectionType();
         switch(current_mode) {
             case 'source':
-                Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                Lists.edited_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
                 break;
             case 'translation':
-                Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                Lists.edited_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
                 break;
             case 'transcription':
-                Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.row_id_for_editing}"]`);
+                Lists.edited_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
                 break;
         }
         document.removeEventListener('keyup', Words.reverse_mode_by_keyup);
@@ -939,6 +1003,19 @@ class Lists {
         };
     }
 
+    static create_hard() {
+        Lists.#prepare_hard_words();
+        let list_name = Lists.list_name__input.value;
+        let data = new FormData(Lists.words__form);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', `/randomizer/createNewList/${Lists.active_language_mark}/hard/${list_name}`);
+        xhr.send(data);
+        xhr.responseType = 'text';
+        xhr.onloadend = () => {
+            alert(xhr.response);
+        };
+    }
+
     static reset_rows_counter() {
         Lists.source_row = 0;
         Lists.translation_row = 0;
@@ -963,6 +1040,31 @@ class Lists {
             let words = '';
             for(const row of type__words)
                 words += row.textContent + ';';
+            let input = document.querySelector(`.words__input[name="${type}"]`);
+            input.value = words;
+        }
+    }
+
+    static #prepare_hard_words() {
+        let type__words;
+        let types = ['source', 'translation', 'transcription'];
+        for(const type of types) {
+            switch(type) {
+                case 'source':
+                    type__words = Lists.source__area.children;
+                    break;
+                case 'translation':
+                    type__words = Lists.translation__area.children;
+                    break;
+                case 'transcription':
+                    type__words = Lists.transcription__area.children;
+                    break;
+            }
+            let words = '';
+            for(const row of type__words) {
+                if(row.dataset.hard === 'true')
+                    words += row.textContent + ';';
+            }
             let input = document.querySelector(`.words__input[name="${type}"]`);
             input.value = words;
         }

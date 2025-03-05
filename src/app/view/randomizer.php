@@ -29,7 +29,7 @@
                     <div class="words_section" data-type="source">
                         <?php if($data->source) { ?>
                         <?php for($i = 0; $i < sizeof($data->source); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->source[$i] ?></pre>
+                        <pre data-id="<?= $i + 1 ?>" data-hard=""><?= $data->source[$i] ?></pre>
                         <?php } ?>
                         <?php } else { ?>
                         <pre data-id="1">Сюда писать исходное значение</pre>
@@ -47,7 +47,7 @@
                     <div class="words_section" data-type="translation">
                         <?php if($data->translation) { ?>
                         <?php for($i = 0; $i < sizeof($data->translation); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->translation[$i] ?></pre>
+                        <pre data-id="<?= $i + 1 ?>" data-hard=""><?= $data->translation[$i] ?></pre>
                         <?php } ?>
                         <?php } ?>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="words_section" data-type="transcription">
                         <?php if($data->transcription) { ?>
                         <?php for($i = 0; $i < sizeof($data->transcription); $i++) { ?>
-                        <pre data-id="<?= $i + 1 ?>"><?= $data->transcription[$i] ?></pre>
+                        <pre data-id="<?= $i + 1 ?>" data-hard=""><?= $data->transcription[$i] ?></pre>
                         <?php } ?>
                         <?php } ?>
                     </div>
