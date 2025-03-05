@@ -49,6 +49,8 @@ class Lists {
         ['Кнопка сохранения списка', '.actions-additional__button_save-list'],
         // define_native_language
         ['Кнопка основного языка', '#main'],
+        // delete_all_hard_lists
+        ['Кнопка удаления списков трудных слов', '.lists_delete-hard-lists'],
     ]);
 
 
@@ -115,6 +117,8 @@ class Lists {
     static save_list__button = document.querySelector(Lists.selectors.get('Кнопка сохранения списка'));
     // define_native_language
     static main_language__button = document.querySelector(Lists.selectors.get('Кнопка основного языка'));
+    // delete_all_hard_lists
+    static delete_hard_lists__button = document.querySelector(Lists.selectors.get('Кнопка удаления списков трудных слов'));
 
 
 
@@ -980,8 +984,10 @@ class Lists {
         xhr.onloadend = () => {
             if(xhr.response === null) alert('Произошла ошибка в delete_list!');
             else if(xhr.response.hasOwnProperty('updated')) {
-                Lists.clear_words_area();
-                Lists.insert_empty_rows();
+                if(Lists.selected_list_type === this.dataset.type) {
+                    Lists.clear_words_area();
+                    Lists.insert_empty_rows();
+                }
                 let list_type = this.dataset.type;
                 let list_for_deletion = Lists.lists__area.querySelector(`.lists_select-list[data-type="${this.dataset.type}"][data-id="${this.dataset.id}"]`);
                 list_for_deletion.remove();
@@ -1007,6 +1013,28 @@ class Lists {
             // alert(xhr.response);
         };
         event.stopPropagation();
+    }
+
+    static delete_all_hard_lists() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/randomizer/deleteLists/hard');
+        xhr.send();
+        xhr.responseType = 'json';
+        xhr.onloadend = () => {
+            if(xhr.response === null) alert('Произошла ошибка в delete_all_hard_lists!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                if(Lists.selected_list_type === 'hard') {
+                    Lists.clear_words_area();
+                    Lists.insert_empty_rows();
+                }
+                let hard_list_buttons = Lists.hard_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                for(let i = hard_list_buttons.length; i > 0; i--) 
+                    hard_list_buttons[i - 1].remove();
+                Lists.hide_hard_lists_block();
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+        };
     }
 
     static #delete_all_lists() {
@@ -1470,4 +1498,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     Lists.set_listeners_for_row_editing();
     Lists.save_list__button.addEventListener('click', Lists.create_main);
+    Lists.delete_hard_lists__button.addEventListener('click', Lists.delete_all_hard_lists);
 });

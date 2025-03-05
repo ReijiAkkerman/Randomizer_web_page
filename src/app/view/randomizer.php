@@ -404,7 +404,7 @@
                         }
                         for($i = sizeof($lists_ids); $i > 0; $i--) { 
                     ?>
-                    <div class="lists_select-list" data-type="<?= $data->lists->hard[$lists_ids[$i - 1]]->type ?>" data-id="<?= $data->lists->hard[$lists_ids[$i - 1]]->id ?>">
+                    <div class="lists_select-list" data-type="<?= $data->lists->hard[$lists_ids[$i - 1]]->type ?>" data-id="<?= $data->lists->hard[$lists_ids[$i - 1]]->id ?>" data-selected="<?php if($lists_ids[$i - 1] === $data->lists->selected_list_id) echo 'true' ?>">
                         <p><?php
                             if($data->lists->hard[$lists_ids[$i - 1]]->name) echo $data->lists->hard[$lists_ids[$i - 1]]->name;
                             else echo $data->lists->hard[$lists_ids[$i - 1]]->date;

@@ -200,6 +200,12 @@
             $lists->deleteList($listId);
         }
 
+        public function deleteLists(array $args): void {
+            $listsType = $args[0];
+            $lists = new Lists();
+            $lists->deleteLists($listsType);
+        }
+
         public function updateListData(array $args): void {
             $listId = $args[0];
             $lists = new Lists();

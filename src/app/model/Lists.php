@@ -305,6 +305,24 @@
             }
         }
 
+        public function deleteLists($_lists_type): void {
+            if($this->getCookie()) {
+                $this->createAuthConnection();
+                $tableName = $this->getUserTableName();
+                $this->closeAuthConnection();
+
+                $this->createListsConnection();
+                $query = "DELETE FROM $tableName WHERE type='$_lists_type'";
+                $this->mysql->query($query);
+                $this->closeListsConnection();
+                echo '{"updated":true}';
+            }
+            else {
+                $this->deleteCookie();
+                echo '{"redirect":true}';
+            }
+        }
+
         public function updateList($_list_id): void {
             if($this->getCookie()) {
                 $SOURCE = $TRANSLATION = $TRANSCRIPTION = null;
@@ -481,7 +499,7 @@
         }
 
         public function prepareHardLists(&$data): void {
-            
+
         }
 
 
