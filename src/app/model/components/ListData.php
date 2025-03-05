@@ -10,5 +10,6 @@
         public string $date;
         public string $name;
         public string $type;
+        public int $tied_list_id;
         public int $id;
     }

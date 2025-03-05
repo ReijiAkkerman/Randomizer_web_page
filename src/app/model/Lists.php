@@ -46,6 +46,7 @@
                     type VARCHAR(10) NOT NULL,
                     date DATETIME NOT NULL,
                     hash VARCHAR(50) UNIQUE,
+                    tied_list BOOLEAN DEFAULT 0 NOT NULL,
                     native_language SMALLINT UNSIGNED NOT NULL,
                     active_language SMALLINT UNSIGNED NOT NULL,
                     source TEXT NOT NULL,
@@ -74,7 +75,8 @@
         public function createNew(
             string $_active_language_mark,
             string $_list_type,
-            string $_list_name
+            string $_list_name,
+            int $tied_list_id = 0
         ): void {
             if($this->getCookie()) {
                 $this->createSettingsConnection();
@@ -131,6 +133,7 @@
                         type,
                         date,
                         hash,
+                        tied_list,
                         native_language,
                         active_language,
                         source,
@@ -141,11 +144,12 @@
                         '$LIST_TYPE',
                         NOW(),
                         '$HASH',
+                        $tied_list_id,
                         $MAIN_LANGUAGE_ID,
                         $ACTIVE_LANGUAGE_ID,
                         '$sources',
                         '$translations',
-                        '$transcriptions'
+                        '$transcriptions',
                     )";
                     $this->mysql->query($query);
                 }
@@ -159,6 +163,7 @@
                         type,
                         date,
                         hash,
+                        tied_list,
                         native_language,
                         active_language,
                         source,
@@ -168,6 +173,7 @@
                         '$LIST_TYPE',
                         NOW(),
                         '$HASH',
+                        $tied_list_id,
                         $MAIN_LANGUAGE_ID,
                         $ACTIVE_LANGUAGE_ID,
                         '$sources',
@@ -235,9 +241,9 @@
                 $this->createListsConnection();
                 // получение списков
                 if($_selected_language_id)
-                    $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$_selected_language_id'";
+                    $query = "SELECT source,translation,transcription,date,name,type,tied_list,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$_selected_language_id'";
                 else 
-                    $query = "SELECT source,translation,transcription,date,name,type,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$selectedLanguageId'";
+                    $query = "SELECT source,translation,transcription,date,name,type,tied_list,ID FROM $tableName WHERE native_language='$mainLanguageId' && active_language='$selectedLanguageId'";
                 $result = $this->mysql->query($query);
                 $list = new ListData();
                 $lists = new ListsData();
@@ -248,6 +254,7 @@
                     $list->date = $value['date'];
                     $list->name = $value['name'];
                     $list->type = $value['type'];
+                    $list->tied_list_id = $value['tied_list'];
                     $list->id = $value['ID'];
                     switch($list->type) {
                         case 'main':
@@ -439,6 +446,42 @@
                     $this->closeListsConnection();
                 }
             }
+        }
+
+
+
+
+        public function prepareMainLists(&$data): void {
+            $selected_list = $data->lists->selected_list_id = $this->getSelectedListId();
+            switch($selected_list) {
+                case false:
+                case 0:
+                    $list_type = $selected_list_type = 'main';
+                    break;
+                default:
+                    if(is_null($data->lists->types[$selected_list])) {
+                        $this->resetSelectedListId();
+                        $list_type = $data->lists->selected_list_type = 'main';
+                    }
+                    else 
+                        $list_type = $data->lists->selected_list_type = $data->lists->types[$selected_list];
+                    break;
+            }
+            if(sizeof($data->lists->$list_type)) {
+                if($selected_list) {
+                    if(is_null($data->lists->$list_type[$selected_list]->transcription)) 
+                        $words_types = ['source', 'translation'];
+                    else 
+                        $words_types = ['source', 'translation', 'transcription'];
+                    foreach($words_types as $words_type) {
+                        $data->$words_type = explode(';', $data->lists->$list_type[$selected_list]->$words_type);
+                    }
+                }
+            }
+        }
+
+        public function prepareHardLists(&$data): void {
+            
         }
 
 

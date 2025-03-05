@@ -39,6 +39,9 @@ class Lists {
         ['Область списков', '.lists'],
         ['Область основных списков', '.lists-word'],
         ['Место вставки основных списков', '.lists-word .lists_title'],
+        // create_button_of_hard_list
+        ['Область списков трудных слов', '.lists-hard-word'],
+        ['Место вставки списков трудных слов', '.lists-hard-word .lists_header'],
         // save_new_list
         ['Форма слов', '.words__form'],
         ['Поле для наименования языка', '.actions-additional__input[name="list_name"]'],
@@ -102,6 +105,9 @@ class Lists {
     static lists__area = document.querySelector(Lists.selectors.get('Область списков'));
     static main_lists__area = document.querySelector(Lists.selectors.get('Область основных списков'));
     static main_lists__insertion_place = document.querySelector(Lists.selectors.get('Место вставки основных списков'));
+    // create_button_of_hard_list
+    static hard_lists__area = document.querySelector(Lists.selectors.get('Область списков трудных слов'));
+    static hard_lists__insertion_place = document.querySelector(Lists.selectors.get('Место вставки списков трудных слов'));
     // save_new_list
     static words__form = document.querySelector(Lists.selectors.get('Форма слов'));
     static list_name__input = document.querySelector(Lists.selectors.get('Поле для наименования языка'));
@@ -145,8 +151,10 @@ class Lists {
         for(const element of elements) {
             element.setAttribute('contenteditable', '');
             element.addEventListener('input', Lists.stash_by_change);
-            if(Adaptive.getDevice() === 'desktop') 
+            if(Adaptive.getDevice() === 'desktop') {
                 element.addEventListener('keyup', Lists.execute_by_keyup);
+                element.removeEventListener('dblclick', Lists.add_row_to_hard_words_list__desktop);
+            }
             else {
                 element.addEventListener('input', Lists.execute_by_input);
                 element.removeEventListener('input', Lists.set_row_id_for_hard_words_list);
@@ -154,6 +162,7 @@ class Lists {
         }
         elements = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
         for(const button of elements) {
+            button.removeEventListener('dblclick', Lists.edit_row__desktop);
             button.removeEventListener('click', Lists.set_row_id_for_editing);
             button.addEventListener('click', Lists.select_row_by_click_on_number);
         }
@@ -166,8 +175,10 @@ class Lists {
         for(const element of elements) {
             element.removeAttribute('contenteditable');
             element.removeEventListener('input', Lists.stash_by_change);
-            if(Adaptive.getDevice() === 'desktop') 
+            if(Adaptive.getDevice() === 'desktop') {
                 element.removeEventListener('keyup', Lists.execute_by_keyup);
+                element.addEventListener('dblclick', Lists.add_row_to_hard_words_list__desktop  )
+            }
             else {
                 element.removeEventListener('input', Lists.execute_by_input);
                 element.addEventListener('input', Lists.set_row_id_for_hard_words_list);
@@ -177,6 +188,7 @@ class Lists {
         for(const button of elements) {
             button.removeEventListener('click', Lists.select_row_by_click_on_number);
             button.addEventListener('click', Lists.set_row_id_for_editing);
+            button.addEventListener('dblclick', Lists.add_row_to_hard_words_list__desktop);
         }
     }
 
@@ -186,16 +198,18 @@ class Lists {
             if(Adaptive.getDevice() === 'mobile')
                 row.addEventListener('click', Lists.set_row_id_for_hard_words_list);
             else 
-                row.addEventListener('dblclick', Lists.edit_row__desktop);
+                row.addEventListener('dblclick', Lists.add_row_to_hard_words_list__desktop);
         }
         let numbers = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
-        for(const number of numbers)
+        for(const number of numbers) {
+            number.addEventListener('dblclick', Lists.edit_row__desktop);
             number.addEventListener('click', Lists.set_row_id_for_editing);
+        }
         if(Adaptive.getDevice() === 'mobile') {
             document.addEventListener('touchstart', Lists.start_keeping_timer);
             document.addEventListener('touchmove', Lists.write_deviation);
             document.addEventListener('touchend', Lists.edit_row__mobile);
-            document.addEventListener('touchend', Lists.add_row_to_hard_words_list);
+            document.addEventListener('touchend', Lists.add_row_to_hard_words_list__mobile);
         }
     }
 
@@ -487,49 +501,49 @@ class Lists {
      * Редактирование строк всех списков кроме нового списка.
      * Мобильная версия(функции ниже до комментария относятся к редактированию)
      */
-    static add_row_to_hard_words_list() {
+    static add_row_to_hard_words_list__mobile() {
         if(Lists.action_type_for_selected_row === 'add') {
             if(Lists.selected_row_id) {
-                let touchend_timer = Date.now();
-                let time_delta = touchend_timer - Lists.touchstart_timer;
-                if(time_delta > 500) {
-                    if(Lists.deviation.x_access && Lists.deviation.y_access) {
-                        Words.reverse_mode();
-                        let modes = ['source', 'translation', 'transcription'];
-                        let adding_row;
-                        for(const mode of modes) {
-                            switch(mode) {
-                                case 'source':
-                                    adding_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
-                                    adding_row.dataset.hard = 'true';
-                                    adding_row.style.backgroundColor = '#f002';
-                                    break;
-                                case 'translation':
-                                    adding_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
-                                    adding_row.dataset.hard = 'true';
-                                    adding_row.style.backgroundColor = '#f002';
-                                    break;
-                                case 'transcription':
-                                    adding_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
-                                    if(adding_row !== null) {
+                if(Lists.selected_list_type === 'main') {
+                    let touchend_timer = Date.now();
+                    let time_delta = touchend_timer - Lists.touchstart_timer;
+                    if(time_delta > 500) {
+                        if(Lists.deviation.x_access && Lists.deviation.y_access) {
+                            Words.reverse_mode();
+                            let modes = ['source', 'translation', 'transcription'];
+                            let adding_row;
+                            for(const mode of modes) {
+                                switch(mode) {
+                                    case 'source':
+                                        adding_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
                                         adding_row.dataset.hard = 'true';
                                         adding_row.style.backgroundColor = '#f002';
-                                    }
-                                    break;
+                                        break;
+                                    case 'translation':
+                                        adding_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                        adding_row.dataset.hard = 'true';
+                                        adding_row.style.backgroundColor = '#f002';
+                                        break;
+                                    case 'transcription':
+                                        adding_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                                        if(adding_row !== null) {
+                                            adding_row.dataset.hard = 'true';
+                                            adding_row.style.backgroundColor = '#f002';
+                                        }
+                                        break;
+                                }
                             }
+                            Lists.show_elements_for_hard_list_creation();
+                            Lists.save_list__button.removeEventListener('click', Lists.create_main);
+                            Lists.save_list__button.addEventListener('click', Lists.create_hard);
                         }
-                        Lists.list_name__error.style.display = '';
-                        Lists.list_name__input.style.display = '';
-                        Lists.save_list__button.removeEventListener('click', Lists.create_main);
-                        Lists.save_list__button.style.display = '';
-                        Lists.save_list__button.addEventListener('click', Lists.create_hard);
                     }
-                }
-                else {
-                    Lists.action_type_for_selected_row = false;
-                    Lists.selected_row_id = false;
-                    Lists.deviation = {};
-                    Lists.touchstart_timer = false;
+                    else {
+                        Lists.action_type_for_selected_row = false;
+                        Lists.selected_row_id = false;
+                        Lists.deviation = {};
+                        Lists.touchstart_timer = false;
+                    }
                 }
             }
         }
@@ -639,6 +653,36 @@ class Lists {
      * Редактирование строк всех списков кроме нового списка.
      * Компьютерная версия
      */
+    static add_row_to_hard_words_list__desktop() {
+        Lists.selected_row_id = this.dataset.id;
+        let modes = ['source', 'translation', 'transcription'];
+        let adding_row;
+        for(const mode of modes) {
+            switch(mode) {
+                case 'source':
+                    adding_row = Lists.source__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                    adding_row.dataset.hard = 'true';
+                    adding_row.style.backgroundColor = '#f002';
+                    break;
+                case 'translation':
+                    adding_row = Lists.translation__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                    adding_row.dataset.hard = 'true';
+                    adding_row.style.backgroundColor = '#f002';
+                    break;
+                case 'transcription':
+                    adding_row = Lists.transcription__area.querySelector(`pre[data-id="${Lists.selected_row_id}"]`);
+                    if(adding_row !== null) {
+                        adding_row.dataset.hard = 'true';
+                        adding_row.style.backgroundColor = '#f002';
+                    }
+                    break;
+            }
+        }
+        Lists.show_elements_for_hard_list_creation();
+        Lists.save_list__button.removeEventListener('click', Lists.create_main);
+        Lists.save_list__button.addEventListener('click', Lists.create_hard);
+    }
+
     static edit_row__desktop() {
         Lists.selected_row_id = this.dataset.id;
         // Words.reverse_mode();
@@ -938,12 +982,23 @@ class Lists {
             else if(xhr.response.hasOwnProperty('updated')) {
                 Lists.clear_words_area();
                 Lists.insert_empty_rows();
-                let list_for_deletion = Lists.main_lists__area.querySelector(`.lists_select-list[data-type="${this.dataset.type}"][data-id="${this.dataset.id}"]`);
+                let list_type = this.dataset.type;
+                let list_for_deletion = Lists.lists__area.querySelector(`.lists_select-list[data-type="${this.dataset.type}"][data-id="${this.dataset.id}"]`);
                 list_for_deletion.remove();
-                let main_list__buttons = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
-                if(main_list__buttons.length === 0) {
-                    Lists.hide_main_lists_block();
-                    Lists.show_list_absense_info();
+                switch(list_type) {
+                    case 'main':
+                        let main_list__buttons = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                        if(main_list__buttons.length === 0) {
+                            Lists.hide_main_lists_block();
+                            Lists.show_list_absense_info();
+                        }
+                        break;
+                    case 'hard':
+                        let hard_list__buttons = Lists.hard_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                        if(hard_list__buttons.length === 0) {
+                            Lists.hide_hard_lists_block();
+                        }
+                        break;
                 }
                 Lists.reset_selected_list_id();
             }
@@ -1012,11 +1067,23 @@ class Lists {
         let list_name = Lists.list_name__input.value;
         let data = new FormData(Lists.words__form);
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', `/randomizer/createNewList/${Lists.active_language_mark}/hard/${list_name}`);
+        xhr.open('POST', `/randomizer/createNewList/${Lists.active_language_mark}/hard/${list_name}/${Lists.selected_list_id}`);
         xhr.send(data);
-        xhr.responseType = 'text';
+        xhr.responseType = 'json';
         xhr.onloadend = () => {
-            alert(xhr.response);
+            if(xhr.response === null) alert('Произошла ошибка в create_hard!');
+            else if(xhr.response.hasOwnProperty('updated')) {
+                let listName = (list_name) ? list_name : xhr.response.date;
+                Lists.create_button_of_hard_list(listName, xhr.response.id);
+                Lists.reset_hard_words_selection();
+                Lists.hide_elements_for_hard_list_creation();
+                Lists.show_hard_lists_block();
+                Lists.save_list__button.removeEventListener('click', Lists.create_hard);
+                Lists.save_list__button.addEventListener('click', Lists.create_main);
+            }
+            else if(xhr.response.hasOwnProperty('redirect'))
+                location.href = '/auth/view';
+            // alert(xhr.response);
         };
     }
 
@@ -1278,6 +1345,18 @@ class Lists {
         Lists.main_lists__insertion_place.after(list_button);
     }
 
+    static create_button_of_hard_list(_list_name, _id) {
+        let list_button = Lists.#create_list_button(_list_name);
+        let list_button__delete = list_button.querySelector('button');
+        list_button.dataset.type = 
+        list_button__delete.dataset.type = 'hard';
+        list_button.dataset.id = 
+        list_button__delete.dataset.id = _id;
+        list_button.addEventListener('click', Lists.show_list_data);
+        list_button.addEventListener('click', Lists.highlight_list_button);
+        Lists.hard_lists__insertion_place.after(list_button);
+    }
+
     static #create_list_button(list_name = '', default_deletion = true) {
         let clone = Lists.list_button__template.content.cloneNode(true);
         let list_button = clone.querySelector('div');
@@ -1321,6 +1400,26 @@ class Lists {
         Lists.main_lists__area.style.display = 'none';
     }
 
+    static show_hard_lists_block() {
+        Lists.hard_lists__area.style.display = '';
+    }
+
+    static hide_hard_lists_block() {
+        Lists.hard_lists__area.style.display = 'none';
+    }
+
+    static show_elements_for_hard_list_creation() {
+        Lists.list_name__error.style.display = '';
+        Lists.list_name__input.style.display = '';
+        Lists.save_list__button.style.display = '';
+    }
+
+    static hide_elements_for_hard_list_creation() {
+        Lists.list_name__error.style.display = 'none';
+        Lists.list_name__input.style.display = 'none';
+        Lists.save_list__button.style.display = 'none';
+    }
+
     static set_active_color_for_list_button(button) {
         let text = button.querySelector('p');
         button.style.borderColor = 
@@ -1331,6 +1430,14 @@ class Lists {
         let text = button.querySelector('p');
         button.style.borderColor = 
         text.style.color = '';
+    }
+
+    static reset_hard_words_selection() {
+        let rows = Lists.words__area.querySelectorAll('pre[data-hard="true"]');
+        for(const row of rows) {
+            row.dataset.hard = '';
+            row.style.backgroundColor = '';
+        }
     }
 }
 

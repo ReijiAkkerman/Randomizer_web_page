@@ -43,33 +43,8 @@
                 $data->studied_languages = $languages->getStudied();
                 $data->all_languages = $languages->getAll();
                 $data->lists = $lists->getAllListsData();
-                // подготовка списков
-                $selected_list = $data->lists->selected_list_id = $lists->getSelectedListId();
-                switch($selected_list) {
-                    case false:
-                    case 0:
-                        $list_type = $selected_list_type = 'main';
-                        break;
-                    default:
-                        if(is_null($data->lists->types[$selected_list])) {
-                            $this->resetSelectedListId();
-                            $list_type = $data->lists->selected_list_type = 'main';
-                        }
-                        else 
-                            $list_type = $data->lists->selected_list_type = $data->lists->types[$selected_list];
-                        break;
-                }
-                if(sizeof($data->lists->$list_type)) {
-                    if($selected_list) {
-                        if(is_null($data->lists->$list_type[$selected_list]->transcription)) 
-                            $words_types = ['source', 'translation'];
-                        else 
-                            $words_types = ['source', 'translation', 'transcription'];
-                        foreach($words_types as $words_type) {
-                            $data->$words_type = explode(';', $data->lists->$list_type[$selected_list]->$words_type);
-                        }
-                    }
-                }
+                $lists->prepareMainLists($data);
+                // $lists->preapreHardLists($data);
                 // подготовка языков
                 foreach($data->studied_languages as $language) {
                     $data->studied_languages_list[] = $language->name;
@@ -82,7 +57,7 @@
                 else 
                     $data->show_all_languages = true;
                 // сортировка списка
-                $lists->sort($selected_list);
+                $lists->sort($data->lists->selected_list_id);
 
                 require_once __DIR__ . '/../view/randomizer.php';
             }
@@ -199,8 +174,11 @@
             $listType = $args[1];
             if(isset($args[2])) $listName = $args[2];
             else $listName = '';
+            if(isset($args[3])) $tiedListId = (int)$args[3];
+
             $lists = new Lists();
-            $lists->createNew($activeLanguageMark, $listType, $listName);
+            if(isset($tiedListId)) $lists->createNew($activeLanguageMark, $listType, $listName, $tiedListId);
+            else $lists->createNew($activeLanguageMark, $listType, $listName);
         }
 
         public function getListData(array $args): void {

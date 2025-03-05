@@ -7,6 +7,9 @@
         public array $hard;
         public array $split;
         public array $combined;
+
+        public HardInfo $hard_info;
+
         public int|false $selected_list_id;
         public string $selected_list_type;
 
