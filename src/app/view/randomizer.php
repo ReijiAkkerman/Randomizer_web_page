@@ -399,7 +399,7 @@
                     </div>
                     <?php
                         $lists_ids = [];
-                        foreach($data->lists->main as $list_id => $value) {
+                        foreach($data->lists->hard as $list_id => $value) {
                             $lists_ids[] = $list_id;
                         }
                         for($i = sizeof($lists_ids); $i > 0; $i--) { 
