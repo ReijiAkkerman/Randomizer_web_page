@@ -1031,6 +1031,7 @@ class Lists {
                 for(let i = hard_list_buttons.length; i > 0; i--) 
                     hard_list_buttons[i - 1].remove();
                 Lists.hide_hard_lists_block();
+                Lists.reset_selected_list_id();
             }
             else if(xhr.response.hasOwnProperty('redirect'))
                 location.href = '/auth/view';
