@@ -188,6 +188,9 @@ class Lists {
             else 
                 row.addEventListener('dblclick', Lists.edit_row__desktop);
         }
+        let numbers = document.querySelectorAll(Lists.selectors.get('Числа нумерующие слова'));
+        for(const number of numbers)
+            button.addEventListener('click', Lists.set_row_id_for_editing);
         if(Adaptive.getDevice() === 'mobile') {
             document.addEventListener('touchstart', Lists.start_keeping_timer);
             document.addEventListener('touchmove', Lists.write_deviation);
@@ -515,6 +518,7 @@ class Lists {
                                     break;
                             }
                         }
+                        Lists.list_name__error.style.display = '';
                         Lists.list_name__input.style.display = '';
                         Lists.save_list__button.removeEventListener('click', Lists.create_main);
                         Lists.save_list__button.style.display = '';
