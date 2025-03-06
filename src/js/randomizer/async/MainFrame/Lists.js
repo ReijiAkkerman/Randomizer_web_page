@@ -260,7 +260,7 @@ class Lists {
                 }
                 break;
             case 'insertCompositionText':
-                Lists.deletion_access = true;
+                Lists.deletion_access = false;
                 break;
         }
     }
