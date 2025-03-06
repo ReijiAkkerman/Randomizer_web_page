@@ -140,18 +140,31 @@
                         translation,
                         transcription
                     ) VALUES (
-                        '$LIST_NAME',
-                        '$LIST_TYPE',
+                        ?,
+                        ?,
                         NOW(),
-                        '$HASH',
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?
+                    )";
+                    $stmt = $this->mysql->prepare($query);
+                    $stmt->bind_param(
+                        'sssiiisss',
+                        $LIST_NAME,
+                        $LIST_TYPE,
+                        $HASH,
                         $tied_list_id,
                         $MAIN_LANGUAGE_ID,
                         $ACTIVE_LANGUAGE_ID,
-                        '$sources',
-                        '$translations',
-                        '$transcriptions',
-                    )";
-                    $this->mysql->query($query);
+                        $sources,
+                        $translations,
+                        $transcriptions
+                    );
+                    $stmt->execute();
                 }
                 else {
                     $this->prepareRows($sources, $translations);
@@ -169,17 +182,29 @@
                         source,
                         translation
                     ) VALUES (
-                        '$LIST_NAME',
-                        '$LIST_TYPE',
+                        ?,
+                        ?,
                         NOW(),
-                        '$HASH',
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?
+                    )";
+                    $stmt = $this->mysql->prepare($query);
+                    $stmt->bind_param(
+                        'sssiiiss',
+                        $LIST_NAME,
+                        $LIST_TYPE,
+                        $HASH,
                         $tied_list_id,
                         $MAIN_LANGUAGE_ID,
                         $ACTIVE_LANGUAGE_ID,
-                        '$sources',
-                        '$translations'
-                    )";
-                    $this->mysql->query($query);
+                        $sources,
+                        $translations
+                    );
+                    $stmt->execute();
                 }
                 $query = "SELECT ID,date FROM $TABLE_NAME WHERE hash='$HASH'";
                 $result = $this->mysql->query($query);
@@ -334,18 +359,35 @@
                 $this->closeAuthConnection();
 
                 $this->createListsConnection();
-                if($this->kanji)
+                if($this->kanji) {
                     $query = "UPDATE $tableName SET 
-                        source='$SOURCE',
-                        translation='$TRANSLATION',
-                        transcription='$TRANSCRIPTION'
-                    WHERE ID=$_list_id";
-                else 
+                        source=?,
+                        translation=?,
+                        transcription=?
+                    WHERE ID=?";
+                    $stmt = $this->mysql->prepare($query);
+                    $stmt->bind_param(
+                        'sssi',
+                        $SOURCE,
+                        $TRANSLATION,
+                        $TRANSCRIPTION,
+                        $_list_id
+                    );
+                }
+                else {
                     $query = "UPDATE $tableName SET
-                        source='$SOURCE',
-                        translation='$TRANSLATION'
-                    WHERE ID=$_list_id";
-                $this->mysql->query($query);
+                        source=?,
+                        translation=?
+                    WHERE ID=?";
+                    $stmt = $this->mysql->prepare($query);
+                    $stmt->bind_param(
+                        'ssi',
+                        $SOURCE,
+                        $TRANSLATION,
+                        $_list_id
+                    );
+                }
+                $stmt->execute();
                 $this->closeListsConnection();
                 echo '{"updated":true}';
             }
