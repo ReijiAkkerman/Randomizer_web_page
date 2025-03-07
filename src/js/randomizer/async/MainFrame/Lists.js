@@ -781,6 +781,7 @@ class Lists {
                     Lists.hide_lists_absense_info();
                     Lists.show_main_lists_block();
                     Lists.#insert_main_lists(xhr.response.main);
+                    Lists.#insert_hard_lists(xhr.response.hard);
                     let lists_length = Object.keys(xhr.response.main).length;
                     let selected_list_key = Object.keys(xhr.response.main)[lists_length - 1];
                     Lists.#insert_sources(xhr.response.main[selected_list_key].source);
@@ -806,6 +807,15 @@ class Lists {
             let key = Object.keys(lists)[i];
             let name = (lists[key].name) ? lists[key].name : lists[key].date;
             Lists.create_button_of_main_list(name, lists[key].id);
+        }
+    }
+
+    static #insert_hard_lists(lists) {
+        for(let i = 0; i < Object.keys(lists).length; i++) {
+            Lists.show_hard_lists_block();
+            let key = Object.keys(lists)[i];
+            let name = (lists[key].name) ? lists[key].name : lists[key].date;
+            Lists.create_button_of_hard_list(name, lists[key].id);
         }
     }
 
@@ -1040,13 +1050,22 @@ class Lists {
 
     static #delete_all_lists() {
         let types = ['main', 'hard', 'split', 'combined'];
+        let max;
         for(const type of types) {
             switch(type) {
                 case 'main':
                     let main_lists = Lists.main_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
-                    let max = main_lists.length;
+                    max = main_lists.length;
                     for(let i = max; i > 0; i--) 
                         main_lists[i - 1].remove();
+                    break;
+                case 'hard':
+                    let hard_lists = Lists.hard_lists__area.querySelectorAll(Lists.selectors.get('Кнопки списков'));
+                    max = hard_lists.length;
+                    for(let i = max; i > 0; i--) {
+                        hard_lists[i - 1].remove();
+                    }
+                    Lists.hide_hard_lists_block();
                     break;
             }
         }

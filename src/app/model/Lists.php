@@ -336,8 +336,17 @@
                 $tableName = $this->getUserTableName();
                 $this->closeAuthConnection();
 
+                $this->createSettingsConnection();
+                $query = "SELECT main,selected FROM languages WHERE USER_ID={$this->_id}";
+                $result = $this->mysql->query($query);
+                foreach($result as $value) {
+                    $MAIN_LANGUAGE_ID = $value['main'];
+                    $SELECTED_LANGUAGE_ID = $value['selected'];
+                }
+                $this->closeSettingsConnection();
+
                 $this->createListsConnection();
-                $query = "DELETE FROM $tableName WHERE type='$_lists_type'";
+                $query = "DELETE FROM $tableName WHERE type='$_lists_type' && native_language='$MAIN_LANGUAGE_ID' && active_language='$SELECTED_LANGUAGE_ID'";
                 $this->mysql->query($query);
                 $this->closeListsConnection();
                 echo '{"updated":true}';
