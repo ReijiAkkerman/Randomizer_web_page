@@ -23,7 +23,7 @@
                         <p data-id="<?= $i + 1 ?>"><?= $i + 1 ?></p>
                         <?php } ?>
                         <?php } else { ?>
-                        <p data-id="1">1</p>
+                        <p data-id="1">1</p> 
                         <?php } ?>
                     </div>
                     <div class="words_section" data-type="source">
