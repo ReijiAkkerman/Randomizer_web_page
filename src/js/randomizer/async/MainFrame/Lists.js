@@ -776,7 +776,7 @@ class Lists {
                 Lists.reset_selected_list_id();
                 Lists.clear_words_area();
                 Lists.#delete_all_lists();
-                localStorage.clear();
+                // localStorage.clear();
                 if(Object.keys(xhr.response.main).length) {
                     Lists.hide_lists_absense_info();
                     Lists.show_main_lists_block();
