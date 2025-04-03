@@ -72,6 +72,7 @@ class Lists {
     static editing_access = false;
     static touchstart_timer = false;
     static edited_row = false;
+    static backspace_counter = 0;
 
 
 
@@ -289,6 +290,7 @@ class Lists {
                 }
                 Words.switch_to_next_mode();
                 Lists.focus_on_next_row();
+                Lists.backspace_counter = 0;
                 break;
             /**
              * Удаление существующей строки по нажатию на Backspace
@@ -296,10 +298,17 @@ class Lists {
             case 'Backspace':
                 if(this.textContent === "") {
                     if(this.dataset.id > 1) {
-                        Lists.delete_number_and_row(this.dataset.id);
-                        this.remove();
+                        Lists.backspace_counter++;
+                        if(Lists.backspace_counter > 2) {
+                            Lists.delete_number_and_row(this.dataset.id);
+                            this.remove();
+                            Lists.backspace_counter = 0;
+                        }
                     }
                 }
+                break;
+            default:
+                Lists.backspace_counter = 0;
                 break;
         }
     }
@@ -964,8 +973,8 @@ class Lists {
         row.textContent = text;
         if(Lists.editing_mode) 
             number.addEventListener('click', Lists.select_row_by_click_on_number);
-        else 
-            number.addEventListener('click', Lists.edit_row_by_click_on_number);
+        // else 
+        //     number.addEventListener('click', Lists.edit_row_by_click_on_number);
         place_for_number.append(number);
         place_for_row.append(row);
     }
