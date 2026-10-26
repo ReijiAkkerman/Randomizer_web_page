@@ -142,9 +142,17 @@ class Lists {
             WordsTypes.resetSections();
             Words.switch_mode();
             let current_mode = WordsTypes.getShownSectionType();
-            let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="1"]`);
+            let row_id = (() => {
+                let all_rows = document.querySelectorAll(`.words_section[data-type="${current_mode}"] pre`);
+                let last_row_index = all_rows.length;
+                return last_row_index;
+            })();
+            let row = document.querySelector(`.words_section[data-type="${current_mode}"] pre[data-id="${row_id}"]`);
+            Lists.source_row = row_id;
+            Lists.translation_row = 
+            Lists.transcription_row = row_id - 1;
             row.focus();
-            Lists.select_text(row);
+            // Lists.select_text(row);
             Lists.enable_editing_mode();
         }
     }
